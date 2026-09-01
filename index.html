@@ -1538,7 +1538,7 @@ input.inp:disabled{ background:var(--limestone-dk); color:var(--ink-soft); }
 .wf-filters .wf-f.on .pi{ color:var(--paper); }
 
 /* ===== WHAT FITS v3 — honey banner, floating ask, sheet commits ===== */
-.wfb{ margin:0; padding:14px 20px 46px; background:var(--honey); color:var(--on-honey); border-radius:0 0 26px 26px; }
+.wfb{ margin:2px 14px 0; padding:14px 20px 46px; background:var(--honey); color:var(--on-honey); border-radius:26px; }
 .wfb-top{ display:flex; align-items:baseline; justify-content:space-between; gap:10px; }
 .wfb-title{ font-family:var(--font-display); font-weight:760; font-size:22px; letter-spacing:-.02em; }
 .wfb-next{ font-size:12.5px; font-weight:650; opacity:.75; white-space:nowrap; overflow:hidden; text-overflow:ellipsis; font-variant-numeric:tabular-nums; }
@@ -1553,7 +1553,7 @@ input.inp:disabled{ background:var(--limestone-dk); color:var(--ink-soft); }
 .wf-ask2 .wf-can-ic{ position:absolute; left:17px; top:50%; transform:translateY(-50%); color:var(--ink-faint); }
 .wf-ask2 .wf-can-ic .pi{ width:16px; height:16px; display:inline-flex; }
 .wf-card{ padding:14px 14px; }
-.wf-card .wf-place{ font-size:15px; }
+.wf-card .wf-place{ font-size:15px; display:-webkit-box; -webkit-line-clamp:2; -webkit-box-orient:vertical; overflow:hidden; line-height:1.2; }
 .wf-card .wf-hero{ font-size:22px; margin-top:2px; }
 .wf-best{ position:absolute; top:-9px; left:16px; font-family:var(--font-display); font-size:11px; font-weight:760; letter-spacing:.02em; color:var(--on-honey); background:var(--honey); border-radius:999px; padding:4px 11px; }
 .wf-card.top{ box-shadow:inset 0 0 0 1.6px var(--honey), 0 2px 14px rgba(20,19,15,.06); overflow:visible; }
@@ -1982,6 +1982,19 @@ input.inp:disabled{ background:var(--limestone-dk); color:var(--ink-soft); }
 .wf-askcard input:focus{ outline:none; box-shadow:inset 0 0 0 2px var(--ink); }
 .wf-askgo{ display:block; width:100%; margin-top:14px; border:none; cursor:pointer; background:var(--ink); color:var(--paper); border-radius:var(--r-md); padding:15px; font-family:var(--font-display); font-size:16px; font-weight:700; }
 
+/* Time-picker triggers. House rule: never a native <input type="time"> — these
+   open plan.js's custom sheet and carry their value in data-v. Styled to read
+   as the field they replaced, with a caret to say "this opens something". */
+.hm-pick{ display:flex; align-items:center; justify-content:space-between; gap:10px;
+  width:100%; min-height:48px; margin-top:0; padding:12px 14px; border:none; cursor:pointer;
+  border-radius:var(--r-xs); background:var(--onwhite); color:var(--on-honey);
+  box-shadow:inset 0 0 0 1px rgba(20,19,15,.14);
+  font-family:var(--font-text); font-size:16px; font-variant-numeric:tabular-nums; text-align:left; }
+.hm-pick .pi{ width:15px; height:15px; color:rgba(20,19,15,.55); flex:none; }
+.hm-pick:active{ background:#F2EFE8; }
+.im-pick{ display:flex; align-items:center; justify-content:space-between; cursor:pointer;
+  text-align:left; font-variant-numeric:tabular-nums; }
+
 </style>
 </head>
 <body>
@@ -2365,7 +2378,7 @@ input.inp:disabled{ background:var(--limestone-dk); color:var(--ink-soft); }
         <div class="prow" id="pUpdates"><span class="prow-ic"><span data-pi="arrows-clockwise"></span></span><b class="prow-label">What’s new<span class="upd-dot" id="updDot" style="display:none"></span></b><span class="prow-val" id="pUpdatesVal"></span><span class="prow-ch"><span data-pi="caret-right"></span></span></div>
       </div>
 
-      <div class="profile-version">BeeLine 1.0.0 · build 2026-09-01 14:10 · your data stays on this phone<br>Map data © OpenStreetMap contributors · © CARTO</div>
+      <div class="profile-version">BeeLine 1.0.0 · build 2026-09-01 14:24 · your data stays on this phone<br>Map data © OpenStreetMap contributors · © CARTO</div>
       <button class="prow" id="pAdd" style="display:none"></button>
     </div>
   </section>
@@ -6682,14 +6695,14 @@ BusUI.wireSearch();
 /* ---- custom time picker sheet (house rule: never native pickers).
    Hour chips + quarter-minute chips + AM/PM, one Done. Reusable:
    planTimeSheet('14:30', hm => ...) — hm is 'HH:MM' 24h. ---- */
-function planTimeSheet(initial, cb){
+function planTimeSheet(initial, cb, title){
   let bg=document.getElementById('ptShBg'); if(bg) bg.remove();
   let [h0,m0]=(initial||'14:00').split(':').map(Number);
   let ap=h0>=12?'PM':'AM'; let h12=h0%12||12; let mm=[0,15,30,45].reduce((a,b)=>Math.abs(b-m0)<Math.abs(a-m0)?b:a,0);
   bg=document.createElement('div'); bg.id='ptShBg'; bg.className='brxsh-bg';
   const hours=[...Array(12)].map((_,i)=>i+1);
   bg.innerHTML=`<div class="brxsh">
-    <div class="brxsh-head"><b>Until when?</b>
+    <div class="brxsh-head"><b>${esc(title||'Until when?')}</b>
       <button class="brxsh-x" aria-label="Close"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.4" stroke-linecap="round"><path d="M6 6 L18 18 M18 6 L6 18"/></svg></button></div>
     <div class="brxsh-scroll pt-body">
       <div class="pt-preview" id="ptPreview"></div>
@@ -7095,7 +7108,7 @@ const PlanUI={
     return `<div class="wfb">
       <div class="wfb-top"><span class="wfb-title">What fits?</span><span class="wfb-next">${esc(c.nextName)} · ${when}</span></div>
       <div class="wfb-gap">${g}<span class="wfb-free">free</span></div>
-      <div class="wfb-sub">leave for ${esc(shortName(c.nextB||c.nextName))} by ${direct.src==='learned'?'':'~'}${fmtClockTime(leaveDirect)}</div>
+      <div class="wfb-sub">leave by ${direct.src==='learned'?'':'~'}${fmtClockTime(leaveDirect)}</div>
     </div>
     <div class="wf-ask2"><span class="wf-can-ic">${pic('magnifying-glass')}</span><input type="text" id="wfCanI" placeholder="Can I… ?  gym · coffee · go home" value="${esc(this.lastQuery)}" autocomplete="off"></div>`;
   },
@@ -7108,13 +7121,13 @@ const PlanUI={
       : (i===0?`${tilde}${Math.max(1,Math.round(pl.thereMin))} min walk · leave there ${lv}`:`${tilde}${Math.max(1,Math.round(pl.thereMin))} min walk`);
     const ph=(typeof placePhoto==='function')?placePhoto({n:pl.place.n}):null;
     const meta2=catMeta(pl.place.c||'offcampus');
-    const tile= ph
-      ? `<span class="wf-tile"><img src="${esc(ph.t)}" alt="" loading="lazy" decoding="async"></span>`
-      : `<span class="wf-tile glyph" style="background:${meta2.color}">${PIN_ICON[pl.place.c]||PIN_ICON.offcampus}</span>`;
+    /* glyph always paints beneath; the photo overlays when it loads and
+       removes itself on error — no black-square tiles, ever */
+    const tile= `<span class="wf-tile glyph" style="background:${meta2.color}">${PIN_ICON[pl.place.c]||PIN_ICON.offcampus}${ph?`<img src="${esc(ph.t)}" alt="" loading="lazy" decoding="async" onerror="this.remove()">`:''}</span>`;
     return `<div class="wf-card${i===0&&!pl.nearMiss?' top':''}${pl.nearMiss?' miss':''}" data-wf="${i}" role="button" tabindex="0">
       ${i===0&&!pl.nearMiss?'<span class="wf-best">Best fit</span>':''}
       <div class="wf-main">${tile}<div class="wf-body">
-        <b class="wf-place">${esc(shortName(pl.place.n))}</b>
+        <b class="wf-place">${esc(String(pl.place.n).replace(/\s*\([^)]*\)\s*/g,' ').trim())}</b>
         <div class="wf-hero">${hero}</div>
         <div class="wf-meta">${meta}${pl.reason?` · <i class="wf-why2">${esc(pl.reason)}</i>`:''}</div>
       </div><span class="wf-go">${pic('caret-right')}</span></div>
@@ -7453,6 +7466,13 @@ function hmClock(d){
   const s=fmtClockTime(d);                       // "1:30 PM"
   return s.replace(/\s([AP]M)$/,'<span class="u">$1</span>');
 }
+/* "13:30" → "1:30 PM". House rule: no native time inputs anywhere, so the
+   value lives in data-v and this renders the human label on the trigger. */
+function hmLabel12(hhmm){
+  const m=/^(\d{1,2}):(\d{2})$/.exec(String(hhmm||'')); if(!m) return 'Pick a time';
+  let h=+m[1]; const ap=h>=12?'PM':'AM'; h=h%12||12;
+  return h+':'+m[2]+' '+ap;
+}
 /* the ~ that marks an estimated (not measured) figure */
 function hmTilde(src){ return (src==='line'||src==='learned'||src==='route') ? '' : '~'; }
 function hmIcon(n){ return (typeof pic==='function') ? pic(n) : ''; }
@@ -7644,7 +7664,7 @@ const HomeUI={
        repaint that does happen. */
     const ae=document.activeElement;
     if(ae && box.contains(ae) && /^(INPUT|TEXTAREA|SELECT)$/.test(ae.tagName)) return;
-    const keep={ until:($('hmUntil')||{}).value, where:($('hmWhere')||{}).value };
+    const keep={ until:(($('hmUntil')||{}).dataset||{}).v, where:($('hmWhere')||{}).value };
     if(typeof renderHomeInsight==='function') renderHomeInsight();
     let st=HomeModel.base();
     /* a real plan (committed from What Fits) always beats a forced QA branch */
@@ -7668,7 +7688,7 @@ const HomeUI={
     this.wireImages();
     if(st.kind==='plan' || st.kind==='leave'){ this.wirePlan(st); this.renderQuick(false); }
     else if(st.kind==='noschedule'){
-      if(keep.until && $('hmUntil')) $('hmUntil').value=keep.until;
+      if(keep.until && $('hmUntil')){ $('hmUntil').dataset.v=keep.until; $('hmUntil').querySelector('span').textContent=hmLabel12(keep.until); }
       if(keep.where && $('hmWhere')) $('hmWhere').value=keep.where;
       this.wireNoSchedule(); this.renderQuick(true);
     }
@@ -7901,8 +7921,8 @@ const HomeUI={
       ${HomeView.hero('Got some time?','Tell BeeLine when you need to be free, and we’ll find plans that actually fit.')}
       <div class="hm-panel">
         <div class="hm-panel-h">${hmIcon('timer')}<span>Fit something in</span></div>
-        <label class="hm-field" for="hmUntil"><span>Until when?</span>
-          <input type="time" id="hmUntil" value="${hh}:${mm}"></label>
+        <div class="hm-field"><span>Until when?</span>
+          <button type="button" class="hm-pick" id="hmUntil" data-v="${hh}:${mm}"><span>${hmLabel12(hh+':'+mm)}</span>${hmIcon('caret-down')}</button></div>
         <div class="hm-field" id="hmWhereField"><span>Before I need to be at…</span>
           <input type="text" id="hmWhere" placeholder="Choose a place" autocomplete="off">
           <div class="hm-acl" id="hmWhereAc" style="display:none"></div></div>
@@ -7917,6 +7937,15 @@ const HomeUI={
     </div>`;
   },
   wireNoSchedule(){
+    /* custom sheet, never the native picker (house rule) */
+    const until=$('hmUntil');
+    if(until) until.addEventListener('click',()=>{
+      if(typeof planTimeSheet!=='function') return;
+      planTimeSheet(until.dataset.v||'14:00', v=>{
+        until.dataset.v=v;
+        const lab=until.querySelector('span'); if(lab) lab.textContent=hmLabel12(v);
+      });
+    });
     let picked=null;
     const inp=$('hmWhere'), acl=$('hmWhereAc');
     if(inp){
@@ -7935,7 +7964,7 @@ const HomeUI={
     }
     const go=$('hmFindPlans');
     if(go) go.addEventListener('click',()=>{
-      const v=$('hmUntil').value;
+      const v=$('hmUntil').dataset.v;
       if(!v){ toast('Pick a time first','warn'); return; }
       const d=new Date(); d.setHours(+v.split(':')[0], +v.split(':')[1], 0, 0);
       if(d<=new Date()) d.setDate(d.getDate()+1);
@@ -8224,7 +8253,9 @@ const ScanParse={
     return String(line)
       .replace(new RegExp('\\b[A-Z]{2,4}\\s*[-–—]\\s*[A-Z]\\s*'+D+'{3}[A-Z]?\\b','g'),' ')
       .replace(new RegExp('\\b[A-Z]{2,4}\\s+[A-Z]\\s*'+D+'{3}[A-Z]?\\b','g'),' ')
-      .replace(new RegExp('\\b[A-Z]{2,4}\\s*[-–—]?\\s*'+D+'{3}[A-Z]?\\b','g'),' ');
+      /* generic dept-code shape: line-start only, same reason as course() —
+         mid-line it is a lettered ROOM ("Lindley Hall LH 008"), not a course */
+      .replace(new RegExp('^[^A-Za-z0-9]{0,3}\\s*[A-Z]{2,4}\\s*[-–—]?\\s*'+D+'{3}[A-Z]?\\b'),' ');
   },
 
   /* IU course codes: BUS-K 201 - CSCI-C 211 - GER-E 141 - SPH-B 150, plus the
@@ -8240,7 +8271,11 @@ const ScanParse={
       const m=line.match(re);
       if(m){ const n=this.digits(m[3]); if(/^\d{3}$/.test(n)) return (m[1]+'-'+m[2]+' '+n+(m[4]||'')).trim(); }
     }
-    const m=line.match(new RegExp('\\b([A-Z]{2,4})\\s*[-–—]?\\s*('+D+'{3})([A-Z]?)\\b'));
+    /* The generic dept-code shape (PSY 101) is also the lettered-room shape
+       (LH 008), so it only counts at the START of a line — where every real
+       schedule puts the course code — or "Lindley Hall LH 008" births a
+       phantom class that swallows the lines after it. */
+    const m=line.match(new RegExp('^[^A-Za-z0-9]{0,3}\\s*([A-Z]{2,4})\\s*[-–—]?\\s*('+D+'{3})([A-Z]?)\\b'));
     if(m){ const n=this.digits(m[2]); if(/^\d{3}$/.test(n)) return (m[1]+' '+n+(m[3]||'')).trim(); }
     return null;
   },
@@ -8283,7 +8318,9 @@ const ScanParse={
     m=t.match(/\b([A-Z]{1,4})\s?(\d{3,4}[A-Z]?)\b/);
     if(m) return (m[1].toUpperCase()+' '+m[2]);
     m=t.match(/\b(\d{3,4}[A-Z]?)\b/);
-    if(m) return m[1];
+    /* a bare number that reads as a year (Fall 2026, Aug 24, 2026) is a date,
+       not a room — only a lettered prefix ("HH 2075") can claim those */
+    if(m && !/^(19|20)\d\d$/.test(m[1])) return m[1];
     return null;
   },
 
@@ -8307,7 +8344,18 @@ const ScanParse={
     const t=line.trim();
     if(t.length<2) return true;
     if(/^[^A-Za-z0-9]+$/.test(t)) return true;
-    return /^(my class schedule|class schedule|weekly schedule|schedule|fall|spring|summer|winter|\d{4})$/i.test(t);
+    if(/^(my class schedule|class schedule|weekly schedule|schedule|fall|spring|summer|winter|\d{4})$/i.test(t)) return true;
+    /* IU Mobile "Class Detail" chrome. Each of these carries no class fact but
+       actively poisons a field if it survives: "Fall 2026" donates a room
+       number, "IU Bloomington" place-matches a random building, "Unable to
+       fetch transit stops" out-lengths the real title. */
+    if(/^(class detail|google maps|grade|notes?|instructors?|enrolled|iu bloomington)$/i.test(t)) return true;
+    if(/^unable to (fetch|load)\b/i.test(t)) return true;
+    if(/^(campus|status|term|credits?|source|section|units?)\b[\s:]/i.test(t)) return true;
+    if(/^(fall|spring|summer|winter)\s+\d{4}\b/i.test(t)) return true;
+    /* a term date range ("Aug 24, 2026 – Dec 18, 2026") is not a meeting */
+    if(/^[a-z]{3,9}\.?\s+\d{1,2},?\s+\d{4}\s*[-–—]\s*[a-z]{3,9}\.?\s+\d{1,2},?\s+\d{4}$/i.test(t)) return true;
+    return false;
   },
 
   /* text → rows. matchPlace is injected (ScanUI supplies the gazetteer),
@@ -8374,14 +8422,34 @@ const ScanParse={
         if(this.TBA_RE.test(line) && /\b(room|location|bldg|building)\b/i.test(line)){ roomTBA=true; }
         if(!room) room=this.room(line);
       }
-      const spare=b.lines.map(l=>this.leftover(l)).filter(Boolean);
-      let place=null, buildingRaw='';
-      for(const s of spare){ const hit=matchPlace?matchPlace(s):null; if(hit){ place=hit; buildingRaw=s; break; } }
-      if(!place){
-        const withNum=b.lines.find(l=>this.room(l));
-        if(withNum){ buildingRaw=this.leftover(withNum); const hit=matchPlace?matchPlace(buildingRaw):null; if(hit) place=hit; }
+      /* The line right under the course code is the class TITLE in every IU
+         layout ("BUSINESS, GOVERNMENT, AND SOC" · "AMSTERDAM"). Claim it
+         before place matching, so an all-caps title can never place-match a
+         building ("…BUSINESS…" ≠ the business school) and never loses the
+         title slot to a longer junk line. */
+      let titleLine='';
+      if(b.lines.length>1){
+        const t2=b.lines[1];
+        if(!this.timeRange(t2) && !this.dayScan(t2).length && !/\d{3,4}/.test(t2)) titleLine=t2;
       }
-      let title=spare.filter(s=>s!==buildingRaw).sort((a,c)=>c.length-a.length)[0]||'';
+      /* The location line's signature is a lettered room on the same line
+         ("Hodge Hall (BUSINESS SCHOOL) HH 2075") — those lines get first
+         claim on the building, before any other phrase that merely resembles
+         a place name. */
+      let place=null, buildingRaw='';
+      const ordered=b.lines.slice().sort((x,y)=>{
+        const rx=/[A-Za-z]/.test(this.room(x)||'')?0:1, ry=/[A-Za-z]/.test(this.room(y)||'')?0:1;
+        return rx-ry;
+      });
+      for(const line of ordered){
+        if(line===titleLine) continue;
+        const s=this.leftover(line); if(!s) continue;
+        const hit=matchPlace?matchPlace(s):null;
+        if(hit){ place=hit; buildingRaw=s; break; }
+      }
+      const spare=b.lines.filter(l=>l!==titleLine).map(l=>this.leftover(l)).filter(Boolean);
+      let title=titleLine ? titleLine.replace(/\s{2,}/g,' ').trim()
+                          : (spare.filter(s=>s!==buildingRaw).sort((a,c)=>c.length-a.length)[0]||'');
       if(title.length>60) title=title.slice(0,60).trim();
 
       meetings.forEach((mt,k)=>{
@@ -8505,10 +8573,27 @@ const ScanView={
       <button class="hm-link" id="imCancel">Cancel</button>
     </div>`;
   },
-  /* one-line summary shown when a row is collapsed */
+  /* "13:30" → "1:30 PM" for the picker triggers (no native time inputs) */
+  clock12(hhmm){
+    const m=/^(\d{1,2}):(\d{2})$/.exec(String(hhmm||'')); if(!m) return 'Set time';
+    let h=+m[1]; const ap=h>=12?'PM':'AM'; h=h%12||12;
+    return h+':'+m[2]+' '+ap;
+  },
+  /* "09:35","10:50" → "9:35–10:50 AM" (meridiem once when shared) */
+  range12(s,e){
+    const m1=/^(\d{1,2}):(\d{2})$/.exec(s||''), m2=/^(\d{1,2}):(\d{2})$/.exec(e||'');
+    if(!m1||!m2) return 'no time';
+    const ap=h=>h>=12?'PM':'AM', f=(h,mm)=>(h%12||12)+':'+mm;
+    const a1=ap(+m1[1]), a2=ap(+m2[1]);
+    return a1===a2 ? f(+m1[1],m1[2])+'–'+f(+m2[1],m2[2])+' '+a2
+                   : f(+m1[1],m1[2])+' '+a1+' – '+f(+m2[1],m2[2])+' '+a2;
+  },
+  /* one-line summary shown when a row is collapsed. Real day names — never
+     registrar letter codes (nobody outside the bursar knows R is Thursday). */
   summary(r){
-    const d=r.days.length?r.days.map(x=>({Mo:'M',Tu:'T',We:'W',Th:'R',Fr:'F',Sa:'S',Su:'U'}[x])).join(''):'—';
-    const t=(r.start&&r.end)?(r.start+'–'+r.end):'no time';
+    const names={Mo:'Mon',Tu:'Tue',We:'Wed',Th:'Thu',Fr:'Fri',Sa:'Sat',Su:'Sun'};
+    const d=r.days.length?r.days.map(x=>names[x]).join(' '):'—';
+    const t=this.range12(r.start,r.end);
     const where=r.place?shortName(r.place.n):(r.buildingRaw?r.buildingRaw.slice(0,18):'no building');
     return `${d} · ${t} · ${esc(where)}`;
   },
@@ -8527,10 +8612,10 @@ const ScanView={
         <button class="im-del" data-del="${i}" aria-label="Not on my schedule" title="Not on my schedule">${pic('trash-simple')}</button>
       </div>
       <input class="im-in" data-f="${i}:title" value="${esc(r.title)}" placeholder="Class name (optional)" autocomplete="off">
-      <div class="im-days">${day('Mo','M')}${day('Tu','T')}${day('We','W')}${day('Th','R')}${day('Fr','F')}${day('Sa','S')}${day('Su','U')}</div>
+      <div class="im-days">${day('Mo','Mon')}${day('Tu','Tue')}${day('We','Wed')}${day('Th','Thu')}${day('Fr','Fri')}${day('Sa','Sat')}${day('Su','Sun')}</div>
       <div class="im-times">
-        <label>Starts<input type="time" class="im-in" data-f="${i}:start" value="${esc(r.start)}"></label>
-        <label>Ends<input type="time" class="im-in" data-f="${i}:end" value="${esc(r.end)}"></label>
+        <label>Starts<button type="button" class="im-in im-pick" data-t="${i}:start" data-v="${esc(r.start)}">${esc(this.clock12(r.start))}</button></label>
+        <label>Ends<button type="button" class="im-in im-pick" data-t="${i}:end" data-v="${esc(r.end)}">${esc(this.clock12(r.end))}</button></label>
       </div>
       <div class="im-place" data-pl="${i}">
         <input class="im-in" data-f="${i}:building" value="${esc(r.place?r.place.n:r.buildingRaw)}" placeholder="Building — pick from the list" autocomplete="off">
@@ -8614,6 +8699,15 @@ const ScanUI={
       this.rows.push({id:'s'+Date.now(), course:'', title:'', days:[], start:'', end:'', room:'', buildingRaw:'', place:null, source:[]});
       this.render();
     });
+    /* Start/end open the shared custom sheet (house rule: never a native time
+       input), titled for this context via the sheet's own title arg. */
+    document.querySelectorAll('#scanBody [data-t]').forEach(b=>b.addEventListener('click',()=>{
+      const [i,f]=b.dataset.t.split(':'); const r=this.rows[+i]; if(!r) return;
+      if(typeof planTimeSheet!=='function') return;
+      planTimeSheet(b.dataset.v || (f==='start'?'09:00':'10:00'),
+        v=>{ r[f]=v; this.render(); },
+        f==='start'?'Class starts':'Class ends');
+    }));
     document.querySelectorAll('#scanBody [data-open]').forEach(b=>b.addEventListener('click',()=>{
       const r=this.rows[+b.dataset.open]; if(r){ r.open=true; this.render(); }
     }));
