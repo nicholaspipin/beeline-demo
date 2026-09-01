@@ -1001,14 +1001,16 @@ input.inp:disabled{ background:var(--limestone-dk); color:var(--ink-soft); }
 /* ---- Buses: full-screen takeover. The map runs edge to edge under the
    floating controls AND the tabbar; everything else floats over it. ---- */
 #scr-buses{ position:relative; }
-.bz-top{ position:absolute; left:0; right:0; top:0; z-index:9; padding:calc(10px + env(safe-area-inset-top)) 16px 18px;
+/* search sits at the very top — the tab bar already names the section, so no
+   title row spends the screen's best real estate */
+.bz-top{ position:absolute; left:0; right:0; top:0; z-index:9; padding:calc(8px + env(safe-area-inset-top)) 16px 16px;
   background:linear-gradient(to bottom, rgba(14,13,11,.78) 0%, rgba(14,13,11,.5) 55%, rgba(14,13,11,0) 100%); pointer-events:none; }
 .bz-top > *{ pointer-events:auto; }
-.bz-head{ display:flex; align-items:center; gap:10px; margin-bottom:10px; }
-.bz-head h1{ font-family:var(--font-display); font-size:22px; font-weight:770; letter-spacing:-.02em; color:#F4EBDC; margin:0; flex:1; text-shadow:0 1px 8px rgba(14,13,11,.6); }
+.bz-head{ display:flex; align-items:center; gap:9px; }
+.bz-head .bz-search{ flex:1; min-width:0; }
+.bz-updated{ position:absolute; right:14px; top:100%; margin-top:2px; pointer-events:none; }
 /* Routes mode covers the map with paper — the overlay flips to page chrome */
 #scr-buses[data-bview="routes"] .bz-top{ background:var(--paper); border-bottom:1px solid var(--line); padding-bottom:12px; }
-#scr-buses[data-bview="routes"] .bz-head h1{ color:var(--ink); text-shadow:none; }
 #scr-buses[data-bview="routes"] .bz-chips{ display:none; }
 .bz-search{ position:relative; }
 .bz-search input{ width:100%; height:50px; border:none; border-radius:var(--r-md); background:var(--paper); box-shadow:inset 0 0 0 1px var(--line2); padding:0 16px 0 44px; font-size:15.5px; color:var(--ink); font-family:var(--ui); outline:none; }
@@ -1111,7 +1113,7 @@ input.inp:disabled{ background:var(--limestone-dk); color:var(--ink-soft); }
 .bz-step{ display:flex; gap:12px; padding:10px 2px; border-top:1px solid var(--line); font-size:14px; line-height:1.45; align-items:flex-start; }
 .bz-step-ic{ flex:none; width:24px; text-align:center; }
 /* routes directory */
-.bz-routes{ position:absolute; inset:0; overflow-y:auto; -webkit-overflow-scrolling:touch; background:var(--paper-bg); padding:calc(128px + env(safe-area-inset-top)) 18px calc(100px + env(safe-area-inset-bottom)); }
+.bz-routes{ position:absolute; inset:0; overflow-y:auto; -webkit-overflow-scrolling:touch; background:var(--paper-bg); padding:calc(84px + env(safe-area-inset-top)) 18px calc(100px + env(safe-area-inset-bottom)); }
 .bz-sec{ font-family:var(--mono); font-size:10.5px; font-weight:700; letter-spacing:.08em; text-transform:uppercase; color:var(--ink-faint); margin:14px 2px 8px; }
 .bz-rrow{ display:flex; align-items:center; gap:13px; background:var(--paper); border-radius:var(--r-md); box-shadow:inset 0 0 0 1px var(--line); padding:13px 14px; margin-bottom:9px; cursor:pointer; min-height:56px; }
 .bz-rrow.dim{ opacity:.72; cursor:default; }
@@ -2611,7 +2613,7 @@ input.inp:disabled{ background:var(--limestone-dk); color:var(--ink-soft); }
         <div class="prow" id="pUpdates"><span class="prow-ic"><span data-pi="arrows-clockwise"></span></span><b class="prow-label">What’s new<span class="upd-dot" id="updDot" style="display:none"></span></b><span class="prow-val" id="pUpdatesVal"></span><span class="prow-ch"><span data-pi="caret-right"></span></span></div>
       </div>
 
-      <div class="profile-version">BeeLine 1.0.0 · build 2026-09-01 15:30 · your data stays on this phone<br>Map data © OpenStreetMap contributors · © CARTO</div>
+      <div class="profile-version">BeeLine 1.0.0 · build 2026-09-01 15:35 · your data stays on this phone<br>Map data © OpenStreetMap contributors · © CARTO</div>
       <button class="prow" id="pAdd" style="display:none"></button>
     </div>
   </section>
@@ -2652,14 +2654,16 @@ input.inp:disabled{ background:var(--limestone-dk); color:var(--ink-soft); }
       <div class="bz-routes" id="bzRoutes" style="display:none"></div>
     </div>
     <div class="bz-top">
-      <div class="bz-head"><h1>Buses</h1><div class="bz-updated" id="bzUpdated" style="display:none"></div>
-        <div class="bz-seg" id="bzSeg"><button data-bv="live" class="on">Live</button><button data-bv="routes">Routes</button></div></div>
-      <div class="bz-search ac">
-        <span class="s-ic"><span data-pi="magnifying-glass"></span></span>
-        <input type="text" id="bzSearch" placeholder="Where are you going?" autocomplete="off">
-        <div class="bz-ac" id="bzAc" style="display:none"></div>
+      <div class="bz-head">
+        <div class="bz-search ac">
+          <span class="s-ic"><span data-pi="magnifying-glass"></span></span>
+          <input type="text" id="bzSearch" placeholder="Where are you going?" autocomplete="off">
+          <div class="bz-ac" id="bzAc" style="display:none"></div>
+        </div>
+        <div class="bz-seg" id="bzSeg"><button data-bv="live" class="on">Live</button><button data-bv="routes">Routes</button></div>
       </div>
       <div class="bz-chips" id="bzChips"></div>
+      <div class="bz-updated" id="bzUpdated" style="display:none"></div>
     </div>
   </section>
 
@@ -6761,11 +6765,11 @@ const BusRouteDetail={
     p.stops.forEach((sid,si)=>{
       const s=BusModel.stop(sid); if(!s) return;
       const here=(approaching[sid]||[]).slice(0,2);
+      /* no ETA on the strip — you're waiting for the next bus either way, and
+         the icon's place on the line already says how close it is */
       const buses=here.map((v,k)=>{
-        const eta=v.nextStopEta!=null?(v.nextStopEta<1?'now':Math.round(v.nextStopEta)+'m'):'';
         const at=v.nextStopEta!=null&&v.nextStopEta<1;
-        return `<span class="br-bus ${k===0?'slotL':'slotR'}${at?' at':''}${si===0?' first':''}" data-eq="${esc(v.equipmentId)}" role="button" aria-label="Bus toward ${esc(s.name)}">
-          ${eta?`<i class="br-bus-eta" style="background:${esc(p.color)};color:${bzTextOn(p.color)}">${eta}</i>`:''}${bzBusSVG(p.color)}</span>`;
+        return `<span class="br-bus ${k===0?'slotL':'slotR'}${at?' at':''}${si===0?' first':''}" data-eq="${esc(v.equipmentId)}" role="button" aria-label="Bus toward ${esc(s.name)}">${bzBusSVG(p.color)}</span>`;
       }).join('');
       html+=`<div class="br-stop" data-sid="${s.id}">${buses}<span class="br-node"></span><span class="br-stop-name">${esc(s.name)}</span><span class="bz-chev">${pic('caret-right')}</span></div>`;
     });
