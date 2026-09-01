@@ -1534,6 +1534,70 @@ input.inp:disabled{ background:var(--limestone-dk); color:var(--ink-soft); }
 .xb-back{ display:inline-flex; align-items:center; gap:5px; border:none; background:none; cursor:pointer; font-family:var(--font-display); font-size:14px; font-weight:680; color:var(--ink); padding:2px 2px 12px; }
 .xb-back .pi{ width:14px; height:14px; display:inline-flex; }
 
+/* privacy sheet: legal links */
+.legal-links{ display:flex; align-items:center; justify-content:center; gap:9px; margin-top:14px; font-size:13px; }
+.legal-links a{ color:var(--ink-soft); font-weight:640; text-decoration:underline; text-underline-offset:3px; }
+.legal-links i{ font-style:normal; color:var(--ink-faint); }
+
+/* ===== WHAT FITS (.wf-*) — plans, not options. Hero = usable time. ===== */
+.wf-sec{ font-family:var(--font-display); font-size:16px; font-weight:720; letter-spacing:-.015em; color:var(--ink); margin:16px 22px 8px; }
+.wf-list{ padding:0 20px; display:flex; flex-direction:column; gap:12px; }
+.wf-card{ background:var(--surface); border-radius:var(--r-lg); box-shadow:inset 0 0 0 1px var(--line), 0 2px 14px rgba(20,19,15,.05); padding:15px 16px 12px; cursor:pointer; position:relative; }
+.wf-card.top{ box-shadow:inset 0 0 0 1.6px var(--ink), 0 2px 14px rgba(20,19,15,.06); }
+.wf-card.miss{ opacity:.85; cursor:default; }
+.wf-card:active:not(.miss){ transform:scale(.985); }
+.wf-row1{ display:flex; align-items:center; gap:8px; flex-wrap:wrap; padding-right:44px; }
+.wf-card.top .wf-row1{ padding-right:124px; }
+.wf-math .dim{ color:var(--ink-faint); }
+.wf-place{ font-family:var(--font-display); font-size:15.5px; font-weight:700; letter-spacing:-.01em; color:var(--ink); }
+.wf-why{ font-family:var(--font-display); font-size:11px; font-weight:680; color:var(--ink); background:var(--honey-tint); border-radius:999px; padding:3px 9px; }
+.wf-hours{ font-size:11px; font-weight:600; color:var(--ink-faint); background:var(--paper-bg); border-radius:999px; padding:3px 9px; }
+.wf-hero{ font-family:var(--font-display); font-weight:760; font-size:26px; letter-spacing:-.025em; margin-top:5px; color:var(--ink); font-variant-numeric:tabular-nums; }
+.wf-meta{ font-size:12.5px; color:var(--ink-soft); margin-top:4px; line-height:1.5; font-variant-numeric:tabular-nums; }
+.wf-math{ margin-top:10px; padding-top:9px; border-top:1px solid var(--line); font-size:12.5px; color:var(--ink-soft); line-height:1.9; font-variant-numeric:tabular-nums; }
+.wf-math span{ display:inline-block; min-width:58px; font-weight:650; color:var(--ink); font-family:var(--font-num); }
+.wf-math .core span{ color:var(--honey-deep); }
+.wf-actions{ position:absolute; top:12px; right:12px; display:flex; align-items:center; gap:8px; }
+.wf-choose{ font-family:var(--font-display); font-size:12.5px; font-weight:700; color:var(--on-honey); background:var(--honey); border-radius:999px; padding:6px 13px; }
+.wf-exp{ border:none; background:var(--paper-bg); border-radius:50%; width:28px; height:28px; display:grid; place-items:center; cursor:pointer; color:var(--ink-soft); }
+.wf-exp .pi{ width:13px; height:13px; display:inline-flex; }
+.wf-calm{ margin:14px 22px 2px; font-size:13.5px; color:var(--ink-soft); line-height:1.55; }
+.wf-calm b{ color:var(--ink); font-variant-numeric:tabular-nums; }
+.wf-none{ margin:16px 22px 4px; font-size:14.5px; color:var(--ink-soft); line-height:1.55; }
+.wf-none b{ color:var(--ink); display:block; margin-bottom:3px; }
+.wf-ask{ margin:14px 22px 10px; padding:12px 14px; border-radius:var(--r-md); background:var(--honey-tint); font-size:13.5px; color:var(--ink); line-height:1.5; }
+.wf-headnow{ margin:12px 22px; width:calc(100% - 44px); }
+.wf-filters{ display:flex; gap:8px; overflow-x:auto; scrollbar-width:none; padding:16px 20px 4px; }
+.wf-filters::-webkit-scrollbar{ display:none; }
+.wf-f{ flex:none; border:none; cursor:pointer; font-family:var(--font-display); font-size:13.5px; font-weight:660; color:var(--ink-soft); background:var(--surface); box-shadow:inset 0 0 0 1px var(--line); border-radius:999px; padding:9px 16px; }
+.wf-f.on{ background:var(--ink); color:var(--paper); box-shadow:none; }
+.wf-can{ position:relative; margin:12px 20px 0; }
+.wf-can-ic{ position:absolute; left:14px; top:50%; transform:translateY(-50%); color:var(--ink-faint); }
+.wf-can-ic .pi{ width:16px; height:16px; display:inline-flex; }
+.wf-can input{ width:100%; border:none; background:var(--surface); box-shadow:inset 0 0 0 1px var(--line2); border-radius:var(--r-md); padding:13px 14px 13px 40px; font-family:var(--font-display); font-size:14.5px; font-weight:600; color:var(--ink); }
+.wf-can input::placeholder{ color:var(--ink-faint); font-weight:500; }
+.wf-can input:focus{ outline:none; box-shadow:inset 0 0 0 2px var(--ink); }
+.wf-deadline{ display:flex; flex-direction:column; gap:8px; padding:6px 22px; }
+.wf-deadline label{ font-size:12.5px; font-weight:650; color:var(--ink-soft); }
+.wf-deadline input{ border:none; background:var(--surface); box-shadow:inset 0 0 0 1px var(--line2); border-radius:var(--r-md); padding:12px 14px; font-family:var(--font-display); font-size:15px; color:var(--ink); }
+.wf-deadline .btn{ margin-top:8px; }
+
+.wf-nfm{ margin-top:8px; border:none; background:none; cursor:pointer; font-family:var(--font-display); font-size:12.5px; font-weight:640; color:var(--ink-faint); text-decoration:underline; text-underline-offset:3px; padding:0; }
+.wf-roleask{ display:flex; align-items:center; gap:10px; margin:14px 22px 0; padding:12px 14px; border-radius:var(--r-md); background:var(--surface); box-shadow:inset 0 0 0 1px var(--line); font-size:13.5px; color:var(--ink-soft); }
+.wf-roleask b{ color:var(--ink); }
+.wf-roleask span{ margin-left:auto; display:flex; gap:6px; }
+.wf-roleask button{ border:none; cursor:pointer; font-family:var(--font-display); font-size:12.5px; font-weight:700; border-radius:999px; padding:7px 14px; background:var(--paper-bg); color:var(--ink); }
+.wf-roleask button[data-ra=yes]{ background:var(--honey); color:var(--on-honey); }
+
+.wf-bus{ display:flex; align-items:center; gap:7px; margin-top:8px; font-size:12.5px; color:var(--ink-soft); }
+.wf-bus .pi{ width:14px; height:14px; display:inline-flex; color:var(--ink-faint); }
+.wf-bus i{ font-style:normal; font-size:10.5px; font-weight:700; letter-spacing:.04em; text-transform:uppercase; color:var(--ink-faint); background:var(--paper-bg); border-radius:999px; padding:2px 8px; }
+
+/* live bus fullness — measured counters, LIVE rows only */
+.bz-fullness{ display:inline-block; font-size:11px; font-weight:700; border-radius:999px; padding:3px 9px; margin-left:6px; font-variant-numeric:tabular-nums; }
+.bz-fullness.near{ background:var(--honey-tint); color:var(--ink); }
+.bz-fullness.full{ background:#E5484D; color:#fff; }
+
 </style>
 </head>
 <body>
@@ -1920,7 +1984,7 @@ input.inp:disabled{ background:var(--limestone-dk); color:var(--ink-soft); }
         <div class="prow" id="pUpdates"><span class="prow-ic"><span data-pi="arrows-clockwise"></span></span><b class="prow-label">What’s new<span class="upd-dot" id="updDot" style="display:none"></span></b><span class="prow-val" id="pUpdatesVal"></span><span class="prow-ch"><span data-pi="caret-right"></span></span></div>
       </div>
 
-      <div class="profile-version">BeeLine 1.0.0 · build 2026-09-01 09:48 · your data stays on this phone<br>Map data © OpenStreetMap contributors · © CARTO</div>
+      <div class="profile-version">BeeLine 1.0.0 · build 2026-09-01 10:53 · your data stays on this phone<br>Map data © OpenStreetMap contributors · © CARTO</div>
       <button class="prow" id="pAdd" style="display:none"></button>
     </div>
   </section>
@@ -2084,13 +2148,7 @@ input.inp:disabled{ background:var(--limestone-dk); color:var(--ink-soft); }
     <div class="prom-row slim"><b>No account · nothing sold</b></div>
     <div class="prom-row slim"><b>Maps &amp; search use the internet</b></div>
   </div>
-  <button class="btn river" id="toggleTracking" style="margin-top:10px">Turn location off</button>
-  <button class="btn ghost" id="closePrivacy" style="margin-top:10px">Close</button>
-</div></div>
-    <div class="prom-row"><span class="prom-ic"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"><circle cx="12" cy="12" r="9"></circle><path d="M12 7 v5 l3 2"></path></svg></span><div><b>Only while walking</b><span>Recording stops when you do.</span></div></div>
-    <div class="prom-row"><span class="prom-ic"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"><path d="M12 3 L19 6 v5 c0 4.5-3 7.6-7 9-4-1.4-7-4.5-7-9 V6 z"></path><path d="M9 12 l2 2 l4-4"></path></svg></span><div><b>Never sold</b><span>No account, no tracking, nothing sold.</span></div></div>
-    <div class="prom-row"><span class="prom-ic"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"><circle cx="12" cy="12" r="9"></circle><path d="M3 12 h18 M12 3 a14 14 0 0 1 0 18 a14 14 0 0 1 0-18"></path></svg></span><div><b>Maps &amp; search use the internet</b><span>Searching a place or loading the map sends that request to map providers (OpenStreetMap, CARTO). Your saved walks are never attached.</span></div></div>
-  </div>
+  <div class="legal-links"><a href="https://nicholaspipin.github.io/beeline-demo/terms.html" target="_blank" rel="noopener noreferrer">Terms of Use</a><i>·</i><a href="https://nicholaspipin.github.io/beeline-demo/privacy.html" target="_blank" rel="noopener noreferrer">Privacy Policy</a></div>
   <button class="btn river" id="toggleTracking" style="margin-top:10px">Turn location off</button>
   <button class="btn ghost" id="closePrivacy" style="margin-top:10px">Close</button>
 </div></div>
@@ -4743,20 +4801,11 @@ function renderTimeModule(){
   document.getElementById('scr-home').classList.remove('cta-go');   // Walk tile shows unless the card's CTA is already a Go
   renderHomeInsight();
   if(dest){ box.innerHTML=''; return; }                       // manual destination owns the screen
-  // active plan — the current leg is the headline
+  // active plan — lifecycle card rendered by the planning engine (plan.js)
   if(plan && Date.now()<plan.until){
-    const lv=Math.round((plan.leaveThereBy-Date.now())/6e4);
-    box.innerHTML=`<div class="tm"><div class="tm-card">
-      <div class="tm-toprow"><span class="tm-eyebrow">Plan</span><span class="tm-chip calm">At ${esc(plan.placeName)}</span></div>
-      <div class="tm-stats">
-        <div class="tm-stat"><div class="tm-k">Leave by</div><div class="tm-v honey">${tmHeroTime(new Date(plan.leaveThereBy))}</div>${plan.course?('<div class="tm-basis">then '+esc(plan.course)+'</div>'):''}</div>
-        <div class="tm-stat"><div class="tm-k">You have</div><div class="tm-v">${tmFreeHTML(lv)}</div><div class="tm-basis">at ${esc(plan.placeName)}</div></div>
-      </div>
-      <button class="tm-cta" id="tmPlanGo">${lv<=1?'Leave now':'Walk to '+esc(plan.course||'class')}</button>
-      <button class="tm-fit" id="tmPlanClear">Clear plan</button></div></div>`;
-    const g=$('tmPlanGo'); if(g) g.addEventListener('click',()=>{ setDest(plan.classLat,plan.classLng,plan.classB||plan.course||'Class'); if(trackingOn) startWalk(); });
-    const c=$('tmPlanClear'); if(c) c.addEventListener('click', clearPlan);
-    return;
+    box.innerHTML = (typeof planHomeCard==='function') ? planHomeCard() : '';
+    if(typeof planHomeWire==='function') planHomeWire();
+    if(box.innerHTML) return;
   }
   if(plan && Date.now()>=plan.until){ plan=null; savePlan(); }
   // no schedule yet → one quiet, dismissible invitation (never a wall)
@@ -4865,150 +4914,10 @@ function renderHomeInsight(){
 setInterval(()=>{ if(screens.home.classList.contains('active') && !document.hidden && !dest) renderTimeModule(); }, 30000);
 document.addEventListener('visibilitychange', ()=>{ if(!document.hidden && screens.home.classList.contains('active')) renderTimeModule(); });
 
-/* ---- FIT SOMETHING IN — intent → complete plans (usable time is the hero) ---- */
-const FIT_CATS=[
-  {k:'eat',   t:'Eat',    min:20, over:8,  ic:PIN_ICON.dining},
-  {k:'coffee',t:'Coffee', min:10, over:4,  ic:'<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"><path d="M4 8 h12 v7 a4 4 0 0 1-4 4 h-4 a4 4 0 0 1-4-4 z"/><path d="M16 9 h2.4 a2.3 2.3 0 0 1 0 4.6 H16"/><path d="M7 4.5 c0-1 1-1 1-2 M11 4.5 c0-1 1-1 1-2"/></svg>'},
-  {k:'gym',   t:'Gym',    min:25, over:10, ic:PIN_ICON.rec},
-  {k:'study', t:'Study',  min:20, over:3,  ic:PIN_ICON.library},
-  {k:'home',  t:'Home',   min:15, over:5,  ic:'<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"><path d="M4 11 L12 5 L20 11 v9 h-16 z"/><path d="M10 20 v-5 h4 v5"/></svg>'},
-  {k:'other', t:'Somewhere else', min:5, over:0, ic:'<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.9" stroke-linecap="round" stroke-linejoin="round"><circle cx="11" cy="11" r="6.5"/><path d="M16 16 L21 21"/></svg>'}
-];
-let fitCtx=null;   // {cls, nx, etaToClassMin, until:Date ms}
-function estMinBetween(aLat,aLng,bLat,bLng){ return (distance(aLat,aLng,bLat,bLng)*1.3)/paceSpeed()/60; }
-function walkFreqMap(){ const f={}; walks.forEach(w=>{ const k=w.destLat.toFixed(4)+','+w.destLng.toFixed(4); f[k]=(f[k]||0)+1; }); return f; }
-function openFit(nx, etaToClassMin){
-  const cls=nx?nx.c:null;
-  fitCtx={ cls, startDeltaMin:nx?nx.startDelta:null, etaToClassMin:etaToClassMin||null };
-  show('fit'); renderFitIntent();
-}
-function fitGapMin(){
-  if(fitCtx && fitCtx.startDeltaMin!=null) return fitCtx.startDeltaMin;
-  if(fitCtx && fitCtx.deadline) return Math.max(0, Math.round((fitCtx.deadline-Date.now())/6e4));
-  return null;
-}
-function renderFitIntent(){
-  const body=$('fitBody'); if(!body) return;
-  const gap=fitGapMin();
-  // schedule-less (or no upcoming class): ask "until when?" once
-  if(gap==null){
-    body.innerHTML=`<div class="fit-head"><h1 class="fit-title">Fit something in</h1>
-      <div class="fit-until">When do you need to be done?</div></div>
-      <div class="fit-deadline"><span class="label">Until</span><input type="time" id="fitDeadline"></div>
-      <div style="padding:14px 22px"><button class="btn" id="fitDeadlineGo">Continue</button></div>`;
-    $('fitDeadlineGo').addEventListener('click',()=>{
-      const v=$('fitDeadline').value; if(!v){ toast('Pick a time','warn'); return; }
-      const d=new Date(); d.setHours(+v.split(':')[0], +v.split(':')[1], 0, 0); if(d<=new Date()) d.setDate(d.getDate()+1);
-      fitCtx.deadline=+d; renderFitIntent();
-    });
-    return;
-  }
-  const untilTxt = fitCtx.cls ? ('Until '+esc(fitCtx.cls.course)+' at '+fmtTime(hm(fitCtx.cls.start))) : ('Until '+fmtClockTime(new Date(fitCtx.deadline)));
-  body.innerHTML=`<div class="fit-head"><h1 class="fit-title">What do you feel like?</h1>
-    <div class="fit-until">${untilTxt} · <b>${gap} min</b> gap</div></div>
-    <div class="fit-grid">${FIT_CATS.map(c=>{
-      const rough=gap-8-classBuffer(); const viable=c.k==='other' || rough>=c.min;
-      return `<button class="fit-cat${viable?'':' dim'}" data-fc="${c.k}"><span class="ic">${c.ic}</span><span class="t">${c.t}</span><span class="s">${c.k==='other' ? 'search campus' : viable?('up to ~'+Math.max(0,gap-6-classBuffer())+' min'):'too tight'}</span></button>`;
-    }).join('')}</div>`;
-  body.querySelectorAll('[data-fc]').forEach(b=>b.addEventListener('click',()=>{
-    const k=b.dataset.fc;
-    if(k==='other'){ show('home'); setTimeout(()=>{ try{ destInput.focus(); }catch(e){} },150); return; }
-    renderFitPlans(k);
-  }));
-}
-function fitCandidates(k){
-  const out=[], seen=new Set();
-  const push=(p,badge)=>{ const key=p.n; if(seen.has(key)) return; seen.add(key); out.push({p,badge}); };
-  // 1) explicit role
-  favorites.filter(f=>f.role===k || (k==='eat'&&f.role==='food')).forEach(f=>push({n:f.name,lat:f.lat,lng:f.lng},'your '+ (f.role==='food'?'spot':f.role)));
-  if(k==='home') return out;   // Home is only ever the designated place
-  // 2) frequent destinations of the right category
-  const freq=walkFreqMap();
-  const cats = k==='eat'?['dining','offcampus'] : k==='coffee'?['dining','offcampus'] : k==='gym'?['rec'] : k==='study'?['library']:[];
-  const match=(p)=>{ if(!cats.includes(p.c)) return false;
-    if(k==='coffee') return /coffee|café|cafe|starbucks|brew/i.test(p.n+' '+(p.a||[]).join(' '));
-    if(k==='gym') return /rec|gym|srsc|fitness/i.test(p.n+' '+(p.a||[]).join(' ')) || p.c==='rec';
-    return true; };
-  const pool=IU_PLACES.filter(match);
-  pool.slice().sort((a,b)=>(freq[b.lat.toFixed(4)+','+b.lng.toFixed(4)]||0)-(freq[a.lat.toFixed(4)+','+a.lng.toFixed(4)]||0));
-  pool.forEach(p=>{ const n=freq[p.lat.toFixed(4)+','+p.lng.toFixed(4)]||0; if(n>=2) push(p,'you go often'); });
-  // 3) nearby matching places
-  const from=curPos||IU;
-  pool.slice().sort((a,b)=>distance(from.lat,from.lng,a.lat,a.lng)-distance(from.lat,from.lng,b.lat,b.lng)).forEach(p=>push(p,null));
-  return out;
-}
-function renderFitPlans(k){
-  const body=$('fitBody'); if(!body) return;
-  const cat=FIT_CATS.find(c=>c.k===k), gap=fitGapMin(), from=curPos||IU;
-  const clsPt = fitCtx.cls ? {lat:fitCtx.cls.lat,lng:fitCtx.cls.lng} : from;
-  const untilTxt = fitCtx.cls ? ('Until '+esc(fitCtx.cls.course)+' at '+fmtTime(hm(fitCtx.cls.start))) : ('Until '+fmtClockTime(new Date(fitCtx.deadline)));
-  let cands=fitCandidates(k);
-  if(k==='home' && !cands.length){
-    body.innerHTML=`<div class="fit-head"><h1 class="fit-title">Home</h1><div class="fit-until">${untilTxt}</div></div>
-      <div class="fit-empty">Tell BeeLine where home is first — set the <b>Home</b> role on a place in <b>You → Your Places</b>, then this works in one tap.</div>
-      <div style="padding:0 22px"><button class="btn ghost" id="fitSetHome">Open Your Places</button></div>`;
-    $('fitSetHome').addEventListener('click',()=>{ openFavsSheet(); });
-    return;
-  }
-  // score: usable minutes at the place (estimates for ranking — exact ETA only on commit)
-  const scored=cands.map(c=>{
-    const there=estMinBetween(from.lat,from.lng,c.p.lat,c.p.lng);
-    const back=estMinBetween(c.p.lat,c.p.lng,clsPt.lat,clsPt.lng);
-    const usable=Math.floor(gap - there - back - classBuffer() - (cat.over||0));
-    const hrs=placeHours(c.p, (enrichNow(c.p).fields)||{});
-    const open= hrs ? openStatus(hrs.hours) : null;
-    return {c, there, back, usable, open};
-  }).filter(x=>x.open!=='Closed now')
-    .filter(x=>x.usable > -10)
-    .sort((a,b)=>b.usable-a.usable)
-    .slice(0,4);
-  const viable=scored.filter(x=>x.usable>=cat.min);
-  let html=`<div class="fit-head"><h1 class="fit-title">${esc(cat.t)}</h1><div class="fit-until">${untilTxt}</div></div>`;
-  if(!scored.length){ html+=`<div class="fit-empty">Nothing close enough${fitCtx.cls?(' before '+esc(fitCtx.cls.course)):''}.</div>`; body.innerHTML=html; return; }
-  // one grouped list — usable minutes carry the hierarchy (Ink, not honey);
-  // the whole row commits; only the recommended plan gets the honey action
-  html+=`<div class="planlist">`;
-  scored.forEach((x,i)=>{
-    const leaveThere=new Date(Date.now()+(gap - x.back - classBuffer())*6e4);
-    const ok=x.usable>=cat.min;
-    const badges=(x.open==='Open now'?`<span class="plan-badge">Open now</span>`:'')+(x.c.badge?`<span class="plan-badge">${esc(x.c.badge)}</span>`:'');
-    html+=`<div class="plan-row${ok?'':' dim'}${i===0&&ok?' top':''}" ${ok?`data-plan="${i}" role="button" tabindex="0"`:''}>
-      <div class="plan-mid">
-        <div class="plan-name">${esc(x.c.p.n)}</div>
-        <div class="plan-meta">${ok?`~${Math.max(1,Math.round(x.there))} min there · leave by ${fmtClockTime(leaveThere)}`:'Not enough time after travel'}</div>
-        ${badges?`<div class="plan-badges">${badges}</div>`:''}
-      </div>
-      <div class="plan-usable"><b>${Math.max(0,x.usable)}</b><span>usable min</span></div>
-    </div>
-    ${i===0&&ok?`<button class="btn plan-choose" data-plan="0">Choose this plan</button>`:''}`;
-  });
-  html+=`</div>`;
-  if(!viable.length && scored.length) html+=`<div class="fit-empty">Nothing fits comfortably${fitCtx.cls?(' before '+esc(fitCtx.cls.course)):''}.${scored[0].usable>0?(' The closest option gives about '+scored[0].usable+' min.'):''}</div>`;
-  html+=`<div class="fit-note">Estimates from your pace${fitCtx.cls?' and walk history':''} — the exact route is checked when you choose.</div>`;
-  body.innerHTML=html;
-  body.querySelectorAll('[data-plan]').forEach(b=>b.addEventListener('click',()=>{
-    const x=scored[+b.dataset.plan]; commitPlan(x, cat);
-  }));
-}
-function commitPlan(x, cat){
-  const gap=fitGapMin();
-  const leaveThereBy=Date.now()+(gap - x.back - classBuffer())*6e4;
-  plan={ placeName:x.c.p.n, lat:x.c.p.lat, lng:x.c.p.lng,
-    leaveThereBy, until: fitCtx.cls ? Date.now()+gap*6e4 : fitCtx.deadline,
-    course: fitCtx.cls?fitCtx.cls.course:null, classB: fitCtx.cls?fitCtx.cls.b:null,
-    classLat: fitCtx.cls?fitCtx.cls.lat:(curPos?curPos.lat:IU.lat), classLng: fitCtx.cls?fitCtx.cls.lng:(curPos?curPos.lng:IU.lng) };
-  savePlan();
-  // refine the second leg with one exact router call (honesty: better leave-there time)
-  if(curPos) fetchOfficialWalkMinutes(x.c.p.lat,x.c.p.lng,plan.classLat,plan.classLng).then(r=>{
-    if(!plan) return; plan.leaveThereBy=Date.now()+(fitGapMin()!=null?fitGapMin():gap)*6e4 - (r.minutes+classBuffer())*6e4;
-    // recompute simply: leaveThereBy = classStart - ride/walk back - buffer
-    if(fitCtx && fitCtx.cls){ const nx2=scheduleNow(); if(nx2 && !nx2.ongoing){ plan.leaveThereBy=Date.now()+(nx2.startDelta - r.minutes - classBuffer())*6e4; } }
-    savePlan(); if(screens.home.classList.contains('active')) renderTimeModule();
-  }).catch(()=>{});
-  setDest(x.c.p.lat, x.c.p.lng, x.c.p.n);
-  show('home'); const sc=document.querySelector('#scr-home .scroll'); if(sc) sc.scrollTo({top:0});
-  toast('Plan set — '+x.usable+' usable min at '+x.c.p.n,'good');
-}
+/* ---- WHAT FITS — the planning engine lives in plan.js; this is the shim.
+   openFit keeps its old signature (callers pass nx/eta; the engine derives
+   its own context from the schedule + live position). ---- */
+function openFit(){ if(typeof PlanUI!=='undefined') PlanUI.open(); }
 $('fitBack').addEventListener('click', ()=>{ show('home'); });
 
 function updateOffBanner(){ $('offBanner').classList.toggle('show', !trackingOn); $('goWalk').disabled= !dest || !trackingOn; }
@@ -5451,7 +5360,8 @@ const BusLive={
       const liveVeh=(a.equipmentID&&a.equipmentID!=='-')?this.vehicles[String(a.equipmentID)]:null;
       const isLive=!!(liveVeh && this.state(liveVeh)==='LIVE');
       return { parent, minutes:a.minutes, clock:(a.time||a.schedule||'').replace(/^0/,''),
-        state:isLive?'LIVE':'SCHEDULED', equipmentId:isLive?String(a.equipmentID):null, dirRaw:a.direction||null };
+        state:isLive?'LIVE':'SCHEDULED', equipmentId:isLive?String(a.equipmentID):null, dirRaw:a.direction||null,
+        load:(isLive&&liveVeh.load!=null)?liveVeh.load:null, capacity:(isLive&&liveVeh.capacity>0)?liveVeh.capacity:null };
     }).filter(Boolean).sort((a,b)=>a.minutes-b.minutes);
     // dedupe: detour variants (F + FD) surface the same trip twice under one parent
     const seen=new Set(), ded=rows.filter(r=>{ const k=r.parent.id+'|'+(r.equipmentId||r.clock||r.minutes); if(seen.has(k)) return false; seen.add(k); return true; });
@@ -5611,6 +5521,14 @@ function bzTextOn(hex){
   const n=parseInt(m[1],16), r=n>>16, g=(n>>8)&255, b=n&255;
   return ((r*299+g*587+b*114)/1000) >= 158 ? '#14130F' : '#fff';
 }
+// fullness hint for a LIVE arrival row — measured counters only, 2 tiers
+function bzFullness(r){
+  if(!r || r.state!=='LIVE' || r.load==null || !(r.capacity>0)) return null;
+  const ratio=Math.min(1, r.load/r.capacity);
+  if(ratio>=0.95) return {t:'Full', cls:'full', n:r.load+'/'+r.capacity};
+  if(ratio>=0.8) return {t:'Nearly full', cls:'near', n:r.load+'/'+r.capacity};
+  return null;
+}
 function bzNowSec(){ const d=new Date(); return d.getHours()*3600+d.getMinutes()*60+d.getSeconds(); }
 function bzFmtSec(s){ return fmtTime(Math.round(s/60)%1440); }
 
@@ -5652,7 +5570,7 @@ const BusPlanner={
         const rideStops=this.stopsBetween(c.p, c.o.id, c.x.id);
         const total=a.minutes+ride+walkFrom;
         const cand={state:'LIVE', p:c.p, board:c.o, alight:c.x, walkTo, walkFrom,
-          wait:a.minutes, ride, rideStops, total, bus:a.equipmentId,
+          wait:a.minutes, ride, rideStops, total, bus:a.equipmentId, load:a.load, capacity:a.capacity,
           leaveInMin:Math.max(0, a.minutes-walkTo-BZ_BOARD_BUFFER_MIN)};
         if(!best||cand.total<best.total) best=cand;
       }
@@ -5944,7 +5862,7 @@ const BusUI={
       return `<div class="bz-arr" ${r.equipmentId?`data-eq="${esc(r.equipmentId)}"`:''}>
       <span class="bz-dot lg" style="background:${esc(r.parent.color)}">${esc(r.parent.abbr)}</span>
       <b class="bz-arr-min">${esc(String(primary))}</b>
-      <span class="bz-arr-state">${r.state==='LIVE' ? BZ_LIVE_BADGE+(r.equipmentId?`<i class="bz-busid">Bus ${esc(r.equipmentId)}</i>`:'') : `<span class="bz-sched">Scheduled${(r.minutes<60&&r.clock)?' · '+esc(r.clock):''}</span>`}</span></div>`;
+      <span class="bz-arr-state">${r.state==='LIVE' ? BZ_LIVE_BADGE+(r.equipmentId?`<i class="bz-busid">Bus ${esc(r.equipmentId)}</i>`:'')+((f=>f?`<span class="bz-fullness ${f.cls}">${f.t} · ${f.n}</span>`:'')(bzFullness(r))) : `<span class="bz-sched">Scheduled${(r.minutes<60&&r.clock)?' · '+esc(r.clock):''}</span>`}</span></div>`;
     }).join('');
     host.querySelectorAll('[data-eq]').forEach(rw=>rw.addEventListener('click',()=>this.openBus(rw.dataset.eq)));
     clearTimeout(this.etaTimer);
@@ -6039,7 +5957,7 @@ const BusUI={
       <div class="bz-plan-total">${headline} ${verdict}</div>
       <div class="bz-steps">
         <div class="bz-step"><span class="bz-step-ic">${pic('person-simple-walk')}</span><div>Walk <b>${Math.max(1,Math.round(b.walkTo))} min</b> to <b>${esc(b.board.name)}</b></div></div>
-        <div class="bz-step"><span class="bz-dot" style="background:${esc(b.p.color)}">${esc(b.p.abbr)}</span><div>Take the <b>${esc(b.p.abbr)}</b>${live?` — Bus ${esc(b.bus)} arrives in <b>${b.wait} min</b>`:` — departs <b>${bzFmtSec(b.depSec)}</b>`}<br><span class="bz-mut2">${leave}</span></div></div>
+        <div class="bz-step"><span class="bz-dot" style="background:${esc(b.p.color)}">${esc(b.p.abbr)}</span><div>Take the <b>${esc(b.p.abbr)}</b>${live?` — Bus ${esc(b.bus)} arrives in <b>${b.wait} min</b>`:` — departs <b>${bzFmtSec(b.depSec)}</b>`}${(f=>f?`<br><span class="bz-fullness ${f.cls}">${f.t} — ${f.n} aboard · it may be standing-room, or pass you by</span>`:'')(bzFullness({state:b.state,load:b.load,capacity:b.capacity}))}<br><span class="bz-mut2">${leave}</span></div></div>
         <div class="bz-step"><span class="bz-step-ic">${pic('signpost')}</span><div>Get off at <b>${esc(b.alight.name)}</b>${b.rideStops?` · <b>${b.rideStops} stop${b.rideStops>1?'s':''}</b>`:''} (~${Math.round(b.ride)} min ride)</div></div>
         <div class="bz-step"><span class="bz-step-ic">${pic('person-simple-walk')}</span><div>Walk <b>${Math.max(1,Math.round(b.walkFrom))} min</b> to <b>${esc(name)}</b></div></div>
       </div>`;
@@ -6372,6 +6290,563 @@ $('bzLocate').addEventListener('click',()=>{
     .catch(e=>toast(geoErrMsg(e),'warn'));
 });
 BusUI.wireSearch();
+
+</script>
+
+<script>
+/* ================================================================
+   BEELINE PLANNING ENGINE — "What fits?"
+   Owns the physical time between commitments. The product unit is a
+   complete PLAN: place → usable activity time → leave-there time →
+   next commitment protected. Loads after app.js (like bus.js); uses
+   its globals ($ , esc, distance, curPos, IU, paceSpeed, favorites,
+   walks, IU_PLACES, placeHours, enrichNow, openStatus, classBuffer,
+   scheduleNow, fmtTime, fmtClockTime, hm, lsGet/lsSet, toast, setDest,
+   show, learnedRoutes, fetchOfficialWalkMinutes, localSearch, pic).
+
+   HONESTY: every time figure carries a source (learned | route | est);
+   estimates render with ~; measured beats estimated; closed places are
+   never recommended; unknown hours are labeled, not assumed open.
+   ================================================================ */
+
+/* ---- ActivityProfiles — setup/exit overhead + duration shape.
+   Starter defaults, NOT truths: personalization nudges min via observed
+   accepted durations (see PlanPersonalization). type: elastic (any
+   meaningful duration works, diminishing returns) | threshold (below min
+   don't surface) | compound (setup+exit dominate) | fixed (user-set). ---- */
+const ActivityProfiles={
+  coffee:{ t:'Coffee', setup:4, exit:1, min:5,  good:12, ideal:18, type:'elastic',  verb:'for coffee' },
+  eat:   { t:'Eat',    setup:6, exit:2, min:12, good:22, ideal:32, type:'threshold',verb:'to eat' },
+  gym:   { t:'Gym',    setup:6, exit:5, min:25, good:45, ideal:65, type:'compound', verb:'workout' },
+  study: { t:'Study',  setup:2, exit:1, min:10, good:30, ideal:60, type:'elastic',  verb:'to study' },
+  home:  { t:'Home',   setup:2, exit:3, min:15, good:30, ideal:60, type:'threshold',verb:'at home' },
+  errand:{ t:'Errand', setup:1, exit:1, min:5,  good:10, ideal:15, type:'fixed',    verb:'' },
+  break: { t:'Break',  setup:0, exit:0, min:1,  good:10, ideal:20, type:'elastic',  verb:'to breathe' },
+};
+
+/* ---- PlanPersonalization — explicit roles > repeated behavior > context.
+   Local-only (beeline.planprefs.v1). Learning is gradual: minimums adapt
+   only after 3+ accepted plans in a category; explicit prefs always win. ---- */
+const LS_PLANPREFS='beeline.planprefs.v1';
+const PlanPersonalization={
+  d: null,
+  load(){ this.d=Object.assign({sel:[], notForMe:{}, minObserved:{}, rolePrompted:{}}, lsGet(LS_PLANPREFS)||{}); return this.d; },
+  save(){ lsSet(LS_PLANPREFS, JSON.stringify(this.d)); },
+  effMin(cat){
+    const prof=ActivityProfiles[cat]; if(!prof) return 5;
+    const obs=(this.d.minObserved||{})[cat];
+    // learned minimum: only lowers (never raises) the default, only with 3+ accepted plans
+    if(obs && obs.n>=3 && obs.p25<prof.min) return Math.max(5, Math.round(obs.p25));
+    return prof.min;
+  },
+  recordSelection(planObj){
+    this.d.sel.push({cat:planObj.cat, place:planObj.placeName, usable:planObj.usableMin, at:Date.now()});
+    if(this.d.sel.length>60) this.d.sel=this.d.sel.slice(-60);
+    // update observed accepted-duration distribution for the category
+    const durs=this.d.sel.filter(s=>s.cat===planObj.cat).map(s=>s.usable).sort((a,b)=>a-b);
+    if(durs.length>=3) (this.d.minObserved=this.d.minObserved||{})[planObj.cat]={n:durs.length, p25:durs[Math.floor(durs.length*0.25)]};
+    this.save();
+  },
+  recordNotForMe(placeName){ (this.d.notForMe=this.d.notForMe||{})[placeName]=(this.d.notForMe[placeName]||0)+1; this.save(); },
+  rejected(placeName){ return (this.d.notForMe||{})[placeName]>=1; },
+  // one gentle role prompt after 3 same-place selections in a role-able category
+  rolePrompt(){
+    const counts={};
+    this.d.sel.slice(-20).forEach(s=>{ if(['gym','study','eat','coffee'].includes(s.cat)) counts[s.cat+'|'+s.place]=(counts[s.cat+'|'+s.place]||0)+1; });
+    for(const [k,n] of Object.entries(counts)){
+      const [cat,place]=k.split('|');
+      const role= cat==='eat'||cat==='coffee' ? 'food' : cat;
+      if(n>=3 && !(this.d.rolePrompted||{})[k] && !favorites.some(f=>f.role===role && favLabel(f.name)===place)){
+        return {cat, place, role, key:k};
+      }
+    }
+    return null;
+  },
+  markPrompted(key){ (this.d.rolePrompted=this.d.rolePrompted||{})[key]=1; this.save(); },
+};
+
+/* ---- PlanTravelService — staged: cheap local estimates for ranking
+   (straight-line × path factor ÷ pace, learned lines when they cover the
+   leg), exact router only for the committed/top plan. ---- */
+const PlanTravelService={
+  est(aLat,aLng,bLat,bLng){ return (distance(aLat,aLng,bLat,bLng)*1.3)/paceSpeed()/60; },
+  // learned personal time for a leg to ~this destination, if history covers it
+  learned(destLat,destLng){
+    try{
+      const lr=learnedForDest({lat:destLat,lng:destLng});
+      if(lr && lr.used>=2) return { min:(lr.avgSeconds*1.05)/60, src:'learned' };  // conservative: avg + 5%
+    }catch(e){}
+    return null;
+  },
+  leg(aLat,aLng,bLat,bLng){
+    const l=this.learned(bLat,bLng);
+    if(l && distance(aLat,aLng, bLat,bLng)>150) return { min:l.min, src:'learned' };
+    return { min:this.est(aLat,aLng,bLat,bLng), src:'est' };
+  },
+};
+
+/* ---- duration utility: 0 at effective-minimum → ~0.62 at good → 1.0 at
+   ideal → gentle past ideal. Below minimum: negative (near-miss zone). ---- */
+function planDurationUtility(usable, prof, effMin){
+  if(usable<=0) return -1;
+  if(usable<effMin) return -0.4*(1-usable/effMin);
+  if(usable<=prof.good)  return 0.62*(usable-effMin)/Math.max(1,prof.good-effMin);
+  if(usable<=prof.ideal) return 0.62+0.38*(usable-prof.good)/Math.max(1,prof.ideal-prof.good);
+  return 1+0.08*Math.min(1,(usable-prof.ideal)/60);
+}
+
+/* ---- candidate pools per category (reuses the proven seeding:
+   explicit roles → frequent destinations → nearby category matches) ---- */
+function planPool(cat){
+  const out=[], seen=new Set();
+  const push=(p,why)=>{ if(seen.has(p.n||p.name)) return; seen.add(p.n||p.name); out.push({p:{n:p.n||p.name,lat:p.lat,lng:p.lng,c:p.c||'offcampus'}, why}); };
+  const roleFor= cat==='eat'||cat==='coffee' ? 'food' : cat;
+  favorites.filter(f=>f.role===roleFor).forEach(f=>push({n:favLabel(f.name),lat:f.lat,lng:f.lng},
+    cat==='home' ? null : 'Your '+(roleFor==='food'?'spot':roleFor)));
+  if(cat==='home') return out;                      // Home is only the designated place
+  const freq={}; walks.forEach(w=>{ const k=w.destLat.toFixed(4)+','+w.destLng.toFixed(4); freq[k]=(freq[k]||0)+1; });
+  const cats = cat==='eat'?['dining','offcampus'] : cat==='coffee'?['dining','offcampus'] : cat==='gym'?['rec'] : cat==='study'?['library']:[];
+  const match=p=>{
+    if(!cats.includes(p.c)) return false;
+    if(cat==='coffee') return /coffee|café|cafe|starbucks|brew/i.test(p.n+' '+(p.a||[]).join(' '));
+    if(cat==='eat' && p.c==='offcampus') return /grill|pizza|taco|burger|noodle|café|cafe|kitchen|diner|chipotle|bloomington bagel|food/i.test(p.n+' '+(p.a||[]).join(' '));
+    return true;
+  };
+  const pool=IU_PLACES.filter(match);
+  pool.forEach(p=>{ const n=freq[p.lat.toFixed(4)+','+p.lng.toFixed(4)]||0; if(n>=2) push(p,'You go often'); });
+  const from=curPos||IU;
+  pool.slice().sort((a,b)=>distance(from.lat,from.lng,a.lat,a.lng)-distance(from.lat,from.lng,b.lat,b.lng)).slice(0,8).forEach(p=>push(p,null));
+  return out;
+}
+
+/* ---- PlanEngine — candidates → feasibility → friction → score → plans ---- */
+const PlanEngine={
+  /* context: {gapMin, nextName, nextStart(ms|null), nextLat, nextLng, buffer, from:{lat,lng}, hereName} */
+  context(){
+    const nx=scheduleNow();
+    const from=curPos||IU;
+    if(nx && !nx.ongoing && ((nx.di-new Date().getDay()+7)%7)===0){
+      return { gapMin:nx.startDelta, nextName:nx.c.course, nextB:favLabel(nx.c.b),
+        nextStart:Date.now()+nx.startDelta*6e4, nextLat:nx.c.lat, nextLng:nx.c.lng,
+        buffer:classBuffer(), from, cls:nx.c };
+    }
+    return null;   // schedule-less: UI collects a deadline+destination
+  },
+  manualContext(deadlineMs, destPlace){
+    const from=curPos||IU;
+    const d=destPlace||{n:'your deadline', lat:from.lat, lng:from.lng};
+    return { gapMin:Math.max(0,Math.round((deadlineMs-Date.now())/6e4)), nextName:d.n, nextB:d.n,
+      nextStart:deadlineMs, nextLat:d.lat, nextLng:d.lng, buffer:classBuffer(), from, manual:true };
+  },
+  hoursState(p){
+    try{
+      const H=placeHours({n:p.n,lat:p.lat,lng:p.lng}, (enrichNow({n:p.n,lat:p.lat,lng:p.lng}).fields)||{});
+      if(!H) return 'unknown';
+      const st=openStatus(H.hours);
+      return st==='Open now'?'open' : st==='Closed now'?'closed' : 'unknown';
+    }catch(e){ return 'unknown'; }
+  },
+  /* one candidate → a fully-computed plan (or null when infeasible) */
+  evaluate(ctx, cand, cat, opts){
+    opts=opts||{};
+    const prof=ActivityProfiles[cat]; if(!prof) return null;
+    const effMin=opts.wantMin!=null?1:PlanPersonalization.effMin(cat);
+    const p=cand.p;
+    if(PlanPersonalization.rejected(p.n) && !opts.explicit) return null;
+    const hours=this.hoursState(p);
+    if(hours==='closed') return null;
+    const stay = opts.stayHere===true;
+    const there = stay ? {min:0,src:'none'} : PlanTravelService.leg(ctx.from.lat,ctx.from.lng,p.lat,p.lng);
+    const back  = PlanTravelService.leg(p.lat,p.lng,ctx.nextLat,ctx.nextLng);
+    // uncertainty allowance: estimates carry a small safety pad, learned legs don't
+    const pad=(there.src==='est'?1:0)+(back.src==='est'?1:0);
+    const usable=Math.floor(ctx.gapMin - there.min - back.min - ctx.buffer - prof.setup - prof.exit - pad);
+    if(usable < (opts.explicit?1:effMin)) {
+      if(opts.explicit) return this.mk(ctx,p,cat,prof,there,back,usable,hours,cand.why,opts,true);
+      return null;
+    }
+    // corridor: is this on the way? added = (cur→p→next) − (cur→next)
+    const direct=PlanTravelService.est(ctx.from.lat,ctx.from.lng,ctx.nextLat,ctx.nextLng);
+    const added=(there.min+back.min)-direct;
+    const onWay=!stay && added<=Math.max(3, direct*0.25);
+    const nearNext=!stay && distance(p.lat,p.lng,ctx.nextLat,ctx.nextLng)<=380;
+    return this.mk(ctx,p,cat,prof,there,back,usable,hours,cand.why,Object.assign({},opts,{onWay,added,nearNext}),false);
+  },
+  mk(ctx,p,cat,prof,there,back,usable,hours,why,opts,nearMiss){
+    const effMin=PlanPersonalization.effMin(cat);
+    const util=planDurationUtility(usable, prof, effMin);
+    const roleBonus = why && why.startsWith('Your ') ? 25 : 0;
+    const freqBonus = why==='You go often' ? 10 : 0;
+    const frict = (there.min+back.min)*1.15 + (prof.setup+prof.exit)*0.55 + (hours==='unknown'?4:0);
+    let score = 60*util + roleBonus + freqBonus - frict;
+    if(opts.onWay) score+=15;
+    if(opts.nearNext) score+=8;
+    if(opts.stayHere) score+=12;
+    if(there.src==='learned'||back.src==='learned') score+=4;      // confidence
+    let reason = why || (opts.stayHere?'No extra travel' : opts.onWay?('On your way'+(opts.added>0.7?(' · adds ~'+Math.round(opts.added)+' min'):'')) : opts.nearNext?('Near '+(ctx.nextB||'your next stop')) : (there.min<=4?'Close by':null));
+    return {
+      cat, prof, place:p, usableMin:usable, thereMin:there.min, backMin:back.min,
+      thereSrc:there.src, backSrc:back.src, hours, score, reason, nearMiss:!!nearMiss,
+      stayHere:!!opts.stayHere, onWay:!!opts.onWay, nearNext:!!opts.nearNext,
+      leaveThereBy: ctx.nextStart - (back.min+ctx.buffer+prof.exit)*6e4,
+      ctx,
+    };
+  },
+  /* the default cross-category answer: top plans across strategies */
+  whatFits(ctx, filterCat, explicit){
+    PlanPersonalization.load();
+    const cats = filterCat ? [filterCat] : ['coffee','eat','study','gym','home'];
+    let all=[];
+    // strategy: stay where you are (elastic activities at/near the current place)
+    if(curPos && !filterCat || curPos && ['study','coffee','break'].includes(filterCat)){
+      let nearest=null, nd=1e9;
+      IU_PLACES.forEach(p=>{ const d=distance(curPos.lat,curPos.lng,p.lat,p.lng); if(d<nd){ nd=d; nearest=p; } });
+      if(nearest && nd<=130){
+        const stayCat = nearest.c==='library'?'study' : nearest.c==='dining'?'coffee' : nearest.c==='rec'?'gym' : 'study';
+        if(!filterCat || filterCat===stayCat){
+          const ev=this.evaluate(ctx,{p:{n:nearest.n,lat:nearest.lat,lng:nearest.lng,c:nearest.c},why:null},stayCat,{stayHere:true});
+          if(ev){ ev.reason='No extra travel'; all.push(ev); }
+        }
+      }
+    }
+    // strategy: standard pools per category
+    cats.forEach(cat=>{
+      planPool(cat).forEach(cand=>{
+        const ev=this.evaluate(ctx,cand,cat,{explicit:explicit&&filterCat===cat});
+        if(ev) all.push(ev);
+      });
+    });
+    all.sort((a,b)=>b.score-a.score);
+    // pick ~3 excellent, diverse: max 1 per (cat unless filtered), keep a
+    // strategy-diverse slate (a stay-here/on-the-way swaps in when close)
+    const picked=[], usedCat={}, usedPlace=new Set();
+    for(const pl of all){
+      if(usedPlace.has(pl.place.n)) continue;
+      if(!filterCat && (usedCat[pl.cat]||0)>=1) continue;
+      picked.push(pl); usedPlace.add(pl.place.n); usedCat[pl.cat]=(usedCat[pl.cat]||0)+1;
+      if(picked.length>=(filterCat?4:3)) break;
+    }
+    if(!filterCat && picked.length>=3){
+      const special=all.find(x=>(x.stayHere||x.onWay)&&!picked.includes(x));
+      if(special && special.score>=picked[2].score*0.8 && !usedPlace.has(special.place.n)) picked[2]=special;
+    }
+    const more=all.filter(x=>!picked.includes(x) && !x.nearMiss).slice(0,6);
+    return {plans:picked, more, all};
+  },
+};
+
+/* ---- CanIParser — deterministic; never hallucinates a destination ---- */
+function planParseCanI(q){
+  const s=q.toLowerCase().trim();
+  if(!s) return null;
+  const out={};
+  const dm=s.match(/(\d{1,3})\s*(?:min|minute|m\b)|(\d{1,2})\s*(?:hr|hour)/);
+  if(dm) out.wantMin= dm[1]?+dm[1] : (+dm[2])*60;
+  if(/\bhome\b/.test(s)) out.cat='home';
+  else if(/gym|work\s?out|workout|lift|exercise/.test(s)) out.cat='gym';
+  else if(/coffee|latte|espresso|caffeine/.test(s)) out.cat='coffee';
+  else if(/\beat\b|food|lunch|dinner|breakfast|hungry|meal|grab.*(bite|food)/.test(s)) out.cat='eat';
+  else if(/study|read|homework|review/.test(s)) out.cat='study';
+  else if(/print/.test(s)) { out.cat='errand'; out.errand='print'; }
+  else if(/package|mail|pick\s?up/.test(s)) { out.cat='errand'; out.errand='package'; }
+  // specific destination: "at <x>", "to <x>", or a bare place name
+  const pm=s.match(/(?:\bat|\bto|\bgo to)\s+(.+?)(?:\s+(?:first|before|after|by)\b.*)?$/);
+  const cand=(pm?pm[1]:(!out.cat?s:'')).replace(/[?.!]/g,'').trim();
+  if(cand && cand.length>=3 && !/^(the )?(gym|home|coffee|food|class|library|somewhere)$/.test(cand)){
+    try{
+      const hits=localSearch(cand).slice(0,3);
+      if(hits.length && hits[0].name.toLowerCase().includes(cand.split(' ')[0])) out.place=hits[0];
+      else if(hits.length) out.placeGuesses=hits;
+    }catch(e){}
+  }
+  return (out.cat||out.place||out.placeGuesses)?out:null;
+}
+
+/* ================================================================
+   ACTIVE PLAN — committed plan lifecycle: travel → active → wrapup →
+   leave. Owns its own state (dest is cleared by walk exits and cannot
+   be relied on). Recalculates on a 60s tick + visibility, with
+   hysteresis: UI only moves when leave-by shifts >90s or usable ±3 min.
+   ================================================================ */
+function planCommit(pl){
+  const now=Date.now();
+  plan={ v:2, cat:pl.cat, placeName:pl.place.n, lat:pl.place.lat, lng:pl.place.lng,
+    strategy: pl.stayHere?'stay': pl.onWay?'onway': pl.nearNext?'nearnext':'standard',
+    createdAt:now, phase: pl.stayHere?'active':'travel',
+    thereMin:Math.round(pl.thereMin), usableMin:pl.usableMin,
+    setup:pl.prof.setup, exit:pl.prof.exit, verb:pl.prof.verb,
+    leaveThereBy:pl.leaveThereBy, until:pl.ctx.nextStart,
+    course:pl.ctx.cls?pl.ctx.cls.course:pl.ctx.nextName, classB:pl.ctx.cls?pl.ctx.cls.b:null,
+    classLat:pl.ctx.nextLat, classLng:pl.ctx.nextLng, buffer:pl.ctx.buffer,
+    backMin:Math.round(pl.backMin), backSrc:pl.backSrc };
+  savePlan();
+  PlanPersonalization.load(); PlanPersonalization.recordSelection(plan);
+  // refine the protected leg with one exact router call (quiet update)
+  fetchOfficialWalkMinutes(pl.place.lat,pl.place.lng,pl.ctx.nextLat,pl.ctx.nextLng).then(r=>{
+    if(!plan || plan.placeName!==pl.place.n) return;
+    const nb=Math.max(1,Math.round(r.minutes));
+    const newLeave=plan.until-(nb+plan.buffer+plan.exit)*6e4;
+    if(Math.abs(newLeave-plan.leaveThereBy)>90e3){ plan.leaveThereBy=newLeave; plan.backMin=nb; plan.backSrc='route'; savePlan();
+      if(screens.home.classList.contains('active')) renderTimeModule(); }
+  }).catch(()=>{});
+  if(!pl.stayHere) setDest(pl.place.lat, pl.place.lng, pl.place.n);
+  show('home'); const sc=document.querySelector('#scr-home .scroll'); if(sc) sc.scrollTo({top:0});
+  toast((pl.usableMin)+' min '+(pl.prof.verb||pl.cat)+' at '+pl.place.n,'good');
+}
+function planTick(){
+  if(!plan || plan.v!==2){ return; }
+  if(Date.now()>=plan.until){ plan=null; savePlan(); return; }
+  // phase transitions
+  if(plan.phase==='travel' && curPos && distance(curPos.lat,curPos.lng,plan.lat,plan.lng)<70){ plan.phase='active'; savePlan(); }
+  const leftMin=(plan.leaveThereBy-Date.now())/6e4;
+  if(plan.phase==='active' && leftMin<=5) { plan.phase='wrapup'; savePlan(); }
+  if((plan.phase==='wrapup'||plan.phase==='active') && leftMin<=0.5){ plan.phase='leave'; savePlan(); }
+  // live recalc of the protected leg from current position when leaving
+  if(plan.phase==='leave' && curPos){
+    const back=PlanTravelService.leg(curPos.lat,curPos.lng,plan.classLat,plan.classLng);
+    plan.backMin=Math.round(back.min); savePlan();
+  }
+}
+/* Home card for the active plan — one card, phase-aware */
+function planHomeCard(){
+  if(!plan) return '';
+  if(plan.v!==2){  // legacy plan object: minimal render
+    return `<div class="tm"><div class="tm-card"><div class="tm-toprow"><span class="tm-eyebrow">Plan</span></div>
+      <div class="tm-who"><div><div class="tm-course">${esc(plan.placeName)}</div><div class="tm-sub">Leave by <b>${fmtClockTime(new Date(plan.leaveThereBy))}</b></div></div></div>
+      <button class="tm-fit" id="tmPlanClear">Clear plan</button></div></div>`;
+  }
+  planTick();
+  if(!plan) return '';
+  const leftMin=Math.max(0,Math.round((plan.leaveThereBy-Date.now())/6e4));
+  const lv=fmtClockTime(new Date(plan.leaveThereBy));
+  const nextTxt=plan.course?esc(plan.course):'your next stop';
+  let chip, hero, sub, cta='';
+  if(plan.phase==='travel'){
+    chip='On plan'; hero=esc(plan.placeName);
+    sub='~'+plan.thereMin+' min away · then '+plan.usableMin+' min '+esc(plan.verb||plan.cat);
+  } else if(plan.phase==='active'){
+    chip='At '+esc(plan.placeName); hero=leftMin+'<span class="unit">min</span>';
+    sub='Leave by <b>'+lv+'</b> for '+nextTxt;
+  } else if(plan.phase==='wrapup'){
+    chip='Wrap up'; hero=leftMin+'<span class="unit">min</span>';
+    sub='Leave by <b>'+lv+'</b> · '+(plan.backSrc==='route'?'':'~')+plan.backMin+' min to '+nextTxt;
+  } else {
+    chip='Leave now'; hero='Now';
+    sub=(plan.backSrc==='route'?'':'~')+plan.backMin+' min to '+nextTxt+(plan.buffer?(' · arrive ~'+plan.buffer+' min early'):'');
+    cta=`<button class="tm-cta" id="tmPlanGo">Go — walk to ${nextTxt}</button>`;
+  }
+  return `<div class="tm"><div class="tm-card${plan.phase==='leave'?' tm-now':''}">
+    <div class="tm-toprow"><span class="tm-eyebrow">Your plan</span><span class="tm-chip${plan.phase==='leave'?'':' calm'}">${chip}</span></div>
+    <div class="tm-stats"><div class="tm-stat"><div class="tm-k">${plan.phase==='travel'?'Heading to':(plan.phase==='leave'?'Time to go':'Time left here')}</div>
+      <div class="tm-v${plan.phase==='leave'?' honey':''}">${hero}</div>
+      <div class="tm-basis">${sub}</div></div></div>
+    ${cta}
+    <button class="tm-fit" id="tmPlanClear">End plan</button></div></div>`;
+}
+function planHomeWire(){
+  const g=$('tmPlanGo'); if(g) g.addEventListener('click',()=>{ setDest(plan.classLat,plan.classLng,(plan.classB||plan.course||'Next stop')); if(typeof trackingOn!=='undefined'&&trackingOn) startWalk(); });
+  const c=$('tmPlanClear'); if(c) c.addEventListener('click', clearPlan);
+}
+setInterval(()=>{ if(plan && plan.v===2){ const before=plan.phase+Math.round((plan.leaveThereBy||0)/9e4); planTick(); const after=plan?plan.phase+Math.round((plan.leaveThereBy||0)/9e4):''; if(before!==after && screens.home.classList.contains('active') && !document.hidden) renderTimeModule(); } }, 30000);
+
+/* ================================================================
+   WHAT FITS — screen. Default entrance is the ANSWER, not a picker:
+   best plans across categories immediately, filters after, Can I…? last.
+   ================================================================ */
+const PlanUI={
+  ctx:null, filter:null, deadline:null, lastQuery:'',
+  open(){
+    this.filter=null; this.lastQuery='';
+    this.ctx=PlanEngine.context();
+    show('fit');
+    if(!this.ctx && !this.deadline){ this.renderDeadlineAsk(); return; }
+    if(!this.ctx && this.deadline) this.ctx=PlanEngine.manualContext(this.deadline.t, this.deadline.place);
+    this.render();
+  },
+  renderDeadlineAsk(){
+    const body=$('fitBody');
+    body.innerHTML=`<div class="fit-head"><h1 class="fit-title">What fits?</h1>
+      <div class="fit-until">No upcoming class found. When do you need to be somewhere?</div></div>
+      <div class="wf-deadline">
+        <label>Be at</label><input type="text" id="wfDest" placeholder="Anywhere (optional) — e.g. Kelley" autocomplete="off">
+        <label>by</label><input type="time" id="wfTime">
+        <button class="btn" id="wfGo">See what fits</button></div>`;
+    $('wfGo').addEventListener('click',()=>{
+      const v=$('wfTime').value; if(!v){ toast('Pick a time','warn'); return; }
+      const d=new Date(); d.setHours(+v.split(':')[0], +v.split(':')[1],0,0); if(d<=new Date()) d.setDate(d.getDate()+1);
+      let place=null;
+      const q=$('wfDest').value.trim();
+      if(q){ const hits=localSearch(q); if(hits.length) place={n:hits[0].name,lat:hits[0].lat,lng:hits[0].lng}; }
+      this.deadline={t:+d, place};
+      this.ctx=PlanEngine.manualContext(+d, place);
+      this.render();
+    });
+  },
+  header(){
+    const c=this.ctx;
+    const when=fmtClockTime(new Date(c.nextStart));
+    const direct=PlanTravelService.leg(c.from.lat,c.from.lng,c.nextLat,c.nextLng);
+    const leaveDirect=new Date(c.nextStart-(direct.min+c.buffer)*6e4);
+    return `<div class="fit-head"><h1 class="fit-title">What fits?</h1>
+      <div class="fit-until">Before <b>${esc(c.nextName)}</b> at ${when} · leave for ${esc(c.nextB||c.nextName)} by ${direct.src==='learned'?'':'~'}${fmtClockTime(leaveDirect)}</div></div>`;
+  },
+  card(pl,i,expanded){
+    const tilde=(pl.thereSrc==='est'||pl.backSrc==='est')?'~':'';
+    const lv=fmtClockTime(new Date(pl.leaveThereBy));
+    const hero= pl.nearMiss
+      ? `about ${Math.max(0,pl.usableMin)} min ${esc(pl.prof.verb||'')}`
+      : `${tilde}${pl.usableMin} min ${esc(pl.prof.verb||'')}`;
+    const meta= pl.stayHere
+      ? `You're here · leave at ${lv}`
+      : `${tilde}${Math.max(1,Math.round(pl.thereMin))} min there · leave ${esc(shortName(pl.place.n))} at ${lv} · ${tilde}${Math.max(1,Math.round(pl.backMin))} min to ${esc(pl.ctx.nextB||'next')}`;
+    const reason= pl.reason?`<span class="wf-why">${esc(pl.reason)}</span>`:'';
+    const hoursTag='';
+    const exp= expanded? `<div class="wf-math">
+        ${pl.stayHere?'':`<div><span>${tilde}${Math.max(1,Math.round(pl.thereMin))} min</span> walk there</div>`}
+        ${pl.prof.setup?`<div><span>${pl.prof.setup} min</span> getting started</div>`:''}
+        <div class="core"><span>${pl.usableMin} min</span> ${esc(pl.prof.verb||pl.cat)}</div>
+        ${pl.prof.exit?`<div><span>${pl.prof.exit} min</span> wrapping up</div>`:''}
+        <div><span>${tilde}${Math.max(1,Math.round(pl.backMin))} min</span> to ${esc(pl.ctx.nextB||'next')}</div>
+        <div><span>${pl.ctx.buffer} min</span> early, like you like</div>${pl.hours==='unknown'?'<div class="dim">Hours not verified — check before a long trip</div>':''}<button class="wf-nfm" data-nfm="${i}">Not for me</button></div>`:'';
+    return `<div class="wf-card${i===0&&!pl.nearMiss?' top':''}${pl.nearMiss?' miss':''}" data-wf="${i}" role="button" tabindex="0">
+      <div class="wf-row1"><b class="wf-place">${esc(pl.place.n)}</b>${reason}${hoursTag}</div>
+      <div class="wf-hero">${hero}</div>
+      <div class="wf-meta">${meta}</div>
+      ${pl.busOpt?`<div class="wf-bus">${pic('bus')} or the ${esc(pl.busOpt.abbr)} bus from ${esc(shortName(pl.busOpt.stop))} — saves ~${pl.busOpt.save} min <i>Scheduled</i></div>`:''}
+      ${exp}
+      <div class="wf-actions">${i===0&&!pl.nearMiss?`<span class="wf-choose">Choose</span>`:''}<button class="wf-exp" data-exp="${i}" aria-label="Show the math">${pic(expanded?'caret-down':'caret-right')}</button></div>
+    </div>`;
+  },
+  render(){
+    const body=$('fitBody'); if(!body || !this.ctx) return;
+    // running-late / tiny-gap guard: be honest, not optimizing
+    const c=this.ctx;
+    const direct=PlanTravelService.leg(c.from.lat,c.from.lng,c.nextLat,c.nextLng);
+    const slack=c.gapMin-direct.min-c.buffer;
+    const res=PlanEngine.whatFits(c, this.filter, false);
+    res.plans.forEach(pl=>{ pl.busOpt=planBusBackOption(pl); });
+    let html=this.header();
+    if(slack<=3 || (!res.plans.length && slack<=12)){
+      html+=`<div class="wf-none"><b>Nothing fits comfortably before ${esc(c.nextName)}.</b>
+        You need to leave in about ${Math.max(0,Math.round(slack+c.buffer- c.buffer))<1?'a minute':Math.max(1,Math.round(slack))+' min'}.</div>
+        <button class="btn wf-headnow" id="wfHeadNow">Head toward ${esc(c.nextB||c.nextName)} now</button>`;
+      body.innerHTML=html; this.wireCommon(res);
+      const hn=$('wfHeadNow'); if(hn) hn.addEventListener('click',()=>{ setDest(c.nextLat,c.nextLng,c.nextB||c.nextName); show('home'); });
+      return;
+    }
+    // calm option first-class: you don't have to do anything
+    const calm=`<div class="wf-calm">You've got <b>${c.gapMin>=120?Math.floor(c.gapMin/60)+'h '+(c.gapMin%60)+'m':c.gapMin+' min'}</b>. You're good — no need to leave until ${direct.src==='learned'?'':'~'}${fmtClockTime(new Date(c.nextStart-(direct.min+c.buffer)*6e4))}.</div>`;
+    if(!res.plans.length){
+      html+=calm+`<div class="wf-none">Nothing else fits comfortably${this.filter?(' for '+esc(ActivityProfiles[this.filter].t.toLowerCase())):''}.</div>`;
+    } else {
+      html+=`<div class="wf-sec">${this.filter?esc(ActivityProfiles[this.filter].t):'Best fits'}</div>`;
+      html+=`<div class="wf-list">`+res.plans.map((pl,i)=>this.card(pl,i,this.expanded===i)).join('')+`</div>`;
+      html+=calm;
+      const rp=PlanPersonalization.rolePrompt();
+      if(rp) html+=`<div class="wf-roleask" id="wfRoleAsk">Make <b>${esc(rp.place)}</b> your ${esc(rp.role==='food'?'food spot':rp.role)}?<span><button data-ra="yes">Yes</button><button data-ra="no">No</button></span></div>`;
+    }
+    html+=this.filterRow();
+    html+=`<div class="wf-can"><span class="wf-can-ic">${pic('magnifying-glass')}</span><input type="text" id="wfCanI" placeholder="Can I… ?  (e.g. get 45 min at the gym)" value="${esc(this.lastQuery)}" autocomplete="off"></div>
+      <div class="fit-note">Times from your pace and walk history — the route is checked when you choose.</div>`;
+    body.innerHTML=html;
+    this.wireCommon(res);
+  },
+  filterRow(){
+    const fs=[['',null,'All'],['eat','eat','Eat'],['gym','gym','Gym'],['study','study','Study'],['coffee','coffee','Coffee'],['home','home','Home']];
+    return `<div class="wf-filters">`+fs.map(([k,v,t])=>`<button class="wf-f${this.filter===v?' on':''}" data-wff="${k}">${t}</button>`).join('')+`</div>`;
+  },
+  wireCommon(res){
+    const body=$('fitBody');
+    body.querySelectorAll('[data-wff]').forEach(b=>b.addEventListener('click',()=>{ this.filter=b.dataset.wff||null; this.expanded=null; this.render(); }));
+    body.querySelectorAll('.wf-exp').forEach(b=>b.addEventListener('click',e=>{ e.stopPropagation(); const i=+b.dataset.exp; this.expanded=this.expanded===i?null:i; this.render(); }));
+    body.querySelectorAll('.wf-nfm').forEach(b=>b.addEventListener('click',e=>{ e.stopPropagation();
+      const pl=res.plans[+b.dataset.nfm]; if(!pl) return;
+      PlanPersonalization.load(); PlanPersonalization.recordNotForMe(pl.place.n);
+      this.expanded=null; this.render(); toast('Got it — no more '+pl.place.n+' suggestions','good');
+    }));
+    body.querySelectorAll('.wf-card[data-wf]').forEach(el=>el.addEventListener('click',()=>{
+      const pl=res.plans[+el.dataset.wf]; if(!pl||pl.nearMiss) return; planCommit(pl);
+    }));
+    const ra=$('wfRoleAsk');
+    if(ra){ const rp=PlanPersonalization.rolePrompt();
+      ra.querySelectorAll('[data-ra]').forEach(b=>b.addEventListener('click',()=>{
+        PlanPersonalization.markPrompted(rp.key);
+        if(b.dataset.ra==='yes'){ const f=favorites.find(x=>favLabel(x.name)===rp.place); if(f){ f.role=rp.role; saveFavs(); } else { favorites.push({name:rp.place, lat:(IU_PLACES.find(p=>p.n===rp.place)||{}).lat, lng:(IU_PLACES.find(p=>p.n===rp.place)||{}).lng, role:rp.role, c:'mine'}); saveFavs(); }
+          toast(rp.place+' saved as your '+(rp.role==='food'?'food spot':rp.role),'good'); }
+        ra.remove();
+      })); }
+    const can=$('wfCanI');
+    if(can){
+      can.addEventListener('keydown',e=>{ if(e.key==='Enter'){ this.canI(can.value); } });
+      can.addEventListener('blur',()=>{ if(can.value.trim() && can.value.trim()!==this.lastQuery) this.canI(can.value); });
+    }
+  },
+  /* Can I…? — parse → structured answer. Explicit asks get honest near-misses. */
+  canI(q){
+    this.lastQuery=q.trim();
+    const req=planParseCanI(q);
+    const body=$('fitBody');
+    if(!req){ this.filter=null; this.render(); toast("Couldn't read that — try a place or 'gym', 'coffee', 'home'",'warn'); return; }
+    const c=this.ctx;
+    let html=this.header();
+    let plans=[];
+    if(req.place){
+      // specific destination — feasibility for a generic visit (or requested duration)
+      const cat=req.cat||'errand';
+      const cand={p:{n:req.place.name,lat:req.place.lat,lng:req.place.lng,c:req.place.c||'offcampus'},why:null};
+      const ev=PlanEngine.evaluate(c,cand,cat,{explicit:true,wantMin:req.wantMin||null});
+      if(ev) plans=[ev];
+    } else if(req.cat){
+      const res=PlanEngine.whatFits(c, req.cat, true);
+      plans=res.all.filter(x=>x.cat===req.cat).slice(0,3);
+    }
+    if(req.errand){
+      html+=`<div class="wf-none">BeeLine doesn't have reliable ${req.errand==='print'?'printer':'package-pickup'} locations yet — pick the place yourself and it'll do the math.</div>`;
+    }
+    if(!plans.length && !req.errand){
+      html+=`<div class="wf-none">Nothing matches that${req.wantMin?(' for '+req.wantMin+' min'):''} before ${esc(c.nextName)}.</div>`;
+    } else if(plans.length){
+      const best=plans[0];
+      if(req.wantMin && best.usableMin<req.wantMin){
+        html+=`<div class="wf-ask">You asked for <b>${req.wantMin} min</b> — about <b>${Math.max(0,best.usableMin)} min</b> fits comfortably.</div>`;
+      } else if(best.nearMiss){
+        html+=`<div class="wf-ask">You'd have about <b>${Math.max(0,best.usableMin)} min</b> — below your usual ${esc(best.prof.t.toLowerCase())}.</div>`;
+      }
+      html+=`<div class="wf-list">`+plans.map((pl,i)=>this.card(pl,i,false)).join('')+`</div>`;
+    }
+    html+=this.filterRow();
+    html+=`<div class="wf-can"><span class="wf-can-ic">${pic('magnifying-glass')}</span><input type="text" id="wfCanI" placeholder="Can I… ?" value="${esc(this.lastQuery)}" autocomplete="off"></div>`;
+    body.innerHTML=html;
+    this.wireCommon({plans});
+  },
+};
+/* ---- Phase 6 (conservative): scheduled bus option for the PROTECTED leg.
+   Live ETAs are only honest for ~now, so a leg 30+ min out uses the real
+   GTFS timetable (sync, offline-capable). Annotation only — the plan's
+   walking math stays authoritative; the bus is surfaced as a real option. ---- */
+function planBusBackOption(pl){
+  try{
+    if(typeof BusModel==='undefined' || !BusModel.parents || !BusModel.parents.length){ if(typeof BusModel!=='undefined') BusModel.load().catch(()=>{}); return null; }
+    if(pl.backMin<11 || typeof BusSchedule==='undefined' || !BusSchedule.ok()) return null;
+    const leaveDate=new Date(pl.leaveThereBy);
+    const leaveSec=leaveDate.getHours()*3600+leaveDate.getMinutes()*60;
+    let best=null;
+    for(const p of BusModel.parents){
+      const near=(pt,max)=>{ let bs=null,bd=max; p.stops.map(id=>BusModel.stop(id)).filter(Boolean).forEach(st=>{ const d=distance(pt.lat,pt.lng,st.lat,st.lng); if(d<bd){ bd=d; bs=st; } }); return bs?{s:bs,d:bd}:null; };
+      const o=near(pl.place,500), x=near({lat:pl.ctx.nextLat,lng:pl.ctx.nextLng},450);
+      if(!o||!x||o.s.id===x.s.id) continue;
+      const walkTo=estWalkMin(o.d), walkFrom=estWalkMin(x.d);
+      const trips=BusSchedule.directTrips(p, o.s.ext, x.s.ext, leaveDate, leaveSec+Math.ceil(walkTo+2)*60, 1);
+      if(!trips.length) continue;
+      const t=trips[0];
+      const total=(t.dep-leaveSec)/60 + (t.arr-t.dep)/60 + walkFrom;   // from leave-time to arrival
+      const save=pl.backMin-total;
+      if(save>=4 && (!best||total<best.total)) best={abbr:p.abbr, dep:t.dep, total, save:Math.round(save), stop:o.s.name};
+    }
+    return best;
+  }catch(e){ return null; }
+}
+function shortName(n){ const s=String(n).replace(/\s*\([^)]*\)\s*/g,' ').trim(); return s.length>22?s.slice(0,21)+'…':s; }
 
 </script>
 </body>
