@@ -1156,9 +1156,16 @@ input.inp:disabled{ background:var(--limestone-dk); color:var(--ink-soft); }
 .br-stop:first-child::before{ top:50%; } .br-stop:last-child::before{ bottom:50%; }
 .br-node{ position:relative; z-index:1; width:13px; height:13px; flex:none; border-radius:50%; background:var(--paper); border:3px solid var(--rc); }
 .br-stop-name{ flex:1; font-size:14.5px; font-weight:560; }
-.br-veh{ position:relative; display:flex; align-items:center; gap:9px; padding:4px 0 4px 30px; }
-.br-veh::before{ content:""; position:absolute; left:11px; top:0; bottom:0; width:3px; background:var(--rc); opacity:.28; }
-.br-veh-chip{ font-size:11.5px; font-weight:700; color:#fff; border-radius:999px; padding:4px 10px; box-shadow:0 2px 8px rgba(20,19,15,.25); }
+/* live bus ON the line: the top-down map icon, nose pointing DOWN the strip
+   (down = direction of travel), tiny fleet number above, ETA beside */
+.br-veh2{ position:relative; display:flex; align-items:center; gap:11px; padding:6px 0; min-height:52px; }
+.br-veh2::before{ content:""; position:absolute; left:11px; top:0; bottom:0; width:3px; background:var(--rc); opacity:.28; }
+.br-veh-icon{ position:relative; z-index:2; flex:none; width:25px; display:flex; justify-content:center; }
+.br-veh-icon svg{ width:19px; height:38px; transform:rotate(180deg); filter:drop-shadow(0 1px 3px rgba(20,19,15,.4)); }
+.br-veh-num{ position:absolute; top:-8px; left:50%; transform:translateX(-50%); z-index:3; font-style:normal; font-family:var(--mono); font-size:8.5px; font-weight:700; letter-spacing:.02em; color:var(--paper); background:var(--ink); border-radius:999px; padding:1.5px 6px; white-space:nowrap; }
+.br-veh-eta{ font-family:var(--mono); font-size:13px; font-weight:700; font-variant-numeric:tabular-nums; }
+.br-dir{ display:flex; align-items:center; gap:8px; margin:0 0 10px; font-size:12px; color:var(--ink-soft); }
+.br-dir .pi{ width:15px; height:15px; flex:none; color:var(--ink-faint); }
 /* ===== ROUTE SCHEDULE (.brx-*) — v4: the day, drawn =====
    Hero card + week card with route-colored service-density bars on a
    shared hour scale. Density = opacity tier; today gets a now-marker. */
@@ -2602,7 +2609,7 @@ input.inp:disabled{ background:var(--limestone-dk); color:var(--ink-soft); }
         <div class="prow" id="pUpdates"><span class="prow-ic"><span data-pi="arrows-clockwise"></span></span><b class="prow-label">What’s new<span class="upd-dot" id="updDot" style="display:none"></span></b><span class="prow-val" id="pUpdatesVal"></span><span class="prow-ch"><span data-pi="caret-right"></span></span></div>
       </div>
 
-      <div class="profile-version">BeeLine 1.0.0 · build 2026-09-01 15:18 · your data stays on this phone<br>Map data © OpenStreetMap contributors · © CARTO</div>
+      <div class="profile-version">BeeLine 1.0.0 · build 2026-09-01 15:23 · your data stays on this phone<br>Map data © OpenStreetMap contributors · © CARTO</div>
       <button class="prow" id="pAdd" style="display:none"></button>
     </div>
   </section>
@@ -5917,7 +5924,10 @@ const BusLive={
       parent:BusModel.parentOfRouteId(v.routeID), onDetour:BusModel.variantToParent[v.routeID]!=null,
       lat:v.lat, lng:v.lng, heading:(typeof v.h==='number')?v.h:0,
       inService:v.inService===1, load:v.load, capacity:v.capacity,
-      nextStopId:v.nextStopID||null, nextStopEta:(v.nextStopETA>=0)?v.nextStopETA:null,
+      /* nextStopETA arrives in SECONDS (a mid-route bus reports ~600+, which
+         as minutes would be ten hours) — normalized here to minutes once, so
+         every display does the same honest math */
+      nextStopId:v.nextStopID||null, nextStopEta:(v.nextStopETA>=0)?(v.nextStopETA/60):null,
       lastSeenAt:now, lastMoveAt: moved?now:(prev?prev.lastMoveAt:now) };
   },
   state(v){ const age=Date.now()-v.lastSeenAt;
@@ -6720,16 +6730,31 @@ const BusRouteDetail={
   liveHTML(p,vehicles){
     // place each live vehicle "approaching" its nextStop → drawn above that stop
     const approaching={};
-    vehicles.forEach(v=>{ if(BusLive.state(v)==='LIVE'&&v.nextStopId){ (approaching[v.nextStopId]=approaching[v.nextStopId]||[]).push(v); } });
-    let html=`<button class="btn ghost sm" id="brViewMap" style="margin:0 0 14px">View on live map</button><div class="br-line" style="--rc:${esc(p.color)}">`;
+    let placed=0;
+    vehicles.forEach(v=>{ if(BusLive.state(v)==='LIVE'&&v.nextStopId){ (approaching[v.nextStopId]=approaching[v.nextStopId]||[]).push(v); placed++; } });
+    /* Every campus route runs its stop sequence in order, so DOWN this list IS
+       the direction of travel — the bus icon's nose points at the stop it's
+       about to reach. A route whose line returns to its start is a loop. */
+    const first=BusModel.stop(p.stops[0]), last=BusModel.stop(p.stops[p.stops.length-1]);
+    const isLoop = first && last && distance(first.lat,first.lng,last.lat,last.lng)<220;
+    let html=`<button class="btn ghost sm" id="brViewMap" style="margin:0 0 12px">View on live map</button>
+      <div class="br-dir">${pic(isLoop?'arrows-clockwise':'caret-down')}<span>${isLoop?'Loop route — buses travel down this list, then start over at the top':'Buses travel down this list'}</span></div>
+      <div class="br-line" style="--rc:${esc(p.color)}">`;
     p.stops.forEach(sid=>{
       const s=BusModel.stop(sid); if(!s) return;
       (approaching[sid]||[]).forEach(v=>{
-        html+=`<div class="br-veh"><span class="br-veh-chip" style="background:${esc(p.color)}">${pic('bus')} Bus ${esc(v.equipmentId)}</span>${v.nextStopEta!=null?`<span class="bz-mut2">${v.nextStopEta<1?'arriving':Math.round(v.nextStopEta)+' min to next stop'}</span>`:''}</div>`;
+        const eta=v.nextStopEta!=null?(v.nextStopEta<1?'arriving':Math.round(v.nextStopEta)+' min'):'';
+        html+=`<div class="br-veh2">
+          <span class="br-veh-icon"><i class="br-veh-num">${esc(v.equipmentId)}</i>${bzBusSVG(p.color)}</span>
+          ${eta?`<span class="br-veh-eta" style="color:${esc(p.color)}">${eta}</span>`:''}
+          ${(f=>f?`<span class="bz-fullness ${f.cls}">${f.t}</span>`:'')(bzFullness({state:'LIVE',load:v.load,capacity:v.capacity}))}
+        </div>`;
       });
       html+=`<div class="br-stop" data-sid="${s.id}"><span class="br-node"></span><span class="br-stop-name">${esc(s.name)}</span><span class="bz-chev">${pic('caret-right')}</span></div>`;
     });
     html+='</div>';
+    const unplaced=vehicles.filter(v=>BusLive.state(v)==='LIVE').length-placed;
+    if(unplaced>0) html+=`<div class="bz-mut2" style="margin-top:8px">${unplaced} live bus${unplaced>1?'es':''} not reporting a next stop — see the live map.</div>`;
     if(!vehicles.length) html+='<div class="bz-mut" style="margin-top:10px">No buses on this route right now — check the Schedule tab for when service runs.</div>';
     return html;
   },
