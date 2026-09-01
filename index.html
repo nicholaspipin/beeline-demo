@@ -1652,6 +1652,27 @@ input.inp:disabled{ background:var(--limestone-dk); color:var(--ink-soft); }
 .brxsh .tm-cta{ margin-top:16px; }
 .wf-nfm.center{ display:block; margin:10px auto 2px; }
 
+/* What Fits shelves — many options, tiny cards, zero crowding */
+.wf-shelf{ margin-top:16px; }
+.wf-shelf-h{ font-family:var(--font-display); font-size:14.5px; font-weight:720; letter-spacing:-.01em; color:var(--ink); margin:0 22px 8px; }
+.wf-shelf-row{ display:flex; gap:10px; overflow-x:auto; scrollbar-width:none; padding:0 20px 6px; }
+.wf-shelf-row::-webkit-scrollbar{ display:none; }
+.wfm-card{ flex:0 0 108px; border:none; cursor:pointer; background:var(--surface); border-radius:var(--r-md); box-shadow:inset 0 0 0 1px var(--line); padding:8px 8px 10px; text-align:left; }
+.wfm-card:active{ transform:scale(.96); }
+.wfm-tile{ position:relative; display:block; width:100%; height:58px; border-radius:9px; overflow:hidden; background:var(--paper-bg); }
+.wfm-tile img{ position:absolute; inset:0; width:100%; height:100%; object-fit:cover; }
+.wfm-tile.glyph{ display:grid; place-items:center; color:#fff; }
+.wfm-tile.glyph .pi, .wfm-tile.glyph svg{ width:20px; height:20px; }
+.wfm-card b{ display:block; font-family:var(--font-display); font-size:12px; font-weight:680; letter-spacing:-.01em; color:var(--ink); line-height:1.2; margin-top:7px; white-space:nowrap; overflow:hidden; text-overflow:ellipsis; }
+.wfm-card span{ display:block; font-size:11.5px; font-weight:640; color:var(--ink-soft); margin-top:1px; font-variant-numeric:tabular-nums; }
+/* Home gap-strip — the mini What Fits banner */
+.tm-gapstrip{ display:flex; align-items:center; justify-content:space-between; width:100%; margin-top:15px; border:none; cursor:pointer;
+  background:var(--honey); color:var(--on-honey); border-radius:var(--r-md); padding:13px 16px; }
+.tm-gapstrip b{ font-family:var(--font-display); font-size:16.5px; font-weight:740; letter-spacing:-.015em; font-variant-numeric:tabular-nums; }
+.tm-gapstrip span{ display:inline-flex; align-items:center; gap:6px; font-family:var(--font-display); font-size:13.5px; font-weight:680; }
+.tm-gapstrip .arrow svg{ width:16px; height:16px; display:block; }
+.tm-gapstrip:active{ transform:scale(.985); }
+
 </style>
 </head>
 <body>
@@ -2038,7 +2059,7 @@ input.inp:disabled{ background:var(--limestone-dk); color:var(--ink-soft); }
         <div class="prow" id="pUpdates"><span class="prow-ic"><span data-pi="arrows-clockwise"></span></span><b class="prow-label">What’s new<span class="upd-dot" id="updDot" style="display:none"></span></b><span class="prow-val" id="pUpdatesVal"></span><span class="prow-ch"><span data-pi="caret-right"></span></span></div>
       </div>
 
-      <div class="profile-version">BeeLine 1.0.0 · build 2026-09-01 11:10 · your data stays on this phone<br>Map data © OpenStreetMap contributors · © CARTO</div>
+      <div class="profile-version">BeeLine 1.0.0 · build 2026-09-01 11:16 · your data stays on this phone<br>Map data © OpenStreetMap contributors · © CARTO</div>
       <button class="prow" id="pAdd" style="display:none"></button>
     </div>
   </section>
@@ -4918,11 +4939,11 @@ function renderTimeModule(){
       $('tmGo').addEventListener('click',()=>{ setDest(cls.lat,cls.lng,cls.b+(cls.room?(' · '+cls.room):'')); if(trackingOn) startWalk(); }); };
     if(leaveIn>15){
       v.innerHTML=tmHeroTime(new Date(Date.now()+leaveIn*6e4));
-      stat2('You have', tmFreeHTML(leaveIn), 'of free time');
-      if(leaveIn>15){
-        actions.innerHTML='<button class="tm-cta" id="tmFit">'+TM_SPARK+'<span>Fit something in</span></button>';
-        $('tmFit').addEventListener('click', ()=>openFit(nx, etaMin));
-      }
+      // the free time IS the What Fits entrance — one honey strip, same
+      // visual language as the What Fits banner (consistency, less text)
+      const freeTxt= leaveIn>=120 ? (Math.floor(leaveIn/60)+'h '+String(Math.round(leaveIn)%60).padStart(2,'0')+'m') : (Math.round(leaveIn)+' min');
+      actions.innerHTML='<button class="tm-gapstrip" id="tmFit"><b>'+freeTxt+' free</b><span>See what fits '+tmGoArrow()+'</span></button>';
+      $('tmFit').addEventListener('click', ()=>openFit(nx, etaMin));
     } else if(leaveIn>1){
       setChip('Leave soon');
       k1.textContent='Leave in';
@@ -6578,7 +6599,7 @@ const PlanEngine={
       if(usedPlace.has(pl.place.n)) continue;
       if(!filterCat && (usedCat[pl.cat]||0)>=1) continue;
       picked.push(pl); usedPlace.add(pl.place.n); usedCat[pl.cat]=(usedCat[pl.cat]||0)+1;
-      if(picked.length>=(filterCat?4:3)) break;
+      if(picked.length>=(filterCat?6:3)) break;
     }
     if(!filterCat && picked.length>=3){
       const special=all.find(x=>(x.stayHere||x.onWay)&&!picked.includes(x));
@@ -6757,8 +6778,8 @@ const PlanUI={
     const lv=fmtClockTime(new Date(pl.leaveThereBy));
     const hero= `${pl.nearMiss?'about ':''}${tilde}${Math.max(0,pl.usableMin)} min ${esc(pl.prof.verb||'')}`;
     const meta= pl.stayHere
-      ? `you're already here · leave at ${lv}`
-      : `${tilde}${Math.max(1,Math.round(pl.thereMin))} min walk · leave there ${lv}`;
+      ? (i===0?`you're here · leave at ${lv}`:`you're here`)
+      : (i===0?`${tilde}${Math.max(1,Math.round(pl.thereMin))} min walk · leave there ${lv}`:`${tilde}${Math.max(1,Math.round(pl.thereMin))} min walk`);
     const ph=(typeof placePhoto==='function')?placePhoto({n:pl.place.n}):null;
     const meta2=catMeta(pl.place.c||'offcampus');
     const tile= ph
@@ -6811,6 +6832,29 @@ const PlanUI={
     });
     requestAnimationFrame(()=>bg.classList.add('show'));
   },
+  shelfCard(pl,idx){
+    const ph=(typeof placePhoto==='function')?placePhoto({n:pl.place.n}):null;
+    const meta2=catMeta(pl.place.c||'offcampus');
+    const tilde=(pl.thereSrc==='est'||pl.backSrc==='est')?'~':'';
+    const tile= ph
+      ? `<span class="wfm-tile"><img src="${esc(ph.t)}" alt="" loading="lazy" decoding="async"></span>`
+      : `<span class="wfm-tile glyph" style="background:${meta2.color}">${PIN_ICON[pl.place.c]||PIN_ICON.offcampus}</span>`;
+    return `<button class="wfm-card" data-wfa="${idx}">${tile}<b>${esc(shortName(pl.place.n))}</b><span>${tilde}${Math.max(0,pl.usableMin)} min</span></button>`;
+  },
+  shelves(res){
+    const picked=new Set(res.plans.map(p=>p.place.n));
+    const groups=[['eat','Eat'],['study','Study'],['gym','Gym'],['coffee','Coffee'],['home','Home']];
+    let html='';
+    this.allRef=res.all;
+    groups.forEach(([cat,label])=>{
+      const items=res.all.map((pl,idx)=>({pl,idx}))
+        .filter(x=>x.pl.cat===cat && !x.pl.nearMiss && !picked.has(x.pl.place.n))
+        .slice(0,6);
+      if(!items.length) return;
+      html+=`<div class="wf-shelf"><div class="wf-shelf-h">${label}</div><div class="wf-shelf-row">${items.map(x=>this.shelfCard(x.pl,x.idx)).join('')}</div></div>`;
+    });
+    return html;
+  },
   render(){
     const body=$('fitBody'); if(!body || !this.ctx) return;
     const c=this.ctx;
@@ -6832,6 +6876,7 @@ const PlanUI={
       html+=`<div class="wf-none">You're good — nothing you have to do. ${this.filter?('Nothing fits for '+esc(ActivityProfiles[this.filter].t.toLowerCase())+'.'):''}</div>`;
     } else {
       html+=`<div class="wf-list">`+res.plans.map((pl,i)=>this.card(pl,i)).join('')+`</div>`;
+      if(!this.filter) html+=this.shelves(res);
       const rp=PlanPersonalization.rolePrompt();
       if(rp) html+=`<div class="wf-roleask" id="wfRoleAsk">Make <b>${esc(rp.place)}</b> your ${esc(rp.role==='food'?'food spot':rp.role)}?<span><button data-ra="yes">Yes</button><button data-ra="no">No</button></span></div>`;
     }
@@ -6847,6 +6892,9 @@ const PlanUI={
     body.querySelectorAll('[data-wff]').forEach(b=>b.addEventListener('click',()=>{ this.filter=b.dataset.wff||null; this.render(); }));
     body.querySelectorAll('.wf-card[data-wf]').forEach(el=>el.addEventListener('click',()=>{
       const pl=res.plans[+el.dataset.wf]; if(!pl) return; this.openPlanSheet(pl);
+    }));
+    body.querySelectorAll('.wfm-card[data-wfa]').forEach(el=>el.addEventListener('click',()=>{
+      const pl=(this.allRef||[])[+el.dataset.wfa]; if(!pl) return; pl.busOpt=planBusBackOption(pl); this.openPlanSheet(pl);
     }));
     const ra=$('wfRoleAsk');
     if(ra){ const rp=PlanPersonalization.rolePrompt();
