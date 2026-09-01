@@ -1563,6 +1563,128 @@ input.inp:disabled{ background:var(--limestone-dk); color:var(--ink-soft); }
 .wfsh-photo{ margin:10px 0 4px; border-radius:var(--r-md); overflow:hidden; height:150px; }
 .wfsh-photo img{ width:100%; height:100%; object-fit:cover; display:block; }
 .wfsh-hero{ font-family:var(--font-display); font-weight:760; font-size:27px; letter-spacing:-.025em; margin:10px 0 2px; color:var(--ink); font-variant-numeric:tabular-nums; }
+/* ================= PLAN TAB (My Day + Nearby) ================= */
+.pd-bar{ display:flex; align-items:center; padding:14px 18px 8px; gap:10px; }
+.pd-logo{ width:24px; height:26px; color:var(--ink); flex:none; }
+.pd-logo svg{ width:100%; height:100%; }
+.pd-title{ flex:1; text-align:center; font-family:var(--font-display); font-size:17px; font-weight:740; color:var(--ink); margin-right:0; }
+.pd-date{ display:inline-flex; align-items:center; gap:6px; border:none; background:none; cursor:pointer; font-family:var(--font-display); font-size:13px; font-weight:650; color:var(--ink); padding:4px 0; font-variant-numeric:tabular-nums; }
+.pd-date .pi{ width:17px; height:17px; }
+.pd-tabs{ display:flex; justify-content:center; gap:44px; padding:4px 0 0; border-bottom:1px solid var(--line); }
+.pd-tab{ border:none; background:none; cursor:pointer; font-family:var(--mono); font-size:12px; font-weight:720; letter-spacing:.12em; text-transform:uppercase; color:var(--ink-faint); padding:8px 2px 10px; position:relative; }
+.pd-tab.on{ color:var(--ink); }
+.pd-tab.on::after{ content:''; position:absolute; left:15%; right:15%; bottom:0; height:3px; border-radius:2px; background:var(--honey); }
+.pd-hero{ padding:20px 22px 0; }
+.pd-hero h1{ font-family:var(--font-display); font-size:29px; font-weight:780; letter-spacing:-.025em; color:var(--ink); margin:0; }
+.pd-hero p{ font-size:14px; line-height:1.5; color:var(--ink-soft); margin:8px 0 0; }
+.pd-search{ display:flex; align-items:center; gap:11px; margin:16px 22px 0; padding:9px 2px; border-bottom:1.5px solid var(--ink); }
+.pd-search .pi{ width:21px; height:21px; color:var(--ink); flex:none; }
+.pd-search input{ flex:1; border:none; background:none; font-family:var(--font-display); font-size:14.5px; font-weight:570; color:var(--ink); min-width:0; }
+.pd-search input:focus{ outline:none; }
+.pd-search input::placeholder{ color:var(--ink-faint); font-weight:500; }
+.pd-shortcuts{ display:flex; justify-content:space-between; padding:18px 30px 4px; }
+.pd-sc{ display:flex; flex-direction:column; align-items:center; gap:8px; border:none; background:none; cursor:pointer; font-family:var(--font-display); font-size:13px; font-weight:640; color:var(--ink); }
+.pd-sc .pi{ width:30px; height:30px; }
+.pd-sc:active{ opacity:.6; }
+.pd-dayh{ display:flex; align-items:center; padding:22px 22px 10px; }
+.pd-dayh h2{ font-family:var(--font-display); font-size:20px; font-weight:760; letter-spacing:-.02em; color:var(--ink); margin:0; flex:1; }
+.pd-nav{ display:flex; gap:8px; }
+.pd-nav button{ width:32px; height:32px; border:none; cursor:pointer; border-radius:50%; background:var(--surface); box-shadow:inset 0 0 0 1.2px var(--line); color:var(--ink); display:grid; place-items:center; }
+.pd-nav .pi{ width:14px; height:14px; }
+.pd-lm{ font-size:12.5px; font-weight:650; color:var(--ink-soft); }
+/* timeline rail */
+.pd-rail{ padding:2px 20px 0 10px; }
+.pd-item{ display:flex; gap:10px; margin-bottom:8px; }
+.pd-times{ width:62px; flex:none; display:flex; flex-direction:column; justify-content:space-between; padding:4px 0; text-align:right; }
+.pd-times b{ font-family:var(--font-num); font-size:11px; font-weight:640; color:var(--ink-soft); font-variant-numeric:tabular-nums; white-space:nowrap; }
+.pd-dotcol{ width:12px; flex:none; display:flex; flex-direction:column; align-items:center; padding:6px 0; }
+.pd-dotcol .d{ width:9px; height:9px; border-radius:50%; background:var(--ink); flex:none; }
+.pd-dotcol .d.o{ background:none; box-shadow:inset 0 0 0 2px var(--ink); }
+.pd-dotcol .l{ flex:1; width:2px; background:var(--line); margin:3px 0; }
+.pd-dotcol.on .d.f{ background:var(--honey); box-shadow:none; }
+.pd-dotcol.on .l.f{ background:var(--honey); }
+.pd-block{ flex:1; min-width:0; border:1px solid var(--line); border-radius:var(--r-sm); padding:12px 13px; font-size:12.5px; color:var(--ink-soft); font-variant-numeric:tabular-nums; align-self:stretch; display:flex; flex-direction:column; justify-content:center; }
+.pd-block b{ color:var(--ink); font-weight:680; }
+.pd-cls{ display:block; white-space:nowrap; overflow:hidden; text-overflow:ellipsis; }
+.pd-block.open{ border:1.5px solid var(--honey); cursor:pointer; }
+.pd-block.open.best{ background:var(--honey-tint); }
+.pd-open-top{ display:flex; align-items:center; justify-content:space-between; gap:8px; }
+.pd-open-top b{ font-family:var(--font-display); font-size:17.5px; font-weight:750; letter-spacing:-.015em; color:var(--ink); }
+.pd-planhere{ display:inline-flex; align-items:center; gap:5px; font-family:var(--font-display); font-size:13px; font-weight:700; color:var(--honey-deep); white-space:nowrap; }
+.pd-planhere .pi{ width:14px; height:14px; }
+.pd-open-sub{ display:block; margin-top:3px; font-size:12.5px; color:var(--ink-soft); }
+.pd-block.planned{ border:1.5px solid var(--honey); background:var(--honey-tint); cursor:pointer; }
+.pd-pl-min{ font-size:12px; font-weight:650; color:var(--honey-deep); white-space:nowrap; }
+.pd-nowline{ display:flex; align-items:center; gap:8px; margin:2px 0 8px 78px; font-family:var(--mono); font-size:10px; font-weight:700; letter-spacing:.1em; text-transform:uppercase; color:var(--honey-deep); }
+.pd-nowline i{ flex:1; height:1.5px; background:var(--honey); order:2; }
+.pd-foot{ display:flex; align-items:center; gap:8px; margin:14px 22px 0; padding-top:12px; border-top:1px solid var(--line); font-size:12.5px; color:var(--ink-soft); }
+.pd-foot .pi{ width:17px; height:17px; color:var(--ink-faint); }
+.pd-empty{ margin:18px 22px; padding:18px; border:1px solid var(--line); border-radius:var(--r-md); font-size:13.5px; color:var(--ink-soft); }
+.pd-empty b{ display:block; font-family:var(--font-display); font-size:16px; color:var(--ink); margin-bottom:4px; }
+.pd-empty p{ margin:4px 0 12px; line-height:1.5; }
+.pd-manual{ display:inline-flex; align-items:center; gap:7px; border:none; cursor:pointer; background:var(--honey); color:var(--on-honey); border-radius:12px; padding:11px 17px; font-family:var(--font-display); font-size:14px; font-weight:720; }
+.pd-manual .pi{ width:15px; height:15px; }
+/* nearby */
+.pd-mapbtn-wrap{ padding:16px 20px 0; }
+.pd-mapbtn{ display:flex; width:100%; align-items:center; gap:12px; border:none; cursor:pointer; background:var(--surface); box-shadow:inset 0 0 0 1.4px var(--line); border-radius:var(--r-md); padding:13px 15px; text-align:left; color:var(--ink); }
+.pd-mapbtn .pi{ width:22px; height:22px; flex:none; }
+.pd-mapbtn span b{ display:block; font-family:var(--font-display); font-size:14.5px; font-weight:700; }
+.pd-mapbtn span i{ display:block; font-style:normal; font-size:12px; color:var(--ink-soft); margin-top:1px; }
+.pd-mapbtn .pi.ch{ margin-left:auto; width:14px; height:14px; color:var(--ink-faint); }
+.pd-place{ display:flex; align-items:flex-start; gap:11px; padding:14px 20px; border-bottom:1px solid var(--line); }
+.pd-rank{ width:22px; height:22px; flex:none; border-radius:50%; background:var(--paper-bg); display:grid; place-items:center; font-family:var(--font-num); font-size:12px; font-weight:700; color:var(--ink); margin-top:10px; }
+.pd-rank.top{ background:var(--honey); color:var(--on-honey); }
+.pd-glyph{ width:46px; height:46px; flex:none; border-radius:50%; display:grid; place-items:center; margin-top:0; }
+.pd-glyph .pi, .pd-glyph svg{ width:20px; height:20px; }
+.pd-glyph.lg{ width:52px; height:52px; }
+.pd-place-b{ flex:1; min-width:0; cursor:pointer; }
+.pd-place-b b{ display:block; font-family:var(--font-display); font-size:16px; font-weight:720; letter-spacing:-.01em; color:var(--ink); }
+.pd-place-m{ display:flex; align-items:center; gap:4px; font-size:12.5px; color:var(--ink-soft); margin-top:2px; }
+.pd-place-m .pi{ width:13px; height:13px; }
+.pd-place-a{ display:block; font-size:13.5px; font-weight:700; color:var(--ink); margin-top:4px; font-variant-numeric:tabular-nums; }
+.pd-place-f{ display:block; font-size:12.5px; font-weight:650; color:var(--honey-deep); margin-top:2px; font-variant-numeric:tabular-nums; }
+.pd-place-r{ display:flex; flex-direction:column; align-items:flex-end; gap:12px; flex:none; padding-top:2px; }
+.pd-save{ border:none; background:none; cursor:pointer; color:var(--ink); padding:2px; }
+.pd-save .pi{ width:19px; height:19px; }
+.pd-save.on{ color:var(--honey-deep); }
+.pd-planit{ display:inline-flex; align-items:center; gap:5px; border:none; background:none; cursor:pointer; font-family:var(--font-display); font-size:13.5px; font-weight:700; color:var(--honey-deep); padding:2px 0; }
+.pd-planit .pi{ width:14px; height:14px; }
+/* results */
+.pd-resbar{ display:flex; align-items:center; gap:6px; padding:6px 14px 0; }
+.pd-resbar>button{ width:34px; height:34px; border:none; background:none; cursor:pointer; color:var(--ink); display:grid; place-items:center; flex:none; }
+.pd-resbar>button .pi{ width:18px; height:18px; }
+.pd-search.res{ flex:1; margin:0 6px; }
+.pd-search.res button{ border:none; background:none; cursor:pointer; color:var(--ink-faint); display:grid; place-items:center; }
+.pd-search.res button .pi{ width:15px; height:15px; }
+.pd-resctx{ padding:12px 22px 0; font-size:13px; color:var(--ink-soft); }
+.pd-h2{ font-family:var(--font-display); font-size:20px; font-weight:760; letter-spacing:-.02em; color:var(--ink); margin:20px 22px 10px; }
+.pd-best{ margin:0 20px; border-left:3px solid var(--honey); padding:4px 0 4px 16px; }
+.pd-best-win{ font-family:var(--font-num); font-size:13px; font-weight:650; color:var(--ink-soft); font-variant-numeric:tabular-nums; }
+.pd-best-name{ font-family:var(--font-display); font-size:23px; font-weight:770; letter-spacing:-.02em; color:var(--ink); margin-top:2px; }
+.pd-best-dur{ font-size:14px; color:var(--ink); margin-top:3px; }
+.pd-best-legs{ display:flex; flex-wrap:wrap; gap:5px 14px; margin-top:10px; font-size:12px; color:var(--ink-soft); font-variant-numeric:tabular-nums; }
+.pd-best-legs span{ display:inline-flex; align-items:center; gap:5px; }
+.pd-best-legs .pi{ width:14px; height:14px; color:var(--ink-faint); }
+.pd-best-foot{ display:flex; align-items:center; justify-content:space-between; gap:10px; margin-top:12px; }
+.pd-badges{ display:flex; gap:7px; flex-wrap:wrap; }
+.pd-badge{ font-size:11px; font-weight:700; letter-spacing:.04em; text-transform:uppercase; border-radius:6px; padding:5px 9px; }
+.pd-badge.fit{ background:var(--honey-tint); color:var(--honey-deep); }
+.pd-badge.open{ background:var(--good-tint); color:var(--good); }
+.pd-badge.est{ background:var(--paper-bg); color:var(--ink-soft); text-transform:none; letter-spacing:0; }
+.pd-addday{ display:inline-flex; align-items:center; gap:6px; border:none; background:none; cursor:pointer; font-family:var(--font-display); font-size:14px; font-weight:720; color:var(--honey-deep); white-space:nowrap; }
+.pd-addday .pi{ width:15px; height:15px; }
+.pd-sort{ font-size:13px; color:var(--ink-faint); }
+.pd-sort button{ border:none; background:none; cursor:pointer; font-family:var(--font-display); font-size:13px; font-weight:650; color:var(--ink-faint); padding:2px; }
+.pd-sort button.on{ color:var(--honey-deep); text-decoration:underline; text-underline-offset:3px; }
+.pd-more{ display:flex; align-items:center; gap:6px; margin:18px auto 8px; border:none; background:none; cursor:pointer; font-family:var(--font-display); font-size:14px; font-weight:660; color:var(--ink); }
+.pd-more .pi{ width:15px; height:15px; }
+.pd-dayrow{ display:flex; width:100%; align-items:center; justify-content:space-between; border:none; background:none; cursor:pointer; padding:13px 4px; border-bottom:1px solid var(--line); font-family:var(--font-display); color:var(--ink); }
+.pd-dayrow b{ font-size:15px; font-weight:680; }
+.pd-dayrow span{ font-size:12.5px; color:var(--ink-soft); }
+.pd-dayrow.on b{ color:var(--honey-deep); }
+.x-backplan{ display:inline-flex; align-items:center; gap:4px; border:none; background:none; cursor:pointer; font-family:var(--font-display); font-size:14px; font-weight:650; color:var(--ink); padding:6px 2px; }
+.x-backplan .pi{ width:16px; height:16px; }
+
 /* Free time — appbar: back · centered title · close (user mockup) */
 .wfp-bar{ justify-content:space-between; gap:0; padding:12px 14px 10px; border-bottom:1px solid var(--line); }
 .wfp-bar button{ width:34px; height:34px; justify-content:center; color:var(--ink); }
@@ -2331,8 +2453,14 @@ input.inp:disabled{ background:var(--limestone-dk); color:var(--ink-soft); }
   </section>
 
   <!-- ============ MAP / EXPLORE ============ -->
+  <!-- ============ PLAN (tab): My Day + Nearby ============ -->
+  <section class="screen" id="scr-plan" data-tab="plan">
+    <div class="scroll" id="planBody" style="padding:0 0 30px"></div>
+  </section>
+
+  <!-- Explore map lives on as Plan → Nearby → Map (pushed screen) -->
   <section class="screen" id="scr-map" data-tab="map" data-xview="map">
-    <header class="appbar" style="padding-bottom:0"><h1 class="page-h" style="margin:6px 0 0">Plan</h1><div class="spacer"></div></header>
+    <header class="appbar" style="padding-bottom:0"><button class="x-backplan" id="xBackPlan"><span data-pi="caret-left"></span>Plan</button><h1 class="page-h" style="margin:6px 0 0">Map</h1><div class="spacer"></div></header>
     <div class="x-top">
       <div class="x-search">
         <span class="s-ic"><span data-pi="magnifying-glass"></span></span>
@@ -2443,7 +2571,7 @@ input.inp:disabled{ background:var(--limestone-dk); color:var(--ink-soft); }
         <div class="prow" id="pUpdates"><span class="prow-ic"><span data-pi="arrows-clockwise"></span></span><b class="prow-label">What’s new<span class="upd-dot" id="updDot" style="display:none"></span></b><span class="prow-val" id="pUpdatesVal"></span><span class="prow-ch"><span data-pi="caret-right"></span></span></div>
       </div>
 
-      <div class="profile-version">BeeLine 1.0.0 · build 2026-09-01 14:50 · your data stays on this phone<br>Map data © OpenStreetMap contributors · © CARTO</div>
+      <div class="profile-version">BeeLine 1.0.0 · build 2026-09-01 15:02 · your data stays on this phone<br>Map data © OpenStreetMap contributors · © CARTO</div>
       <button class="prow" id="pAdd" style="display:none"></button>
     </div>
   </section>
@@ -2503,7 +2631,7 @@ input.inp:disabled{ background:var(--limestone-dk); color:var(--ink-soft); }
 
   <nav class="tabbar" id="tabbar">
     <button class="tab on" data-go="home"><span class="tab-ic" data-pi="house-simple" data-pib></span><span>Home</span></button>
-    <button class="tab" data-go="map"><span class="tab-ic" data-pi="compass" data-pib></span><span>Plan</span></button>
+    <button class="tab" data-go="plan"><span class="tab-ic" data-pi="compass" data-pib></span><span>Plan</span></button>
     <button class="tab" data-go="buses"><span class="tab-ic" data-pi="bus" data-pib></span><span>Buses</span></button>
     <button class="tab" data-go="profile"><span class="tab-ic" data-pi="user" data-pib></span><span>You</span></button>
   </nav>
@@ -2810,8 +2938,8 @@ function applyCorridorTerm(){
 }
 
 const $ = id=>document.getElementById(id);
-const screens = { onb:$('scr-onb'), home:$('scr-home'), walk:$('scr-walk'), map:$('scr-map'), buses:$('scr-buses'), busroute:$('scr-busroute'), schedule:$('scr-schedule'), saved:$('scr-saved'), profile:$('scr-profile'), updates:$('scr-updates'), shortcut:$('scr-shortcut'), fit:$('scr-fit'), scan:$('scr-scan') };
-const TAB_SCREENS=['home','map','buses','profile'];   // 4 tabs: Home · Explore · Buses · You (Schedule/Lines/Fit/RouteDetail are pushed screens)
+const screens = { onb:$('scr-onb'), home:$('scr-home'), walk:$('scr-walk'), plan:$('scr-plan'), map:$('scr-map'), buses:$('scr-buses'), busroute:$('scr-busroute'), schedule:$('scr-schedule'), saved:$('scr-saved'), profile:$('scr-profile'), updates:$('scr-updates'), shortcut:$('scr-shortcut'), fit:$('scr-fit'), scan:$('scr-scan') };
+const TAB_SCREENS=['home','plan','buses','profile'];  // 4 tabs: Home · Plan · Buses · You (the Explore map is now Plan → Nearby → Map, a pushed screen)
 function show(name){
   for(const k in screens) screens[k].classList.toggle('active', k===name);
   const onTab=TAB_SCREENS.includes(name);
@@ -2822,6 +2950,7 @@ function show(name){
   else stopBusPoll();
   if(typeof BusUI!=='undefined'){ if(name==='buses') BusUI.enter(); else if(name!=='busroute') BusUI.leave(); }
   if(onTab) lastTab=name;   // pushed screens (Lines / Schedule / Fit) back out to here
+  if(name==='plan' && typeof PlanDayUI!=='undefined') PlanDayUI.enter();
   if(name==='schedule'){ schedSelDay=null; renderSchedule(); }
   if(name==='saved') renderSaved();
   if(name==='profile'){ renderProfile(); refreshUpdDot(); }
@@ -5347,6 +5476,8 @@ $('fitBack').addEventListener('click', ()=>{
   show('home');
 });
 $('fitClose').addEventListener('click', ()=>{ show('home'); });
+/* the Explore map is a pushed screen now — back out to the Plan tab */
+$('xBackPlan').addEventListener('click', ()=>{ show('plan'); });
 
 function updateOffBanner(){ $('offBanner').classList.toggle('show', !trackingOn); $('goWalk').disabled= !dest || !trackingOn; }
 [$('saveSheetBg'),$('privacySheetBg'),$('addSheetBg'),$('campusSheetBg'),$('prefsSheetBg'),$('notifySheetBg'),$('favsSheetBg')].forEach(bg=>bg.addEventListener('click',e=>{ if(e.target===bg) bg.classList.remove('show'); }));
@@ -6968,7 +7099,9 @@ const PlanEngine={
     const p=cand.p;
     if(PlanPersonalization.rejected(p.n) && !opts.explicit) return null;
     const hours=this.hoursState(p);
-    if(hours==='closed') return null;
+    /* hoursState is "right now" — a caller planning a WINDOW LATER TODAY passes
+       ignoreHours (closed-now ≠ closed-then) and shows no Open/Closed badge */
+    if(hours==='closed' && !opts.ignoreHours) return null;
     const stay = opts.stayHere===true;
     const there = stay ? {min:0,src:'none'} : PlanTravelService.leg(ctx.from.lat,ctx.from.lng,p.lat,p.lng);
     const back  = PlanTravelService.leg(p.lat,p.lng,ctx.nextLat,ctx.nextLng);
@@ -7541,7 +7674,7 @@ const HomeDev={
     const leaveThereBy=until-(backMin+buffer+exit)*6e4;
     return { v:2, cat:'gym', placeName:srsc.n, lat:srsc.lat, lng:srsc.lng, strategy:'standard',
       createdAt:Date.now(), phase:phase||'active', thereMin:8, usableMin:38, setup:6, exit:exit,
-      verb:'workout', leaveThereBy,
+      verb:'to work out', leaveThereBy,   // mirror ActivityProfiles.gym.verb so QA sees production copy
       until, course:nx.c.course, classB:nx.c.b, classRoom:nx.c.room,
       classLat:nx.c.lat, classLng:nx.c.lng, buffer:buffer, backMin:backMin, backSrc:'route' };
   },
@@ -7999,7 +8132,11 @@ const HomeUI={
           `You’ll arrive around <b>${hmClock(st.arrive)}</b>`,
           margin<0?`${hmDur(-margin)} after ${esc(p.course||'your next commitment')} starts`:`still ${hmDur(margin)} early`):''}
       ${p.phase==='leave'&&p.usableMin?HomeView.strip('ok', hmIcon('check'),
-          `${esc(cap(p.verb||p.cat))} complete · ${p.usableMin} min`):''}
+          /* This slot wants a NOUN, and ActivityProfiles.verb is (rightly) a
+             verb phrase — "to work out" made it read "Work out complete".
+             Naming the place instead reads naturally for every category and
+             needs no per-category noun table. */
+          `Done at ${esc(hmPlaceShort(p.placeName))} · ${p.usableMin} min`):''}
       ${HomeView.link('hmPlanEnd','End plan')}
     </div>`;
   },
@@ -8982,6 +9119,611 @@ const ScanUI={
 
 /* Home / Schedule call this; guarded so neither breaks if scan.js is absent */
 function openScheduleScan(opts){ if(typeof ScanUI!=='undefined') ScanUI.open(opts); else show('schedule'); }
+
+</script>
+
+<script>
+"use strict";
+/* ================================================================
+   BEELINE — PLAN TAB (My Day + Nearby)
+
+   Replaces Explore in the bottom nav while ABSORBING it: Nearby's Map
+   view opens the existing full Explore screen (scr-map) untouched, so
+   its search / categories / pins / place sheets / Add-place all live on.
+
+   Pre-planning lives here; EXECUTION stays on Home. A planned activity
+   is promoted into the existing active-plan object (plan v2) when its
+   departure time arrives, so Home's states 3/4 and the 5-minute leave
+   warning work unchanged — zero home.js involvement.
+
+   SEPARATION (house pattern):
+     PlanDayModel  dates, commitments, travel-aware gaps, planned store,
+                   ranking + search — engine calls only, no DOM.
+     PlanDayView   HTML for header/tabs/timeline/nearby/results. No data.
+     PlanDayUI     state (mode/date/query), wiring, the only writer.
+
+   HONESTY RULES kept: usable minutes always subtract travel + setup +
+   exit + arrival buffer (PlanEngine.evaluate — one engine, no fork);
+   estimates carry ~; Open badges only for windows starting soon (we
+   only know hours "now"); closed-now places are never the best plan
+   for a now-window; no data is invented for days we can't see.
+   ================================================================ */
+
+const PlanDayModel={
+  LS:'beeline.planned.v1',
+  planned:[],
+  load(){ try{ this.planned=JSON.parse(localStorage.getItem(this.LS)||'[]')||[]; }catch(e){ this.planned=[]; } },
+  save(){ try{ localStorage.setItem(this.LS, JSON.stringify(this.planned)); }catch(e){} },
+
+  dayKey(d){ return d.getFullYear()+'-'+String(d.getMonth()+1).padStart(2,'0')+'-'+String(d.getDate()).padStart(2,'0'); },
+  isToday(d){ return this.dayKey(d)===this.dayKey(new Date()); },
+
+  /* classes that meet on this date, sorted; classList is the ONE schedule store */
+  commitments(date){
+    const code=DOW_CODES[date.getDay()];
+    return (typeof classList!=='undefined'?classList:[])
+      .filter(c=>c.days && c.days.indexOf(code)>=0 && c.start && c.end)
+      .map(c=>{
+        const s=hm(c.start), e=hm(c.end);
+        const base=new Date(date); base.setHours(0,0,0,0);
+        return { kind:'class', c, startMin:s, endMin:e,
+                 startMs:+base+s*6e4, endMs:+base+e*6e4,
+                 label:(c.course||'Class'), where:favLabel(c.b||''), room:c.room||'' };
+      })
+      .sort((a,b)=>a.startMin-b.startMin);
+  },
+
+  /* manual day setup for schedule-less use — session-scoped, per date */
+  manual:{},
+  setManual(date, startMs, endMs, place){ this.manual[this.dayKey(date)]={startMs,endMs,place}; },
+
+  /* travel-aware openings between commitments. Each gap knows where you'll
+     be coming FROM and what protects its end, so the engine can price it. */
+  gaps(date){
+    const cs=this.commitments(date), out=[], today=this.isToday(date), now=Date.now();
+    const man=this.manual[this.dayKey(date)];
+    if(!cs.length && man){
+      const p=man.place;
+      out.push({ startMs:man.startMs, endMs:man.endMs,
+        from:{lat:(curPos||IU).lat,lng:(curPos||IU).lng}, fromName:'where you are',
+        next:{ course:p?favLabel(p.n||p.name):'your deadline', b:p?(p.n||p.name):null,
+               lat:p?p.lat:(curPos||IU).lat, lng:p?p.lng:(curPos||IU).lng }, manual:true });
+    }
+    for(let i=0;i<cs.length;i++){
+      /* leading gap: only today, only from NOW (we know where you are now;
+         we don't pretend to know where you'll be at 8 AM tomorrow) */
+      if(i===0 && today && now < cs[0].startMs - 8*6e4){
+        out.push({ startMs:now, endMs:cs[0].startMs,
+          from:{lat:(curPos||IU).lat,lng:(curPos||IU).lng}, fromName:'where you are',
+          next:{course:cs[0].label, b:cs[0].c.b, lat:cs[0].c.lat, lng:cs[0].c.lng}, leading:true });
+      }
+      if(i+1<cs.length){
+        const a=cs[i], b=cs[i+1];
+        if(b.startMs-a.endMs < 12*6e4) continue;            // back-to-back
+        if(today && now>=b.startMs) continue;                // fully past
+        const startMs=Math.max(a.endMs, today?now:a.endMs);
+        if(b.startMs-startMs < 12*6e4) continue;
+        out.push({ startMs, endMs:b.startMs,
+          from:(today&&now>a.endMs&&curPos)?{lat:curPos.lat,lng:curPos.lng}:{lat:a.c.lat,lng:a.c.lng},
+          fromName:favLabel(a.c.b||''), next:{course:b.label, b:b.c.b, lat:b.c.lat, lng:b.c.lng},
+          afterIdx:i });
+      }
+    }
+    return out;
+  },
+
+  /* engine context for one gap — same shape PlanEngine.context() builds */
+  gapContext(g){
+    return { gapMin:Math.max(0,Math.round((g.endMs-g.startMs)/6e4)),
+      nextName:g.next.course, nextB:favLabel(g.next.b||g.next.course),
+      nextStart:g.endMs, nextLat:g.next.lat, nextLng:g.next.lng,
+      buffer:classBuffer(), from:g.from, future:true };
+  },
+  /* headline number for a gap: what's spendable if you just cross it */
+  gapUsable(g){
+    const walk=PlanTravelService.leg(g.from.lat,g.from.lng,g.next.lat,g.next.lng);
+    return Math.max(0, Math.round((g.endMs-g.startMs)/6e4 - walk.min - classBuffer()));
+  },
+
+  plannedFor(date){ const k=this.dayKey(date); return this.planned.filter(p=>p.dateKey===k); },
+  plannedInGap(g,date){ return this.plannedFor(date).find(p=>p.arriveMs<g.endMs+6e4 && p.leaveThereBy>g.startMs); },
+
+  /* evaluate a candidate place inside a specific gap; near-term windows keep
+     the closed-now veto, later windows suspend it (we only know hours "now") */
+  fit(g, cand, cat, opts){
+    const soon=(g.startMs-Date.now())<45*6e4;
+    const ev=PlanEngine.evaluate(this.gapContext(g), cand, cat,
+      Object.assign({ignoreHours:!soon}, opts||{}));
+    if(ev){ ev.gap=g; ev.soon=soon; ev.arriveMs=g.startMs+Math.round(ev.thereMin)*6e4; }
+    return ev;
+  },
+
+  /* Nearby ranking: every open gap × the proven category pools; each place
+     keeps its best window; score is the engine's (usable time, friction,
+     on-route, roles, preferences) — never bare distance. */
+  rankNearby(date, filterCat){
+    PlanPersonalization.load();
+    const cats=filterCat?[filterCat]:['eat','coffee','study','gym'];
+    const open=this.gaps(date).filter(g=>!this.plannedInGap(g,date));
+    const best={};
+    open.forEach(g=>{ cats.forEach(cat=>{ planPool(cat).forEach(cand=>{
+      const ev=this.fit(g,cand,cat);
+      if(!ev||ev.nearMiss) return;
+      const k=ev.place.n;
+      if(!best[k]||ev.score>best[k].score) best[k]=ev;
+    }); }); });
+    return Object.values(best).sort((a,b)=>b.score-a.score);
+  },
+
+  /* unified search: activity word or specific place → windows that fit */
+  search(q, date){
+    const req=(typeof planParseCanI==='function')?planParseCanI(q):null;
+    const open=this.gaps(date).filter(g=>!this.plannedInGap(g,date));
+    let plans=[];
+    if(req && req.place){
+      const cat=req.cat||'errand';
+      open.forEach(g=>{
+        const ev=this.fit(g,{p:{n:req.place.name,lat:req.place.lat,lng:req.place.lng,c:req.place.c||'offcampus'},why:null},cat,{explicit:true,wantMin:req.wantMin||null});
+        if(ev) plans.push(ev);
+      });
+    } else if(req && req.cat){
+      open.forEach(g=>{ planPool(req.cat).forEach(cand=>{ const ev=this.fit(g,cand,req.cat); if(ev&&!ev.nearMiss) plans.push(ev); }); });
+    } else {
+      /* raw gazetteer fallback so building names always work */
+      const hits=(typeof localSearch==='function'?localSearch(q):[])||[];
+      if(hits.length){ const h=hits[0];
+        open.forEach(g=>{ const ev=this.fit(g,{p:{n:h.name,lat:h.lat,lng:h.lng,c:h.c||'offcampus'},why:null},'errand',{explicit:true}); if(ev) plans.push(ev); });
+      }
+    }
+    plans.sort((a,b)=>b.score-a.score);
+    return { req, plans };
+  },
+
+  addPlanned(ev, date){
+    const item={ id:'pd'+Date.now(), dateKey:this.dayKey(date),
+      placeName:ev.place.n, lat:ev.place.lat, lng:ev.place.lng, cat:ev.cat,
+      verb:ev.prof.verb||ev.cat, setup:ev.prof.setup, exit:ev.prof.exit,
+      thereMin:Math.round(ev.thereMin), backMin:Math.round(ev.backMin), backSrc:ev.backSrc, thereSrc:ev.thereSrc,
+      usableMin:ev.usableMin, gapStartMs:ev.gap.startMs, arriveMs:ev.arriveMs,
+      leaveThereBy:ev.leaveThereBy, nextStartMs:ev.gap.endMs,
+      nextName:ev.gap.next.course, nextB:ev.gap.next.b||null,
+      nextLat:ev.gap.next.lat, nextLng:ev.gap.next.lng, buffer:ev.ctx.buffer };
+    this.planned.push(item); this.save();
+    return item;
+  },
+  removePlanned(id){ this.planned=this.planned.filter(p=>p.id!==id); this.save(); },
+
+  /* PLAN → HOME: when a planned activity's departure arrives, it becomes the
+     one active plan (v2) that home.js already renders and alerts on. */
+  promoteDue(){
+    if(typeof plan!=='undefined' && plan) return;         // one live plan at a time
+    const now=Date.now(), today=this.dayKey(new Date());
+    let changed=false;
+    this.planned=this.planned.filter(p=>{
+      if(p.dateKey<today || (p.dateKey===today && now>p.leaveThereBy)){ changed=true; return false; }  // lapsed
+      return true;
+    });
+    const due=this.planned.find(p=>p.dateKey===today && now >= p.gapStartMs-60e3 && now < p.leaveThereBy);
+    if(due){
+      plan={ v:2, cat:due.cat, placeName:due.placeName, lat:due.lat, lng:due.lng,
+        strategy:'planned', createdAt:now, phase:'travel',
+        thereMin:due.thereMin, usableMin:due.usableMin, setup:due.setup, exit:due.exit, verb:due.verb,
+        leaveThereBy:due.leaveThereBy, until:due.nextStartMs,
+        course:due.nextName, classB:due.nextB, classLat:due.nextLat, classLng:due.nextLng,
+        buffer:due.buffer, backMin:due.backMin, backSrc:due.backSrc };
+      savePlan();
+      this.planned=this.planned.filter(p=>p.id!==due.id); changed=true;
+      if(typeof renderTimeModule==='function') renderTimeModule();
+      toast('Time for '+favLabel(due.placeName)+' — plan is live on Home','good');
+    }
+    if(changed) this.save();
+  },
+};
+
+/* ================================================================ */
+const PlanDayView={
+  fmtDur(min){ min=Math.max(0,Math.round(min)); return min>=60 ? (Math.floor(min/60)+' hr'+(min%60?' '+(min%60)+' min':'')) : (min+' min'); },
+  clock(ms){ return fmtClockTime(new Date(ms)); },
+  dateLabel(d){
+    const today=PlanDayModel.isToday(d);
+    const m=['Jan','Feb','Mar','Apr','May','Jun','Jul','Aug','Sep','Oct','Nov','Dec'][d.getMonth()];
+    return (today?'Today':DOW_SHORT[DOW_CODES[d.getDay()]])+' · '+m+' '+d.getDate();
+  },
+  header(d){
+    return `<div class="pd-bar">
+      <span class="pd-logo logomark"></span>
+      <span class="pd-title">Plan</span>
+      <button class="pd-date" id="pdDateBtn">${esc(this.dateLabel(d))} ${pic('calendar-blank')}</button>
+    </div>`;
+  },
+  tabs(mode){
+    return `<div class="pd-tabs" role="tablist">
+      <button class="pd-tab${mode==='day'?' on':''}" data-pdm="day" role="tab" aria-selected="${mode==='day'}">My day</button>
+      <button class="pd-tab${mode==='nearby'?' on':''}" data-pdm="nearby" role="tab" aria-selected="${mode==='nearby'}">Nearby</button>
+    </div>`;
+  },
+  search(q){
+    return `<div class="pd-search">${pic('timer')}<input id="pdQ" type="text" placeholder="What do you want to do or where do you want to go?" autocomplete="off" enterkeyhint="search" value="${esc(q||'')}"></div>`;
+  },
+  shortcuts(items){
+    return `<div class="pd-shortcuts">${items.map(([cat,label,ic])=>
+      `<button class="pd-sc" data-pdsc="${cat}">${pic(ic)}<span>${label}</span></button>`).join('')}</div>`;
+  },
+
+  /* ---- MY DAY ---- */
+  timeline(date){
+    const cs=PlanDayModel.commitments(date);
+    const gaps=PlanDayModel.gaps(date);
+    const planned=PlanDayModel.plannedFor(date);
+    const today=PlanDayModel.isToday(date), now=Date.now();
+    if(!cs.length && !gaps.length){
+      return `<div class="pd-empty">
+        <b>No commitments ${today?'today':'on this day'}.</b>
+        <p>Add your schedule and BeeLine finds the time between things — or set this day up by hand.</p>
+        <button class="pd-manual" id="pdManual">Set up this day</button>
+        <button class="hm-link" id="pdScan">Scan your schedule</button>
+      </div>`;
+    }
+    /* interleave: classes + (gap | planned-in-gap) in time order */
+    const items=[];
+    /* the LIVE plan (execution lives on Home) still shows in today's timeline */
+    if(today && typeof plan!=='undefined' && plan && plan.v===2)
+      items.push({t:Math.min(now,plan.leaveThereBy-1), kind:'live'});
+    cs.forEach(c=>items.push({t:c.startMs, kind:'class', c}));
+    gaps.forEach(g=>{
+      const pl=PlanDayModel.plannedInGap(g,date);
+      if(pl) items.push({t:pl.arriveMs, kind:'planned', pl, g});
+      else{
+        const usable=PlanDayModel.gapUsable(g);
+        if(usable>=10) items.push({t:g.startMs, kind:'gap', g, usable});
+      }
+    });
+    items.sort((a,b)=>a.t-b.t);
+    const maxUsable=Math.max(0,...items.filter(x=>x.kind==='gap').map(x=>x.usable));
+    let html=`<div class="pd-dayh"><h2>Your day</h2><span class="pd-nav"><button id="pdPrev" aria-label="Previous day">${pic('caret-left')}</button><button id="pdNext" aria-label="Next day">${pic('caret-right')}</button></span></div><div class="pd-rail">`;
+    let nowShown=!today;
+    items.forEach((it,idx)=>{
+      if(!nowShown && now<it.t){ html+=`<div class="pd-nowline"><i></i>Now</div>`; nowShown=true; }
+      if(it.kind==='class'){
+        html+=`<div class="pd-item quiet">
+          <div class="pd-times"><b>${this.clock(it.c.startMs)}</b><b>${this.clock(it.c.endMs)}</b></div>
+          <div class="pd-dotcol"><i class="d"></i><i class="l"></i><i class="d o"></i></div>
+          <div class="pd-block"><span class="pd-cls">${this.clock(it.c.startMs).replace(/\s?[AP]M/,'')}–${this.clock(it.c.endMs)} · <b>${esc(it.c.label)}</b> · ${esc(wordShort(it.c.where,20))}</span></div>
+        </div>`;
+      } else if(it.kind==='gap'){
+        const g=it.g;
+        const best=it.usable===maxUsable && it.usable>=45;
+        const sub= best?'Best opening today':this.gapHint(g,it.usable);
+        html+=`<div class="pd-item">
+          <div class="pd-times"><b>${this.clock(g.startMs)}</b><b>${this.clock(g.endMs)}</b></div>
+          <div class="pd-dotcol on"><i class="d f"></i><i class="l f"></i><i class="d f o"></i></div>
+          <div class="pd-block open${best?' best':''}" data-pdgap="${g.startMs}" role="button" tabindex="0">
+            <div class="pd-open-top"><b>${this.fmtDur(it.usable)} usable</b><span class="pd-planhere">Plan here ${pic('arrow-right')}</span></div>
+            <span class="pd-open-sub">${esc(sub)}</span>
+          </div>
+        </div>`;
+      } else if(it.kind==='live'){
+        html+=`<div class="pd-item">
+          <div class="pd-times"><b>Now</b><b>${this.clock(plan.leaveThereBy)}</b></div>
+          <div class="pd-dotcol on"><i class="d f"></i><i class="l f"></i><i class="d f o"></i></div>
+          <div class="pd-block planned" data-pdlive="1" role="button" tabindex="0">
+            <div class="pd-open-top"><b>${esc(favLabel(plan.placeName))}</b><span class="pd-pl-min">live on Home</span></div>
+            <span class="pd-open-sub">${plan.usableMin} min ${esc(plan.verb||plan.cat)} · leave by ${this.clock(plan.leaveThereBy)}</span>
+          </div>
+        </div>`;
+      } else {
+        const p=it.pl;
+        html+=`<div class="pd-item">
+          <div class="pd-times"><b>${this.clock(p.arriveMs)}</b><b>${this.clock(p.leaveThereBy)}</b></div>
+          <div class="pd-dotcol on"><i class="d f"></i><i class="l f"></i><i class="d f o"></i></div>
+          <div class="pd-block planned" data-pdpl="${p.id}" role="button" tabindex="0">
+            <div class="pd-open-top"><b>${esc(favLabel(p.placeName))}</b><span class="pd-pl-min">${p.usableMin} min ${esc(p.verb)}</span></div>
+            <span class="pd-open-sub">Planned · leave by ${this.clock(p.leaveThereBy)}</span>
+          </div>
+        </div>`;
+      }
+    });
+    html+=`</div><div class="pd-foot">${pic('bus')}Travel and arrival time already included.</div>`;
+    return html;
+  },
+  gapHint(g,usable){
+    const h=new Date(g.startMs).getHours();
+    const good=[];
+    if(usable>=22 && h>=10 && h<14) good.push('lunch');
+    else if(usable>=22 && h>=17 && h<20) good.push('dinner');
+    else if(usable>=12) good.push('coffee');
+    if(usable>=30) good.push('studying');
+    if(usable>=45) good.push('a workout');
+    if(!good.length) return 'A quick stop fits';
+    return 'Good for '+(good.length>1? good.slice(0,2).join(' or ') : good[0]);
+  },
+
+  /* ---- NEARBY ---- */
+  nearby(date, ranked){
+    let html=`<div class="pd-mapbtn-wrap"><button class="pd-mapbtn" id="pdMap">${pic('map-trifold')}<span><b>Map</b><i>Every place, on the campus map</i></span>${pic('caret-right','ch')}</button></div>`;
+    html+=`<div class="pd-dayh"><h2>Fits your day</h2><span class="pd-lm">List</span></div>`;
+    if(!ranked.length){
+      html+=`<div class="pd-empty"><b>Nothing fits ${PlanDayModel.isToday(date)?'the rest of today':'this day'}.</b><p>The open windows are too short once travel and getting settled are counted. Try another day.</p><button class="pd-manual" id="pdTomorrow">See tomorrow</button></div>`;
+      return html;
+    }
+    html+=ranked.slice(0,8).map((ev,i)=>{
+      const meta2=catMeta(ev.place.c||'offcampus');
+      const saved=(typeof favorites!=='undefined')&&favorites.some(f=>favLabel(f.name)===favLabel(ev.place.n));
+      const tilde=(ev.thereSrc==='est')?'~':'';
+      return `<div class="pd-place" data-pdi="${i}">
+        <span class="pd-rank${i===0?' top':''}">${i+1}</span>
+        <span class="pd-glyph" style="background:${meta2.color}1f;color:${meta2.color}">${PIN_ICON[ev.place.c]||PIN_ICON.offcampus}</span>
+        <div class="pd-place-b" role="button" tabindex="0" data-pdrow="${i}">
+          <b>${esc(favLabel(ev.place.n))}</b>
+          <span class="pd-place-m">${esc(ev.prof.t)} · ${tilde}${Math.max(1,Math.round(ev.thereMin))} min walk</span>
+          <span class="pd-place-a">${this.fmtDur(ev.usableMin)} available</span>
+          <span class="pd-place-f">Fits ${PlanDayModel.isToday(date)?'today':'this day'} at ${this.clock(ev.arriveMs)}</span>
+        </div>
+        <span class="pd-place-r">
+          <button class="pd-save${saved?' on':''}" data-pdsave="${i}" aria-label="Save place">${pic('bookmark-simple')}</button>
+          <button class="pd-planit" data-pdplan="${i}">Plan it ${pic('arrow-right')}</button>
+        </span>
+      </div>`;
+    }).join('');
+    return html;
+  },
+
+  /* ---- SEARCH RESULTS ---- */
+  results(q, date, r, sortMode){
+    const today=PlanDayModel.isToday(date);
+    let html=`<div class="pd-resbar"><button id="pdResBack" aria-label="Back">${pic('caret-left')}</button>
+      <div class="pd-search res">${pic('magnifying-glass')}<input id="pdQ" type="text" value="${esc(q)}" autocomplete="off" enterkeyhint="search"><button id="pdQx" aria-label="Clear">${pic('x')}</button></div></div>`;
+    const cs=PlanDayModel.commitments(date);
+    const ctxLine= cs.length? `${today?'Today':this.dateLabel(date)} · around ${cs.length} commitment${cs.length===1?'':'s'}` : `${today?'Today':this.dateLabel(date)}`;
+    html+=`<div class="pd-resctx">${esc(ctxLine)}</div>`;
+    if(r.req && r.req.errand){
+      html+=`<div class="pd-empty"><b>No reliable ${r.req.errand==='print'?'printer':'package-pickup'} data yet.</b><p>Pick the place yourself and BeeLine will do the time math.</p></div>`;
+    }
+    if(!r.plans.length){
+      html+=`<div class="pd-empty"><b>Nothing fits ${today?'today':'this day'}.</b>
+        <p>Once travel, getting settled and getting to what's next are counted, no window works. A closer place or a shorter visit might.</p>
+        <button class="pd-manual" id="pdTomorrow">See tomorrow ${pic('arrow-right')}</button></div>`;
+      return html;
+    }
+    const best=r.plans[0];
+    const others=r.plans.slice(1);
+    const tilde=(best.thereSrc==='est'||best.backSrc==='est')?'~':'';
+    html+=`<h2 class="pd-h2">Best time ${today?'today':'this day'}</h2>
+      <div class="pd-best" data-pdi="0">
+        <div class="pd-best-win">${this.clock(best.arriveMs)}–${this.clock(best.leaveThereBy)}</div>
+        <div class="pd-best-name">${esc(favLabel(best.place.n))}</div>
+        <div class="pd-best-dur">${this.fmtDur(best.usableMin)} ${esc(best.prof.verb||best.cat)}</div>
+        <div class="pd-best-legs">
+          <span>${pic('person-simple-walk')}Leave ${esc(wordShort(best.gap.fromName||'here',14))} ${this.clock(best.gap.startMs)}</span>
+          <span>${pic('clock')}Leave ${this.clock(best.leaveThereBy)}</span>
+          <span>${pic('bank')}${esc(wordShort(best.ctx.nextB||'next',14))} ${this.clock(best.gap.endMs)}</span>
+        </div>
+        <div class="pd-best-foot">
+          <span class="pd-badges"><span class="pd-badge fit">Best fit</span>${best.soon&&best.hours==='open'?'<span class="pd-badge open">Open</span>':''}${tilde?'<span class="pd-badge est">~ estimated walk</span>':''}</span>
+          <button class="pd-addday" data-pdplan="0">Add to my day ${pic('arrow-right')}</button>
+        </div>
+      </div>`;
+    if(others.length){
+      html+=`<div class="pd-dayh"><h2>Other times that fit</h2>
+        <span class="pd-sort"><button class="${sortMode==='times'?'on':''}" data-pdsort="times">Times</button> / <button class="${sortMode==='places'?'on':''}" data-pdsort="places">Places</button></span></div>`;
+      const list= sortMode==='times' ? others.slice().sort((a,b)=>a.arriveMs-b.arriveMs) : others;
+      html+=list.slice(0,6).map(ev=>{
+        const i=r.plans.indexOf(ev);
+        const meta2=catMeta(ev.place.c||'offcampus');
+        const note= ev.onWay?'Already on your route' : `${ev.thereSrc==='est'?'~':''}${Math.max(1,Math.round(ev.thereMin))} min walk`;
+        return `<div class="pd-place" data-pdi="${i}">
+          <span class="pd-glyph lg" style="background:${meta2.color}1f;color:${meta2.color}">${PIN_ICON[ev.place.c]||PIN_ICON.offcampus}</span>
+          <div class="pd-place-b" role="button" tabindex="0" data-pdrow="${i}">
+            <b>${esc(favLabel(ev.place.n))}</b>
+            <span class="pd-place-a">${ev.usableMin} min ${esc(ev.prof.verb||ev.cat)}</span>
+            <span class="pd-place-f">Fits ${this.clock(ev.arriveMs)}–${this.clock(ev.leaveThereBy)}</span>
+            <span class="pd-place-m">${ev.onWay?pic('map-pin-simple'):pic('person-simple-walk')} ${esc(note)}</span>
+          </div>
+          <span class="pd-place-r"><button class="pd-planit" data-pdplan="${i}">Plan it ${pic('arrow-right')}</button></span>
+        </div>`;
+      }).join('');
+    }
+    if(today) html+=`<button class="pd-more" id="pdTomorrow">See tomorrow ${pic('arrow-right')}</button>`;
+    return html;
+  },
+};
+
+/* ================================================================ */
+const PlanDayUI={
+  mode:'day', date:new Date(), query:'', stage:'browse', sortMode:'times', lastResults:null,
+
+  enter(){
+    PlanDayModel.load();
+    if(this.stage!=='results') this.stage='browse';
+    this.render();
+  },
+  setDate(d){ this.date=d; this.render(); },
+  shiftDate(days){
+    const d=new Date(this.date); d.setDate(d.getDate()+days);
+    const today=new Date(); today.setHours(0,0,0,0);
+    if(+d < +today) return;                 // yesterday has no plannable time
+    this.setDate(d);
+  },
+
+  render(){
+    const body=$('planBody'); if(!body) return;
+    let html=PlanDayView.header(this.date);
+    if(this.stage==='results'){
+      const r=this.lastResults||PlanDayModel.search(this.query,this.date);
+      this.lastResults=r;
+      html+=PlanDayView.results(this.query, this.date, r, this.sortMode);
+      body.innerHTML=html; this.wireResults(r); return;
+    }
+    html+=PlanDayView.tabs(this.mode);
+    if(this.mode==='day'){
+      html+=`<div class="pd-hero"><h1>Make time ${PlanDayModel.isToday(this.date)?'today':'that day'}</h1>
+        <p>Pick something you want to do.<br>BeeLine will find where it actually fits.</p></div>`;
+      html+=PlanDayView.search(this.query);
+      html+=PlanDayView.shortcuts([['study','Study','books'],['eat','Eat','fork-knife'],['gym','Work out','barbell'],['errand','Errand','signpost']]);
+      html+=PlanDayView.timeline(this.date);
+    } else {
+      html+=`<div class="pd-hero"><h1>Find somewhere that fits</h1>
+        <p>Places ranked by the time you can actually spend there.</p></div>`;
+      html+=PlanDayView.search(this.query);
+      html+=PlanDayView.shortcuts([['eat','Food','fork-knife'],['coffee','Coffee','coffee'],['study','Study','books'],['gym','Fitness','barbell']]);
+      this._ranked=PlanDayModel.rankNearby(this.date,null);
+      html+=PlanDayView.nearby(this.date, this._ranked);
+    }
+    body.innerHTML=html;
+    this.wire();
+  },
+
+  wire(){
+    const body=$('planBody');
+    body.querySelectorAll('[data-pdm]').forEach(b=>b.addEventListener('click',()=>{ this.mode=b.dataset.pdm; this.render(); }));
+    const db=$('pdDateBtn'); if(db) db.addEventListener('click',()=>this.dateSheet());
+    const pv=$('pdPrev'); if(pv) pv.addEventListener('click',()=>this.shiftDate(-1));
+    const nx=$('pdNext'); if(nx) nx.addEventListener('click',()=>this.shiftDate(1));
+    const q=$('pdQ'); if(q){
+      q.addEventListener('input',()=>{ this.query=q.value; });
+      q.addEventListener('keydown',e=>{ if(e.key==='Enter'&&q.value.trim()) this.runSearch(q.value.trim()); });
+    }
+    body.querySelectorAll('[data-pdsc]').forEach(b=>b.addEventListener('click',()=>{
+      const cat=b.dataset.pdsc;
+      this.query=(ActivityProfiles[cat]||{}).t||cat;
+      this.lastResults={req:{cat}, plans:PlanDayModel.rankNearby(this.date,cat)};
+      this.stage='results'; this.render();
+    }));
+    body.querySelectorAll('[data-pdgap]').forEach(el=>el.addEventListener('click',()=>{
+      const g=PlanDayModel.gaps(this.date).find(x=>String(x.startMs)===el.dataset.pdgap);
+      if(g) this.gapSheet(g);
+    }));
+    body.querySelectorAll('[data-pdpl]').forEach(el=>el.addEventListener('click',()=>this.plannedSheet(el.dataset.pdpl)));
+    body.querySelectorAll('[data-pdlive]').forEach(el=>el.addEventListener('click',()=>goTab('home')));
+    const man=$('pdManual'); if(man) man.addEventListener('click',()=>this.manualSetup());
+    const sc=$('pdScan'); if(sc) sc.addEventListener('click',()=>{ if(typeof openScheduleScan==='function') openScheduleScan(); });
+    const mp=$('pdMap'); if(mp) mp.addEventListener('click',()=>show('map'));
+    const tm=$('pdTomorrow'); if(tm) tm.addEventListener('click',()=>this.shiftDate(1));
+    if(this.mode==='nearby') this.wirePlaces(this._ranked||[]);
+  },
+  wirePlaces(list){
+    const body=$('planBody');
+    body.querySelectorAll('[data-pdplan]').forEach(b=>b.addEventListener('click',e=>{
+      e.stopPropagation();
+      const ev=list[+b.dataset.pdplan]; if(!ev) return; this.addToDay(ev);
+    }));
+    body.querySelectorAll('[data-pdrow]').forEach(el=>el.addEventListener('click',()=>{
+      const ev=list[+el.dataset.pdrow]; if(!ev) return;
+      ev.busOpt=(typeof planBusBackOption==='function')?planBusBackOption(ev):null;
+      PlanUI.openPlanSheet(ev);            // full itinerary sheet; its Choose commits NOW-plans only
+      /* swap the sheet CTA to plan-into-the-window semantics */
+      setTimeout(()=>{ const c=document.getElementById('wfshChoose');
+        if(c){ c.textContent = PlanDayModel.isToday(this.date)&&ev.gap&&ev.gap.leading ? 'Choose this plan' : 'Add to my day';
+          const clone=c.cloneNode(true); c.parentNode.replaceChild(clone,c);
+          clone.addEventListener('click',()=>{ document.getElementById('wfShBg')?.remove(); this.addToDay(ev); });
+        } },0);
+    }));
+    body.querySelectorAll('[data-pdsave]').forEach(b=>b.addEventListener('click',e=>{
+      e.stopPropagation();
+      const ev=list[+b.dataset.pdsave]; if(!ev||typeof favorites==='undefined') return;
+      const i=favorites.findIndex(f=>favLabel(f.name)===favLabel(ev.place.n));
+      if(i>=0){ favorites.splice(i,1); toast('Removed from saved',''); }
+      else{ favorites.push({name:ev.place.n, lat:ev.place.lat, lng:ev.place.lng, c:ev.place.c||'mine'}); toast('Saved '+favLabel(ev.place.n),'good'); }
+      saveFavs(); this.render();
+    }));
+  },
+  wireResults(r){
+    const back=$('pdResBack'); if(back) back.addEventListener('click',()=>{ this.stage='browse'; this.lastResults=null; this.render(); });
+    const qx=$('pdQx'); if(qx) qx.addEventListener('click',()=>{ this.query=''; this.stage='browse'; this.lastResults=null; this.render(); });
+    const q=$('pdQ'); if(q) q.addEventListener('keydown',e=>{ if(e.key==='Enter'&&q.value.trim()) this.runSearch(q.value.trim()); });
+    const body=$('planBody');
+    body.querySelectorAll('[data-pdsort]').forEach(b=>b.addEventListener('click',()=>{ this.sortMode=b.dataset.pdsort; this.render(); }));
+    const tm=$('pdTomorrow'); if(tm) tm.addEventListener('click',()=>{ this.shiftDate(1); this.lastResults=null; this.stage='results'; this.runSearch(this.query||''); });
+    const db=$('pdDateBtn'); if(db) db.addEventListener('click',()=>this.dateSheet());
+    this.wirePlaces(r.plans);
+  },
+  runSearch(q){
+    this.query=q;
+    this.lastResults=PlanDayModel.search(q,this.date);
+    this.stage='results'; this.render();
+  },
+
+  addToDay(ev){
+    if(!ev.gap){ toast('No window attached to that plan','warn'); return; }
+    if(PlanDayModel.plannedInGap(ev.gap,this.date)){ toast('That window already has a plan — remove it first','warn'); return; }
+    PlanDayModel.addPlanned(ev,this.date);
+    PlanPersonalization.load(); PlanPersonalization.recordSelection({cat:ev.cat, placeName:ev.place.n});
+    PlanDayModel.promoteDue();             // a basically-now window goes live immediately
+    toast(favLabel(ev.place.n)+' added · '+PlanDayView.clock(ev.arriveMs),'good');
+    this.stage='browse'; this.mode='day'; this.lastResults=null; this.render();
+  },
+
+  /* tap an opening → what fits in THAT window */
+  gapSheet(g){
+    const cats=['eat','coffee','study','gym'];
+    let best={};
+    cats.forEach(cat=>planPool(cat).forEach(cand=>{
+      const ev=PlanDayModel.fit(g,cand,cat);
+      if(!ev||ev.nearMiss) return;
+      if(!best[ev.place.n]||ev.score>best[ev.place.n].score) best[ev.place.n]=ev;
+    }));
+    const list=Object.values(best).sort((a,b)=>b.score-a.score).slice(0,6);
+    this.lastResults={req:null, plans:list};
+    this.query='';
+    this.stage='results'; this.render();
+  },
+  plannedSheet(id){
+    const p=PlanDayModel.planned.find(x=>x.id===id); if(!p) return;
+    let bg=document.getElementById('pdShBg'); if(bg) bg.remove();
+    bg=document.createElement('div'); bg.id='pdShBg'; bg.className='brxsh-bg';
+    bg.innerHTML=`<div class="brxsh"><div class="brxsh-head"><b>${esc(favLabel(p.placeName))}</b>
+      <button class="brxsh-x" aria-label="Close"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.4" stroke-linecap="round"><path d="M6 6 L18 18 M18 6 L6 18"/></svg></button></div>
+      <div class="brxsh-scroll">
+        <div class="wfsh-hero">${p.usableMin} min ${esc(p.verb)}</div>
+        <div class="wfsh-steps">
+          <div class="wfsh-step"><b>Arrive ${PlanDayView.clock(p.arriveMs)}</b><span>${p.thereSrc==='est'?'~':''}${p.thereMin} min walk</span></div>
+          <div class="wfsh-step"><b>Leave by ${PlanDayView.clock(p.leaveThereBy)}</b><span>${p.backSrc==='est'?'~':''}${p.backMin} min to ${esc(favLabel(p.nextB||p.nextName))} — there ${p.buffer} min early</span></div>
+        </div>
+        <button class="hm-act" id="pdPlRemove">Remove from my day</button>
+      </div></div>`;
+    document.body.appendChild(bg);
+    const close=()=>{ bg.classList.remove('show'); setTimeout(()=>bg.remove(),240); };
+    bg.addEventListener('click',e=>{ if(e.target===bg) close(); });
+    bg.querySelector('.brxsh-x').addEventListener('click',close);
+    bg.querySelector('#pdPlRemove').addEventListener('click',()=>{ PlanDayModel.removePlanned(p.id); close(); toast('Removed','' ); this.render(); });
+    requestAnimationFrame(()=>bg.classList.add('show'));
+  },
+  /* schedule-less day: from / until / where-you-need-to-be */
+  manualSetup(){
+    const self=this;
+    planTimeSheet('10:00', from=>{
+      planTimeSheet('17:00', until=>{
+        const d=new Date(self.date);
+        const mk=hmS=>{ const x=new Date(d); x.setHours(+hmS.split(':')[0],+hmS.split(':')[1],0,0); return +x; };
+        let s=mk(from), e=mk(until); if(e<=s){ toast('That ends before it starts','warn'); return; }
+        PlanDayModel.setManual(self.date, s, e, null);
+        self.render();
+        toast('Day set — tap the opening to plan it','good');
+      }, 'Free until when?');
+    }, 'Free starting when?');
+  },
+  dateSheet(){
+    let bg=document.getElementById('pdDtBg'); if(bg) bg.remove();
+    bg=document.createElement('div'); bg.id='pdDtBg'; bg.className='brxsh-bg';
+    const days=[...Array(7)].map((_,i)=>{ const d=new Date(); d.setHours(12,0,0,0); d.setDate(d.getDate()+i); return d; });
+    bg.innerHTML=`<div class="brxsh"><div class="brxsh-head"><b>Pick a day</b>
+      <button class="brxsh-x" aria-label="Close"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.4" stroke-linecap="round"><path d="M6 6 L18 18 M18 6 L6 18"/></svg></button></div>
+      <div class="brxsh-scroll">${days.map((d,i)=>`<button class="pd-dayrow${PlanDayModel.dayKey(d)===PlanDayModel.dayKey(this.date)?' on':''}" data-pdd="${i}">
+        <b>${esc(PlanDayView.dateLabel(d))}</b><span>${PlanDayModel.commitments(d).length} commitment${PlanDayModel.commitments(d).length===1?'':'s'}</span></button>`).join('')}
+      </div></div>`;
+    document.body.appendChild(bg);
+    const close=()=>{ bg.classList.remove('show'); setTimeout(()=>bg.remove(),240); };
+    bg.addEventListener('click',e=>{ if(e.target===bg) close(); });
+    bg.querySelector('.brxsh-x').addEventListener('click',close);
+    bg.querySelectorAll('[data-pdd]').forEach(b=>b.addEventListener('click',()=>{ close(); this.setDate(days[+b.dataset.pdd]); }));
+    requestAnimationFrame(()=>bg.classList.add('show'));
+  },
+};
+
+/* promotion heartbeat: planned → live plan when its departure arrives */
+PlanDayModel.load();
+setInterval(()=>{ try{ PlanDayModel.promoteDue(); }catch(e){} }, 30000);
+try{ PlanDayModel.promoteDue(); }catch(e){}
 
 </script>
 </body>
