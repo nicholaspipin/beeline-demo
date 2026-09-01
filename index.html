@@ -1617,6 +1617,41 @@ input.inp:disabled{ background:var(--limestone-dk); color:var(--ink-soft); }
 .wf-filters .wf-f .pi{ width:15px; height:15px; display:inline-flex; }
 .wf-filters .wf-f.on .pi{ color:var(--paper); }
 
+/* ===== WHAT FITS v3 — honey banner, floating ask, sheet commits ===== */
+.wfb{ margin:0; padding:14px 20px 46px; background:var(--honey); color:var(--on-honey); border-radius:0 0 26px 26px; }
+.wfb-top{ display:flex; align-items:baseline; justify-content:space-between; gap:10px; }
+.wfb-title{ font-family:var(--font-display); font-weight:760; font-size:22px; letter-spacing:-.02em; }
+.wfb-next{ font-size:12.5px; font-weight:650; opacity:.75; white-space:nowrap; overflow:hidden; text-overflow:ellipsis; font-variant-numeric:tabular-nums; }
+.wfb-gap{ font-family:var(--font-display); font-weight:780; font-size:52px; letter-spacing:-.04em; line-height:1; margin-top:8px; font-variant-numeric:tabular-nums; }
+.wfb-gap .unit{ font-size:23px; font-weight:700; letter-spacing:-.01em; }
+.wfb-free{ font-family:var(--font-display); font-size:18px; font-weight:660; margin-left:9px; opacity:.8; }
+.wfb-sub{ font-size:13px; font-weight:600; opacity:.8; margin-top:5px; font-variant-numeric:tabular-nums; }
+.wf-ask2{ position:relative; z-index:2; margin:-24px 20px 0; }
+.wf-ask2 input{ width:100%; border:none; background:var(--surface); box-shadow:inset 0 0 0 1px var(--line), 0 6px 18px rgba(20,19,15,.12); border-radius:999px; padding:15px 16px 15px 44px; font-family:var(--font-display); font-size:14.5px; font-weight:600; color:var(--ink); }
+.wf-ask2 input::placeholder{ color:var(--ink-faint); font-weight:500; }
+.wf-ask2 input:focus{ outline:none; box-shadow:inset 0 0 0 2px var(--ink), 0 6px 18px rgba(20,19,15,.12); }
+.wf-ask2 .wf-can-ic{ position:absolute; left:17px; top:50%; transform:translateY(-50%); color:var(--ink-faint); }
+.wf-ask2 .wf-can-ic .pi{ width:16px; height:16px; display:inline-flex; }
+.wf-card{ padding:14px 14px; }
+.wf-card .wf-place{ font-size:15px; }
+.wf-card .wf-hero{ font-size:22px; margin-top:2px; }
+.wf-best{ position:absolute; top:-9px; left:16px; font-family:var(--font-display); font-size:11px; font-weight:760; letter-spacing:.02em; color:var(--on-honey); background:var(--honey); border-radius:999px; padding:4px 11px; }
+.wf-card.top{ box-shadow:inset 0 0 0 1.6px var(--honey), 0 2px 14px rgba(20,19,15,.06); overflow:visible; }
+.wf-why2{ font-style:normal; color:var(--honey-deep); font-weight:650; }
+.wf-go{ align-self:center; margin-left:auto; flex:none; width:28px; height:28px; border-radius:50%; background:var(--paper-bg); display:grid; place-items:center; color:var(--ink-soft); }
+.wf-go .pi{ width:13px; height:13px; display:inline-flex; }
+.wf-list{ padding-top:6px; }
+.wf-filters{ padding:18px 20px 10px; }
+.wfsh-photo{ margin:10px 0 4px; border-radius:var(--r-md); overflow:hidden; height:150px; }
+.wfsh-photo img{ width:100%; height:100%; object-fit:cover; display:block; }
+.wfsh-hero{ font-family:var(--font-display); font-weight:760; font-size:27px; letter-spacing:-.025em; margin:10px 0 2px; color:var(--ink); font-variant-numeric:tabular-nums; }
+.wf-math.open{ margin-top:6px; padding-top:8px; border-top:1px solid var(--line); font-size:13px; color:var(--ink-soft); line-height:1.95; font-variant-numeric:tabular-nums; }
+.wfsh-leave{ margin-top:10px; font-size:14.5px; color:var(--ink-soft); }
+.wfsh-leave b{ color:var(--ink); font-variant-numeric:tabular-nums; }
+.wfsh-miss{ margin-top:10px; padding:10px 13px; border-radius:var(--r-sm); background:var(--honey-tint); font-size:13px; color:var(--ink); }
+.brxsh .tm-cta{ margin-top:16px; }
+.wf-nfm.center{ display:block; margin:10px auto 2px; }
+
 </style>
 </head>
 <body>
@@ -2003,7 +2038,7 @@ input.inp:disabled{ background:var(--limestone-dk); color:var(--ink-soft); }
         <div class="prow" id="pUpdates"><span class="prow-ic"><span data-pi="arrows-clockwise"></span></span><b class="prow-label">What’s new<span class="upd-dot" id="updDot" style="display:none"></span></b><span class="prow-val" id="pUpdatesVal"></span><span class="prow-ch"><span data-pi="caret-right"></span></span></div>
       </div>
 
-      <div class="profile-version">BeeLine 1.0.0 · build 2026-09-01 11:04 · your data stays on this phone<br>Map data © OpenStreetMap contributors · © CARTO</div>
+      <div class="profile-version">BeeLine 1.0.0 · build 2026-09-01 11:10 · your data stays on this phone<br>Map data © OpenStreetMap contributors · © CARTO</div>
       <button class="prow" id="pAdd" style="display:none"></button>
     </div>
   </section>
@@ -6710,45 +6745,74 @@ const PlanUI={
     const direct=PlanTravelService.leg(c.from.lat,c.from.lng,c.nextLat,c.nextLng);
     const leaveDirect=new Date(c.nextStart-(direct.min+c.buffer)*6e4);
     const g= c.gapMin>=120 ? (Math.floor(c.gapMin/60)+'<span class="unit">h</span> '+String(c.gapMin%60).padStart(2,'0')+'<span class="unit">m</span>') : (c.gapMin+'<span class="unit">min</span>');
-    return `<div class="fit-head wf-hero2"><h1 class="fit-title">What fits?</h1>
-      <div class="wf-gap">${g}<span class="wf-gap-lab">free</span></div>
-      <div class="fit-until">before <b>${esc(c.nextName)}</b> at ${when} · leave by ${direct.src==='learned'?'':'~'}${fmtClockTime(leaveDirect)}</div></div>`;
+    return `<div class="wfb">
+      <div class="wfb-top"><span class="wfb-title">What fits?</span><span class="wfb-next">${esc(c.nextName)} · ${when}</span></div>
+      <div class="wfb-gap">${g}<span class="wfb-free">free</span></div>
+      <div class="wfb-sub">leave for ${esc(shortName(c.nextB||c.nextName))} by ${direct.src==='learned'?'':'~'}${fmtClockTime(leaveDirect)}</div>
+    </div>
+    <div class="wf-ask2"><span class="wf-can-ic">${pic('magnifying-glass')}</span><input type="text" id="wfCanI" placeholder="Can I… ?  gym · coffee · go home" value="${esc(this.lastQuery)}" autocomplete="off"></div>`;
   },
-  card(pl,i,expanded){
+  card(pl,i){
     const tilde=(pl.thereSrc==='est'||pl.backSrc==='est')?'~':'';
     const lv=fmtClockTime(new Date(pl.leaveThereBy));
     const hero= `${pl.nearMiss?'about ':''}${tilde}${Math.max(0,pl.usableMin)} min ${esc(pl.prof.verb||'')}`;
     const meta= pl.stayHere
       ? `you're already here · leave at ${lv}`
       : `${tilde}${Math.max(1,Math.round(pl.thereMin))} min walk · leave there ${lv}`;
-    const reason= pl.reason?`<span class="wf-why">${esc(pl.reason)}</span>`:'';
-    // visual tile: real building photo when we have one, category glyph otherwise
     const ph=(typeof placePhoto==='function')?placePhoto({n:pl.place.n}):null;
     const meta2=catMeta(pl.place.c||'offcampus');
     const tile= ph
       ? `<span class="wf-tile"><img src="${esc(ph.t)}" alt="" loading="lazy" decoding="async"></span>`
       : `<span class="wf-tile glyph" style="background:${meta2.color}">${PIN_ICON[pl.place.c]||PIN_ICON.offcampus}</span>`;
-    const exp= expanded? `<div class="wf-math">
-        ${pl.stayHere?'':`<div><span>${tilde}${Math.max(1,Math.round(pl.thereMin))} min</span> walk there</div>`}
-        ${pl.prof.setup?`<div><span>${pl.prof.setup} min</span> getting started</div>`:''}
-        <div class="core"><span>${Math.max(0,pl.usableMin)} min</span> ${esc(pl.prof.verb||pl.cat)}</div>
-        ${pl.prof.exit?`<div><span>${pl.prof.exit} min</span> wrapping up</div>`:''}
-        <div><span>${tilde}${Math.max(1,Math.round(pl.backMin))} min</span> to ${esc(pl.ctx.nextB||'next')}</div>
-        <div><span>${pl.ctx.buffer} min</span> early, like you like</div>${pl.hours==='unknown'?'<div class="dim">Hours not verified — check before a long trip</div>':''}<button class="wf-nfm" data-nfm="${i}">Not for me</button></div>`:'';
     return `<div class="wf-card${i===0&&!pl.nearMiss?' top':''}${pl.nearMiss?' miss':''}" data-wf="${i}" role="button" tabindex="0">
+      ${i===0&&!pl.nearMiss?'<span class="wf-best">Best fit</span>':''}
       <div class="wf-main">${tile}<div class="wf-body">
-        <div class="wf-row1"><b class="wf-place">${esc(shortName(pl.place.n))}</b>${reason}</div>
+        <b class="wf-place">${esc(shortName(pl.place.n))}</b>
         <div class="wf-hero">${hero}</div>
-        <div class="wf-meta">${meta}</div>
-      </div></div>
-      ${pl.busOpt?`<div class="wf-bus">${pic('bus')} or the ${esc(pl.busOpt.abbr)} bus from ${esc(shortName(pl.busOpt.stop))} — saves ~${pl.busOpt.save} min <i>Scheduled</i></div>`:''}
-      ${exp}
-      <div class="wf-actions">${i===0&&!pl.nearMiss?`<span class="wf-choose">Choose</span>`:''}<button class="wf-exp" data-exp="${i}" aria-label="Show the math">${pic(expanded?'caret-down':'caret-right')}</button></div>
+        <div class="wf-meta">${meta}${pl.reason?` · <i class="wf-why2">${esc(pl.reason)}</i>`:''}</div>
+      </div><span class="wf-go">${pic('caret-right')}</span></div>
     </div>`;
+  },
+  /* plan detail + commit: one bottom sheet, one honey action */
+  openPlanSheet(pl){
+    let bg=document.getElementById('wfShBg'); if(bg) bg.remove();
+    bg=document.createElement('div'); bg.id='wfShBg'; bg.className='brxsh-bg';
+    const tilde=(pl.thereSrc==='est'||pl.backSrc==='est')?'~':'';
+    const ph=(typeof placePhoto==='function')?placePhoto({n:pl.place.n}):null;
+    const lv=fmtClockTime(new Date(pl.leaveThereBy));
+    bg.innerHTML=`<div class="brxsh">
+      <div class="brxsh-head"><b>${esc(shortName(pl.place.n))}</b><span class="bts-sub">${esc(pl.prof.t)}${pl.hours==='unknown'?' · hours not verified':''}</span>
+        <button class="brxsh-x" aria-label="Close"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.4" stroke-linecap="round"><path d="M6 6 L18 18 M18 6 L6 18"/></svg></button></div>
+      <div class="brxsh-scroll">
+        ${ph?`<div class="wfsh-photo"><img src="${esc(ph.t)}" alt=""></div>`:''}
+        <div class="wfsh-hero">${pl.nearMiss?'about ':''}${tilde}${Math.max(0,pl.usableMin)} min ${esc(pl.prof.verb||'')}</div>
+        <div class="wf-math open">
+          ${pl.stayHere?'':`<div><span>${tilde}${Math.max(1,Math.round(pl.thereMin))} min</span> walk there</div>`}
+          ${pl.prof.setup?`<div><span>${pl.prof.setup} min</span> getting started</div>`:''}
+          <div class="core"><span>${Math.max(0,pl.usableMin)} min</span> ${esc(pl.prof.verb||pl.cat)}</div>
+          ${pl.prof.exit?`<div><span>${pl.prof.exit} min</span> wrapping up</div>`:''}
+          <div><span>${tilde}${Math.max(1,Math.round(pl.backMin))} min</span> to ${esc(shortName(pl.ctx.nextB||'next'))}</div>
+          <div><span>${pl.ctx.buffer} min</span> early, like you like</div>
+        </div>
+        <div class="wfsh-leave">Leave ${esc(shortName(pl.place.n))} by <b>${lv}</b></div>
+        ${pl.busOpt?`<div class="wf-bus">${pic('bus')} or the ${esc(pl.busOpt.abbr)} bus from ${esc(shortName(pl.busOpt.stop))} — saves ~${pl.busOpt.save} min <i>Scheduled</i></div>`:''}
+        ${pl.nearMiss?`<div class="wfsh-miss">Below your usual ${esc(pl.prof.t.toLowerCase())} — your call.</div>`:''}
+        <button class="tm-cta" id="wfshChoose">Choose this plan</button>
+        <button class="wf-nfm center" id="wfshNfm">Not for me</button>
+      </div></div>`;
+    document.body.appendChild(bg);
+    const close=()=>{ bg.classList.remove('show'); setTimeout(()=>bg.remove(),240); };
+    bg.addEventListener('click',e=>{ if(e.target===bg) close(); });
+    bg.querySelector('.brxsh-x').addEventListener('click',close);
+    bg.querySelector('#wfshChoose').addEventListener('click',()=>{ close(); planCommit(pl); });
+    bg.querySelector('#wfshNfm').addEventListener('click',()=>{
+      PlanPersonalization.load(); PlanPersonalization.recordNotForMe(pl.place.n);
+      close(); this.render(); toast('Got it — no more '+shortName(pl.place.n)+' suggestions','good');
+    });
+    requestAnimationFrame(()=>bg.classList.add('show'));
   },
   render(){
     const body=$('fitBody'); if(!body || !this.ctx) return;
-    // running-late / tiny-gap guard: be honest, not optimizing
     const c=this.ctx;
     const direct=PlanTravelService.leg(c.from.lat,c.from.lng,c.nextLat,c.nextLng);
     const slack=c.gapMin-direct.min-c.buffer;
@@ -6757,26 +6821,20 @@ const PlanUI={
     let html=this.header();
     if(slack<=3 || (!res.plans.length && slack<=12)){
       html+=`<div class="wf-none"><b>Nothing fits comfortably before ${esc(c.nextName)}.</b>
-        You need to leave in about ${Math.max(0,Math.round(slack+c.buffer- c.buffer))<1?'a minute':Math.max(1,Math.round(slack))+' min'}.</div>
-        <button class="btn wf-headnow" id="wfHeadNow">Head toward ${esc(c.nextB||c.nextName)} now</button>`;
+        You need to leave in about ${Math.max(1,Math.round(slack))} min.</div>
+        <button class="btn wf-headnow" id="wfHeadNow">Head toward ${esc(shortName(c.nextB||c.nextName))} now</button>`;
       body.innerHTML=html; this.wireCommon(res);
       const hn=$('wfHeadNow'); if(hn) hn.addEventListener('click',()=>{ setDest(c.nextLat,c.nextLng,c.nextB||c.nextName); show('home'); });
       return;
     }
-    // calm option first-class: you don't have to do anything
-    const calm=`<div class="wf-calm">You've got <b>${c.gapMin>=120?Math.floor(c.gapMin/60)+'h '+(c.gapMin%60)+'m':c.gapMin+' min'}</b>. You're good — no need to leave until ${direct.src==='learned'?'':'~'}${fmtClockTime(new Date(c.nextStart-(direct.min+c.buffer)*6e4))}.</div>`;
+    html+=this.filterRow();
     if(!res.plans.length){
-      html+=calm+`<div class="wf-none">Nothing else fits comfortably${this.filter?(' for '+esc(ActivityProfiles[this.filter].t.toLowerCase())):''}.</div>`;
+      html+=`<div class="wf-none">You're good — nothing you have to do. ${this.filter?('Nothing fits for '+esc(ActivityProfiles[this.filter].t.toLowerCase())+'.'):''}</div>`;
     } else {
-      html+=`<div class="wf-sec">${this.filter?esc(ActivityProfiles[this.filter].t):'Best fits'}</div>`;
-      html+=`<div class="wf-list">`+res.plans.map((pl,i)=>this.card(pl,i,this.expanded===i)).join('')+`</div>`;
-      html+=calm;
+      html+=`<div class="wf-list">`+res.plans.map((pl,i)=>this.card(pl,i)).join('')+`</div>`;
       const rp=PlanPersonalization.rolePrompt();
       if(rp) html+=`<div class="wf-roleask" id="wfRoleAsk">Make <b>${esc(rp.place)}</b> your ${esc(rp.role==='food'?'food spot':rp.role)}?<span><button data-ra="yes">Yes</button><button data-ra="no">No</button></span></div>`;
     }
-    html+=this.filterRow();
-    html+=`<div class="wf-can"><span class="wf-can-ic">${pic('magnifying-glass')}</span><input type="text" id="wfCanI" placeholder="Can I… ?  (e.g. get 45 min at the gym)" value="${esc(this.lastQuery)}" autocomplete="off"></div>
-      <div class="fit-note">Times from your pace and walk history — the route is checked when you choose.</div>`;
     body.innerHTML=html;
     this.wireCommon(res);
   },
@@ -6786,15 +6844,9 @@ const PlanUI={
   },
   wireCommon(res){
     const body=$('fitBody');
-    body.querySelectorAll('[data-wff]').forEach(b=>b.addEventListener('click',()=>{ this.filter=b.dataset.wff||null; this.expanded=null; this.render(); }));
-    body.querySelectorAll('.wf-exp').forEach(b=>b.addEventListener('click',e=>{ e.stopPropagation(); const i=+b.dataset.exp; this.expanded=this.expanded===i?null:i; this.render(); }));
-    body.querySelectorAll('.wf-nfm').forEach(b=>b.addEventListener('click',e=>{ e.stopPropagation();
-      const pl=res.plans[+b.dataset.nfm]; if(!pl) return;
-      PlanPersonalization.load(); PlanPersonalization.recordNotForMe(pl.place.n);
-      this.expanded=null; this.render(); toast('Got it — no more '+pl.place.n+' suggestions','good');
-    }));
+    body.querySelectorAll('[data-wff]').forEach(b=>b.addEventListener('click',()=>{ this.filter=b.dataset.wff||null; this.render(); }));
     body.querySelectorAll('.wf-card[data-wf]').forEach(el=>el.addEventListener('click',()=>{
-      const pl=res.plans[+el.dataset.wf]; if(!pl||pl.nearMiss) return; planCommit(pl);
+      const pl=res.plans[+el.dataset.wf]; if(!pl) return; this.openPlanSheet(pl);
     }));
     const ra=$('wfRoleAsk');
     if(ra){ const rp=PlanPersonalization.rolePrompt();
@@ -6807,10 +6859,8 @@ const PlanUI={
     const can=$('wfCanI');
     if(can){
       can.addEventListener('keydown',e=>{ if(e.key==='Enter'){ this.canI(can.value); } });
-      can.addEventListener('blur',()=>{ if(can.value.trim() && can.value.trim()!==this.lastQuery) this.canI(can.value); });
     }
   },
-  /* Can I…? — parse → structured answer. Explicit asks get honest near-misses. */
   canI(q){
     this.lastQuery=q.trim();
     const req=planParseCanI(q);
@@ -6820,7 +6870,6 @@ const PlanUI={
     let html=this.header();
     let plans=[];
     if(req.place){
-      // specific destination — feasibility for a generic visit (or requested duration)
       const cat=req.cat||'errand';
       const cand={p:{n:req.place.name,lat:req.place.lat,lng:req.place.lng,c:req.place.c||'offcampus'},why:null};
       const ev=PlanEngine.evaluate(c,cand,cat,{explicit:true,wantMin:req.wantMin||null});
@@ -6829,6 +6878,8 @@ const PlanUI={
       const res=PlanEngine.whatFits(c, req.cat, true);
       plans=res.all.filter(x=>x.cat===req.cat).slice(0,3);
     }
+    plans.forEach(pl=>{ pl.busOpt=planBusBackOption(pl); });
+    html+=this.filterRow();
     if(req.errand){
       html+=`<div class="wf-none">BeeLine doesn't have reliable ${req.errand==='print'?'printer':'package-pickup'} locations yet — pick the place yourself and it'll do the math.</div>`;
     }
@@ -6841,10 +6892,8 @@ const PlanUI={
       } else if(best.nearMiss){
         html+=`<div class="wf-ask">You'd have about <b>${Math.max(0,best.usableMin)} min</b> — below your usual ${esc(best.prof.t.toLowerCase())}.</div>`;
       }
-      html+=`<div class="wf-list">`+plans.map((pl,i)=>this.card(pl,i,false)).join('')+`</div>`;
+      html+=`<div class="wf-list">`+plans.map((pl,i)=>this.card(pl,i)).join('')+`</div>`;
     }
-    html+=this.filterRow();
-    html+=`<div class="wf-can"><span class="wf-can-ic">${pic('magnifying-glass')}</span><input type="text" id="wfCanI" placeholder="Can I… ?" value="${esc(this.lastQuery)}" autocomplete="off"></div>`;
     body.innerHTML=html;
     this.wireCommon({plans});
   },
@@ -6852,7 +6901,7 @@ const PlanUI={
 /* ---- Phase 6 (conservative): scheduled bus option for the PROTECTED leg.
    Live ETAs are only honest for ~now, so a leg 30+ min out uses the real
    GTFS timetable (sync, offline-capable). Annotation only — the plan's
-   walking math stays authoritative; the bus is surfaced as a real option. ---- */
+   walking math stays authoritative. ---- */
 function planBusBackOption(pl){
   try{
     if(typeof BusModel==='undefined' || !BusModel.parents || !BusModel.parents.length){ if(typeof BusModel!=='undefined') BusModel.load().catch(()=>{}); return null; }
@@ -6868,7 +6917,7 @@ function planBusBackOption(pl){
       const trips=BusSchedule.directTrips(p, o.s.ext, x.s.ext, leaveDate, leaveSec+Math.ceil(walkTo+2)*60, 1);
       if(!trips.length) continue;
       const t=trips[0];
-      const total=(t.dep-leaveSec)/60 + (t.arr-t.dep)/60 + walkFrom;   // from leave-time to arrival
+      const total=(t.dep-leaveSec)/60 + (t.arr-t.dep)/60 + walkFrom;
       const save=pl.backMin-total;
       if(save>=4 && (!best||total<best.total)) best={abbr:p.abbr, dep:t.dep, total, save:Math.round(save), stop:o.s.name};
     }
