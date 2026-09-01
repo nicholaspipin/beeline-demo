@@ -1841,6 +1841,81 @@ input.inp:disabled{ background:var(--limestone-dk); color:var(--ink-soft); }
 .hm-dev button.on{ background:var(--ink); color:var(--paper-bg); }
 .hm-dev-n{ font-size:10px; color:var(--ink-faint); margin-left:auto; }
 
+/* ================================================================
+   SCAN YOUR SCHEDULE — on-device OCR import (markup/logic in scan.js).
+   Same flat, editorial system as Home: one honey action per view, ink
+   type carries the hierarchy, hairlines instead of cards.
+   ================================================================ */
+.im-state{ padding:6px 22px 30px; }
+.im-h{ font-family:var(--font-display); font-weight:770; font-size:clamp(26px,7.4vw,32px);
+  letter-spacing:-.035em; line-height:1.08; color:var(--ink); margin:8px 0 0; text-wrap:balance; }
+.im-p{ font-size:14.5px; line-height:1.5; color:var(--ink-soft); margin:10px 0 0; }
+
+/* progress while the engine loads / reads */
+.im-busy{ padding-top:60px; text-align:center; }
+.im-bar{ height:4px; border-radius:4px; background:var(--surface-dim); overflow:hidden; margin:0 auto 18px; max-width:260px; }
+.im-bar i{ display:block; height:100%; background:var(--honey); border-radius:4px; transition:width .3s ease; }
+.im-busy-t{ font-family:var(--font-display); font-size:17px; font-weight:700; color:var(--ink); }
+
+/* the confirm/edit rows */
+.im-rows{ margin-top:20px; }
+.im-row{ padding:16px 0; border-top:1px solid var(--line2); }
+.im-row:first-child{ border-top:none; padding-top:4px; }
+.im-row-top{ display:flex; align-items:center; gap:10px; }
+.im-in{ width:100%; min-height:44px; margin-top:8px; padding:11px 13px; border:none; border-radius:var(--r-xs);
+  background:var(--surface); color:var(--ink); box-shadow:inset 0 0 0 1px var(--line2); outline:none;
+  font-family:var(--font-text); font-size:16px; }
+.im-in:focus{ box-shadow:inset 0 0 0 2px var(--ink); }
+.im-row-top .im-in{ margin-top:0; }
+.im-course{ font-family:var(--font-display); font-weight:700; letter-spacing:-.01em; }
+.im-del{ flex:none; display:grid; place-items:center; width:44px; height:44px; border:none; cursor:pointer;
+  background:none; color:var(--ink-faint); border-radius:50%; }
+.im-del .pi{ width:18px; height:18px; }
+.im-del:active{ background:var(--surface-dim); color:var(--ink); }
+
+/* day toggles — 7 equal targets, honey only when on */
+.im-days{ display:grid; grid-template-columns:repeat(7,1fr); gap:6px; margin-top:10px; }
+.im-day{ min-height:44px; border:none; cursor:pointer; border-radius:var(--r-xs);
+  background:var(--surface); color:var(--ink-soft); box-shadow:inset 0 0 0 1px var(--line2);
+  font-family:var(--font-display); font-size:14px; font-weight:700; }
+.im-day.on{ background:var(--honey); color:var(--on-honey); box-shadow:none; }
+
+.im-times{ display:grid; grid-template-columns:1fr 1fr; gap:10px; }
+.im-times label{ display:block; font-size:12px; font-weight:640; color:var(--ink-faint); margin-top:10px; }
+
+/* building picker */
+.im-place{ position:relative; }
+.im-acl{ position:absolute; left:0; right:0; top:100%; z-index:40; margin-top:6px; padding:6px;
+  background:var(--surface); border-radius:var(--r-sm); box-shadow:var(--shadow-pop), inset 0 0 0 1px var(--line);
+  max-height:230px; overflow-y:auto; }
+.im-acl-i{ display:block; width:100%; padding:11px 12px; border:none; background:none; cursor:pointer;
+  text-align:left; border-radius:var(--r-xs); font-family:var(--font-text); font-size:15px; color:var(--ink); }
+.im-acl-i i{ display:block; font-style:normal; font-size:12.5px; color:var(--ink-soft); margin-top:2px; }
+.im-acl-i:active{ background:var(--surface-dim); }
+.im-ok{ display:inline-flex; align-items:center; gap:5px; margin-top:7px; font-size:12.5px; color:var(--good); font-weight:640; }
+.im-ok .pi{ width:14px; height:14px; }
+.im-need{ display:block; margin-top:7px; font-size:12.5px; color:var(--honey-deep); font-weight:640; }
+
+/* a row that cannot be saved yet */
+.im-row.warn{ border-left:2px solid var(--honey); padding-left:12px; }
+.im-miss{ display:flex; align-items:center; gap:7px; margin-top:10px; font-size:12.5px; color:var(--ink-soft); }
+.im-miss .pi{ width:15px; height:15px; color:var(--honey-deep); flex:none; }
+
+.im-add{ display:flex; align-items:center; justify-content:center; gap:8px; width:100%; min-height:48px;
+  margin-top:18px; border:none; cursor:pointer; border-radius:var(--r-sm);
+  background:var(--surface); color:var(--ink); box-shadow:inset 0 0 0 1px var(--line2);
+  font-family:var(--font-display); font-size:15px; font-weight:680; }
+.im-add .pi{ width:16px; height:16px; }
+.im-state .hm-act[disabled]{ opacity:.45; }
+
+@media (max-width:359px){
+  .im-h{ font-size:24px; }
+  .im-days{ gap:4px; }
+  .im-day{ font-size:13px; }
+  .im-times{ grid-template-columns:1fr; }
+  .im-state{ padding-inline:16px; }
+}
+
 </style>
 </head>
 <body>
@@ -2224,7 +2299,7 @@ input.inp:disabled{ background:var(--limestone-dk); color:var(--ink-soft); }
         <div class="prow" id="pUpdates"><span class="prow-ic"><span data-pi="arrows-clockwise"></span></span><b class="prow-label">What’s new<span class="upd-dot" id="updDot" style="display:none"></span></b><span class="prow-val" id="pUpdatesVal"></span><span class="prow-ch"><span data-pi="caret-right"></span></span></div>
       </div>
 
-      <div class="profile-version">BeeLine 1.0.0 · build 2026-09-01 13:13 · your data stays on this phone<br>Map data © OpenStreetMap contributors · © CARTO</div>
+      <div class="profile-version">BeeLine 1.0.0 · build 2026-09-01 13:54 · your data stays on this phone<br>Map data © OpenStreetMap contributors · © CARTO</div>
       <button class="prow" id="pAdd" style="display:none"></button>
     </div>
   </section>
@@ -2243,6 +2318,12 @@ input.inp:disabled{ background:var(--limestone-dk); color:var(--ink-soft); }
   <section class="screen" id="scr-fit">
     <div class="pushbar"><button id="fitBack"><span data-pi="caret-left"></span>Back</button></div>
     <div class="scroll" id="fitBody" style="padding:0 0 30px"></div>
+  </section>
+
+  <!-- ============ SCAN YOUR SCHEDULE (on-device OCR import) ============ -->
+  <section class="screen" id="scr-scan">
+    <div class="pushbar"><button id="scanBack"><span data-pi="caret-left"></span>Back</button></div>
+    <div class="scroll" id="scanBody"></div>
   </section>
 
   <!-- ============ TAB BAR ============ -->
@@ -2585,7 +2666,7 @@ function applyCorridorTerm(){
 }
 
 const $ = id=>document.getElementById(id);
-const screens = { onb:$('scr-onb'), home:$('scr-home'), walk:$('scr-walk'), map:$('scr-map'), buses:$('scr-buses'), busroute:$('scr-busroute'), schedule:$('scr-schedule'), saved:$('scr-saved'), profile:$('scr-profile'), updates:$('scr-updates'), shortcut:$('scr-shortcut'), fit:$('scr-fit') };
+const screens = { onb:$('scr-onb'), home:$('scr-home'), walk:$('scr-walk'), map:$('scr-map'), buses:$('scr-buses'), busroute:$('scr-busroute'), schedule:$('scr-schedule'), saved:$('scr-saved'), profile:$('scr-profile'), updates:$('scr-updates'), shortcut:$('scr-shortcut'), fit:$('scr-fit'), scan:$('scr-scan') };
 const TAB_SCREENS=['home','map','buses','profile'];   // 4 tabs: Home · Explore · Buses · You (Schedule/Lines/Fit/RouteDetail are pushed screens)
 function show(name){
   for(const k in screens) screens[k].classList.toggle('active', k===name);
@@ -4682,6 +4763,7 @@ $('pNotify').addEventListener('click', openNotify);
 $('pPrivacy').addEventListener('click', ()=>{ $('toggleTracking').textContent= trackingOn?'Turn location off':'Turn location on'; $('privacySheetBg').classList.add('show'); });
 $('savedBack').addEventListener('click', ()=>goTab(lastTab));
 $('schedBack').addEventListener('click', ()=>goTab(lastTab));
+const scanBk=$('scanBack'); if(scanBk) scanBk.addEventListener('click', ()=>{ if(typeof ScanUI!=='undefined') ScanUI.close(); else goTab(lastTab); });
 
 /* ---- Campus picker (persists even though IU is the only live campus) ---- */
 function openCampusPicker(){
@@ -7736,7 +7818,13 @@ const HomeUI={
       PlanUI.deadline={t:+d, place:picked};
       PlanUI.open();
     });
-    const cg=$('hmConnectGo'); if(cg) cg.addEventListener('click',()=>show('schedule'));
+    /* "Set up" now opens the OCR import — a screenshot beats typing six
+       classes by hand. Guarded so Home still works if scan.js is absent,
+       and the import returns straight here so State 5 resolves in place. */
+    const cg=$('hmConnectGo'); if(cg) cg.addEventListener('click',()=>{
+      if(typeof openScheduleScan==='function') openScheduleScan({ onDone:()=>{ goTab('home'); HomeUI.render(); } });
+      else show('schedule');
+    });
     const cx=$('hmConnectX'); if(cx) cx.addEventListener('click',()=>{ lsSet(LS_TEASER,'1'); this.render(); });
   },
 
@@ -7810,6 +7898,539 @@ setInterval(()=>{
    fresh install lands on State 5 exactly as designed. */
 HomeDev.seed();
 if(screens && screens.home && screens.home.classList.contains('active')) HomeUI.render();
+
+</script>
+
+<script>
+"use strict";
+/* ================================================================
+   BEELINE — SCAN YOUR SCHEDULE (on-device OCR import)
+
+   Take a screenshot of your One.IU / Student Center schedule, and BeeLine
+   reads it into real class entries. Loads after home.js and writes through
+   the SAME store the Schedule editor uses (classList + saveClasses() →
+   beeline.classes.v1), so an import instantly moves Home out of State 5.
+
+   PRIVACY (the reason this design was chosen): the IMAGE NEVER LEAVES THE
+   DEVICE. Tesseract runs in a web worker on this phone; the only thing
+   fetched from the network is the OCR engine itself (pinned version + SRI
+   on the entry script). No photo, no extracted text, no schedule is ever
+   uploaded — there is no server to upload it to. docs/PRIVACY.md says the
+   same thing, updated in the same commit.
+
+   SEPARATION (mirrors HomeModel / HomeView / HomeUI):
+     ScanOCR    engine lifecycle — lazy load, worker, progress. No DOM.
+     ScanParse  pure text → class rows. No DOM, no globals, unit-testable.
+     ScanView   rows + state → HTML. No data access.
+     ScanUI     picks the state, composes, wires, saves.
+
+   OCR IS IMPERFECT, so the confirm/edit screen is mandatory: nothing is
+   ever written to the schedule that the user has not seen and approved.
+   ================================================================ */
+
+/* ================================================================
+   ScanOCR — lazy engine. Nothing here ships in the base bundle; the
+   ~10 MB of language data would dwarf the whole app (2 MB) and ride
+   along in every OTA. Fetched on demand, then cached by Tesseract in
+   IndexedDB, so it is a one-time cost per device.
+   ================================================================ */
+const ScanOCR={
+  SRC:'https://cdn.jsdelivr.net/npm/tesseract.js@5.1.1/dist/tesseract.min.js',
+  SRI:'sha384-GJqSu7vueQ9qN0E9yLPb3Wtpd7OrgK8KmYzC8T1IysG1bcvxvIO4qtYR/D3A991F',
+  scriptP:null, worker:null,
+
+  /* load the engine script once; resolves immediately on later calls */
+  loadScript(){
+    if(this.scriptP) return this.scriptP;
+    if(typeof Tesseract!=='undefined') return (this.scriptP=Promise.resolve());
+    this.scriptP=new Promise((res,rej)=>{
+      const s=document.createElement('script');
+      s.src=this.SRC;
+      s.integrity=this.SRI;           // pinned build; tampered file will not execute
+      s.crossOrigin='anonymous';
+      s.onload=()=>res();
+      s.onerror=()=>{ this.scriptP=null; rej(new Error('engine-unreachable')); };
+      document.head.appendChild(s);
+    });
+    return this.scriptP;
+  },
+
+  /* one worker per session; the first call downloads the language data */
+  async ensureWorker(onProgress){
+    await this.loadScript();
+    if(this.worker) return this.worker;
+    this.worker=await Tesseract.createWorker('eng', 1, {
+      logger: m=>{ if(onProgress && m && typeof m.progress==='number') onProgress(m); },
+    });
+    return this.worker;
+  },
+
+  async recognize(source, onProgress){
+    const w=await this.ensureWorker(onProgress);
+    const r=await w.recognize(source);
+    return (r && r.data && r.data.text) || '';
+  },
+
+  /* free the worker when the screen closes — it holds real memory */
+  release(){
+    const w=this.worker; this.worker=null;
+    if(w && w.terminate) { try{ w.terminate(); }catch(e){} }
+  },
+  offline(){ return (typeof navigator!=='undefined' && navigator.onLine===false); },
+};
+
+/* ================================================================
+   ScanParse — PURE. Raw OCR text in, candidate class rows out.
+   No DOM, no app globals (the gazetteer match is injected), so the
+   whole thing can be exercised from a console with a text fixture.
+   ================================================================ */
+const ScanParse={
+  DOW:['Su','Mo','Tu','We','Th','Fr','Sa'],
+
+  /* OCR confuses letters and digits. Only ever applied inside a numeric
+     context (times, room numbers) — never to names, or "Ballantine"
+     would come out mangled. */
+  digits(s){
+    return String(s).replace(/[OoQD]/g,'0').replace(/[lI|]/g,'1')
+                    .replace(/[Ss]/g,'5').replace(/[Bb]/g,'8').replace(/[Zz]/g,'2');
+  },
+
+  /* "MWF" · "TR" · "TuTh" · "MoWeFr" · "M W F" → ['Mo','We','Fr'].
+     Two-letter tokens are consumed first so TuTh ≠ T,u,T,h and TR = Tu,Th. */
+  days(raw){
+    const s=String(raw||'').toUpperCase().replace(/[^A-Z]/g,'');
+    if(!s) return [];
+    const two={MO:'Mo',TU:'Tu',WE:'We',TH:'Th',FR:'Fr',SA:'Sa',SU:'Su'};
+    const one={M:'Mo',T:'Tu',W:'We',R:'Th',F:'Fr',S:'Sa',U:'Su'};
+    const out=[]; let i=0;
+    while(i<s.length){
+      const p=s.slice(i,i+2);
+      if(two[p]){ if(out.indexOf(two[p])<0) out.push(two[p]); i+=2; continue; }
+      const c=s[i];
+      if(one[c]){ if(out.indexOf(one[c])<0) out.push(one[c]); i+=1; continue; }
+      i+=1;
+    }
+    return out.sort((a,b)=>this.DOW.indexOf(a)-this.DOW.indexOf(b));
+  },
+
+  /* a single clock time → minutes since midnight, or null */
+  time(h,m,ap){
+    let H=parseInt(this.digits(h),10), M=parseInt(this.digits(m),10);
+    if(!(H>=0&&H<=23) || !(M>=0&&M<=59)) return null;
+    if(ap){ const p=/p/i.test(ap); if(H===12) H=p?12:0; else if(p) H+=12; }
+    if(H>23) return null;
+    return H*60+M;
+  },
+  hhmm(mins){
+    if(mins==null) return '';
+    return String(Math.floor(mins/60)).padStart(2,'0')+':'+String(mins%60).padStart(2,'0');
+  },
+
+  /* "1:30PM - 2:45PM" · "1:30 – 2:45 p.m." · "13:30-14:45" */
+  timeRange(line){
+    const re=/(\d{1,2}|[OoQlI|SsBbZz]{1,2})\s*[:.]\s*([0-9OoQlI|SsBbZz]{2})\s*([AaPp])?\.?\s*[Mm]?\.?/g;
+    const hits=[]; let m;
+    while((m=re.exec(line))){ hits.push({h:m[1], mm:m[2], ap:m[3]||null, at:m.index}); }
+    if(hits.length<2) return null;
+    const a=hits[0], b=hits[1];
+    /* "1:30 - 2:45 PM": the meridiem on the END applies to the START too,
+       unless that would run the class backwards (11:30-1:15 PM). */
+    let ap1=a.ap, ap2=b.ap;
+    if(!ap1 && ap2) ap1=ap2;
+    let s=this.time(a.h,a.mm,ap1), e=this.time(b.h,b.mm,ap2);
+    if(s==null||e==null) return null;
+    if(e<=s && ap1==='A'&&ap2==='A'){ /* leave it — caller flags */ }
+    if(e<=s && !a.ap && ap2 && /p/i.test(ap2)){ const alt=this.time(a.h,a.mm,'A'); if(alt!=null && alt<e) s=alt; }
+    if(e<=s) return null;
+    return {start:s, end:e, startStr:this.hhmm(s), endStr:this.hhmm(e)};
+  },
+
+  /* Strip the course code before day/room detection, so "MATH-M 211" can't
+     donate its M to Monday or its 211 to a room number. */
+  stripCourse(line){
+    const D='[0-9OoQlI|SsBbZz]';
+    return String(line)
+      .replace(new RegExp('\\b[A-Z]{2,4}\\s*[-–—]\\s*[A-Z]\\s*'+D+'{3}[A-Z]?\\b','g'),' ')
+      .replace(new RegExp('\\b[A-Z]{2,4}\\s+[A-Z]\\s*'+D+'{3}[A-Z]?\\b','g'),' ')
+      .replace(new RegExp('\\b[A-Z]{2,4}\\s*[-–—]?\\s*'+D+'{3}[A-Z]?\\b','g'),' ');
+  },
+
+  /* IU course codes: BUS-K 201 - CSCI-C 211 - GER-E 141 - SPH-B 150, plus the
+     generic PSY 101 shape. Digits are OCR-tolerant ("31O" -> 310) but the
+     result must normalise to three real digits or we don't claim a match. */
+  course(line){
+    const D='[0-9OoQlI|SsBbZz]';
+    const pats=[
+      new RegExp('\\b([A-Z]{2,4})\\s*[-–—]\\s*([A-Z])\\s*('+D+'{3})([A-Z]?)\\b'),
+      new RegExp('\\b([A-Z]{2,4})\\s+([A-Z])\\s*('+D+'{3})([A-Z]?)\\b'),
+    ];
+    for(const re of pats){
+      const m=line.match(re);
+      if(m){ const n=this.digits(m[3]); if(/^\d{3}$/.test(n)) return (m[1]+'-'+m[2]+' '+n+(m[4]||'')).trim(); }
+    }
+    const m=line.match(new RegExp('\\b([A-Z]{2,4})\\s*[-–—]?\\s*('+D+'{3})([A-Z]?)\\b'));
+    if(m){ const n=this.digits(m[2]); if(/^\d{3}$/.test(n)) return (m[1]+' '+n+(m[3]||'')).trim(); }
+    return null;
+  },
+
+  /* Day clusters: "MWF" - "M W F" - "TuTh" - "TR". Searched on course-stripped
+     text; the longest cluster on the line wins, so a stray initial loses. */
+  dayScan(line){
+    const t=this.stripCourse(line);
+    const re=/(?:^|[\s,;|])((?:(?:Mo|Tu|We|Th|Fr|Sa|Su|[MTWRFSU])[\s.,]{0,2}){1,7})(?=[\s|]|$)/g;
+    let best=[], m;
+    while((m=re.exec(t))){
+      const raw=m[1].replace(/[\s.,]/g,'');
+      if(!raw || raw.length>7) continue;
+      const d=this.days(raw);
+      if(d.length>best.length) best=d;
+    }
+    return best;
+  },
+
+  /* "Room 1055" - "Rm. 1055" - "HH 1055" - a bare trailing "008".
+     digits() is applied to the NUMBER only, never the letters, or "PSY"
+     would come back as "P5Y". */
+  roomNorm(raw){
+    const m=String(raw).trim().match(/^([A-Za-z]*)\s*(.*)$/);
+    const alpha=(m&&m[1])?m[1].toUpperCase():'';
+    const num=this.digits((m&&m[2])||'').replace(/[^0-9A-Z]/gi,'');
+    if(!num) return '';
+    return (alpha?alpha+' ':'')+num;
+  },
+  room(line){
+    const t=this.stripCourse(line);
+    let m=t.match(/\b(?:room|rm)\.?\s*([A-Za-z]{0,4}\s?[0-9OoQlI|SsBbZz]{2,4}[A-Z]?)\b/i);
+    if(m) return this.roomNorm(m[1]);
+    m=t.match(/\b([A-Z]{1,4})\s?(\d{3,4}[A-Z]?)\b/);
+    if(m) return (m[1].toUpperCase()+' '+m[2]);
+    m=t.match(/\b(\d{3,4}[A-Z]?)\b/);
+    if(m) return m[1];
+    return null;
+  },
+
+  /* strip everything we already understood, so what's left can be a place */
+  leftover(line){
+    return this.stripCourse(line)          /* OCR-tolerant, so "BUS-A 31O" goes too */
+      .replace(/\b[A-Z]{2,4}\s*[-–—]?\s*[A-Z]?\s*\d{3}[A-Z]?\b/g,' ')
+      .replace(/\d{1,2}\s*[:.]\s*\d{2}\s*[APap]?\.?[Mm]?\.?/g,' ')
+      .replace(/\b(?:room|rm)\.?\s*[A-Z]{0,4}\s?\d{2,4}[A-Z]?\b/ig,' ')
+      .replace(/\b(?:MWF|TR|TTH|MW|WF|MTWRF|MoWeFr|TuTh)\b/ig,' ')
+      .replace(/\b(?:days?|times?|room|location|building|instructor|section|units?|credits?|status|enrolled)\b/ig,' ')
+      .replace(/[-–—|•·,;:()\[\]]+/g,' ')
+      .replace(/\s{2,}/g,' ').trim();
+  },
+
+  noise(line){
+    const t=line.trim();
+    if(t.length<2) return true;
+    if(/^[^A-Za-z0-9]+$/.test(t)) return true;
+    return /^(my class schedule|class schedule|weekly schedule|schedule|fall|spring|summer|winter|\d{4})$/i.test(t);
+  },
+
+  /* text → rows. matchPlace is injected (ScanUI supplies the gazetteer),
+     so this stays pure and testable. */
+  parse(text, matchPlace){
+    const lines=String(text||'').split(/\r?\n/).map(l=>l.replace(/\s+/g,' ').trim()).filter(l=>l && !this.noise(l));
+    /* a new class starts at each course code; everything until the next one
+       belongs to it (One.IU wraps a class over several lines) */
+    const blocks=[]; let cur=null;
+    for(const line of lines){
+      const c=this.course(line);
+      if(c){ cur={course:c, lines:[line]}; blocks.push(cur); }
+      else if(cur) cur.lines.push(line);
+    }
+    /* a table with no recognisable course code at all: fall back to
+       "every line that has a time range is a class" */
+    if(!blocks.length){
+      for(const line of lines) if(this.timeRange(line)) blocks.push({course:'', lines:[line]});
+    }
+    const rows=[];
+    for(const b of blocks){
+      const joined=b.lines.join(' ');
+      let days=[], tr=null, room=null;
+      for(const line of b.lines){
+        if(!tr) tr=this.timeRange(line);
+        if(!room) room=this.room(line);
+        const d=this.dayScan(line);      // longest day cluster in the block wins
+        if(d.length>days.length) days=d;
+      }
+      if(!tr) tr=this.timeRange(joined);
+      if(!days.length) days=this.dayScan(joined);
+      /* title = the wordiest leftover that isn't the building line */
+      const spare=b.lines.map(l=>this.leftover(l)).filter(Boolean);
+      let place=null, buildingRaw='';
+      for(const s of spare){ const hit=matchPlace?matchPlace(s):null; if(hit){ place=hit; buildingRaw=s; break; } }
+      if(!place){
+        const withNum=b.lines.find(l=>this.room(l));
+        if(withNum){ buildingRaw=this.leftover(withNum); const hit=matchPlace?matchPlace(buildingRaw):null; if(hit) place=hit; }
+      }
+      let title=spare.filter(s=>s!==buildingRaw).sort((a,c)=>c.length-a.length)[0]||'';
+      if(title.length>60) title=title.slice(0,60).trim();
+      rows.push({
+        id:'s'+rows.length+'_'+b.course.replace(/\W/g,''),
+        course:b.course, title,
+        days, start:tr?tr.startStr:'', end:tr?tr.endStr:'',
+        room:room||'',
+        buildingRaw, place,
+        source:b.lines.slice(0,4),
+      });
+    }
+    return rows;
+  },
+
+  /* what still has to be true before a row can be saved */
+  missing(r){
+    const m=[];
+    if(!r.course.trim()) m.push('course');
+    if(!r.days.length) m.push('days');
+    if(!r.start||!r.end) m.push('time');
+    if(!r.place) m.push('building');
+    return m;
+  },
+};
+
+/* ================================================================
+   ScanView — pure presentation.
+   ================================================================ */
+const ScanView={
+  intro(){
+    return `<div class="im-state">
+      <h1 class="im-h">Add your schedule from a photo</h1>
+      <p class="im-p">Pick a screenshot of your class schedule — One.IU, Student Center, or any timetable — and BeeLine reads it here on your phone.</p>
+      <button class="hm-act honey" id="imPick"><span class="hm-act-ic">${pic('magnifying-glass')}</span><span>Choose a screenshot</span></button>
+      <button class="hm-link" id="imManual">Type it in instead</button>
+      <div class="hm-strip ok" style="margin-top:24px"><span class="hm-strip-ic">${pic('shield-check')}</span>
+        <span class="hm-strip-t">Your photo never leaves this phone.<i>It is read on-device. Only the scanner software itself is downloaded, the first time you use it.</i></span></div>
+    </div>`;
+  },
+  busy(stage, pct){
+    const p=Math.max(0,Math.min(100,Math.round(pct||0)));
+    return `<div class="im-state im-busy">
+      <div class="im-bar"><i style="width:${p}%"></i></div>
+      <div class="im-busy-t">${esc(stage)}</div>
+      <p class="im-p">${p}%</p>
+    </div>`;
+  },
+  failed(kind){
+    const offline = kind==='engine-unreachable';
+    return `<div class="im-state">
+      <h1 class="im-h">${offline?'The scanner needs a connection the first time':'That didn’t scan'}</h1>
+      <p class="im-p">${offline
+        ? 'Downloading the scanner is the only part that needs the internet — after that it works offline. Try again on Wi‑Fi, or type your classes in.'
+        : 'No classes could be read from that image. A sharper screenshot of the schedule table usually works better than a photo of a screen.'}</p>
+      <button class="hm-act" id="imRetry"><span>Try another photo</span></button>
+      <button class="hm-link" id="imManual">Type it in instead</button>
+    </div>`;
+  },
+  /* the confirm/edit screen — every field editable, nothing saved unseen */
+  review(rows){
+    const ok=rows.filter(r=>!ScanParse.missing(r).length).length;
+    return `<div class="im-state">
+      <h1 class="im-h">Here’s what we found</h1>
+      <p class="im-p">Fix anything that looks wrong — scans aren’t perfect. Nothing is saved until you tap save.</p>
+      <div class="im-rows">${rows.map((r,i)=>this.row(r,i)).join('')}</div>
+      <button class="im-add" id="imAdd">${pic('plus')}<span>Add a class we missed</span></button>
+      <button class="hm-act honey" id="imSave"${ok?'':' disabled'}><span>${ok?('Save '+ok+' class'+(ok===1?'':'es')):'Fill in the missing bits'}</span></button>
+      <button class="hm-link" id="imCancel">Cancel</button>
+    </div>`;
+  },
+  row(r,i){
+    const miss=ScanParse.missing(r);
+    const day=(code,label)=>`<button type="button" class="im-day${r.days.indexOf(code)>=0?' on':''}" data-day="${i}:${code}">${label}</button>`;
+    return `<div class="im-row${miss.length?' warn':''}" data-row="${i}">
+      <div class="im-row-top">
+        <input class="im-in im-course" data-f="${i}:course" value="${esc(r.course)}" placeholder="Course e.g. BUS-K 201" autocomplete="off">
+        <button class="im-del" data-del="${i}" aria-label="Remove this class">${pic('trash-simple')}</button>
+      </div>
+      <input class="im-in" data-f="${i}:title" value="${esc(r.title)}" placeholder="Class name (optional)" autocomplete="off">
+      <div class="im-days">${day('Mo','M')}${day('Tu','T')}${day('We','W')}${day('Th','R')}${day('Fr','F')}${day('Sa','S')}${day('Su','U')}</div>
+      <div class="im-times">
+        <label>Starts<input type="time" class="im-in" data-f="${i}:start" value="${esc(r.start)}"></label>
+        <label>Ends<input type="time" class="im-in" data-f="${i}:end" value="${esc(r.end)}"></label>
+      </div>
+      <div class="im-place" data-pl="${i}">
+        <input class="im-in" data-f="${i}:building" value="${esc(r.place?r.place.n:r.buildingRaw)}" placeholder="Building — pick from the list" autocomplete="off">
+        <div class="im-acl" style="display:none"></div>
+        ${r.place?`<span class="im-ok">${pic('check')}${esc(shortName(r.place.n))}</span>`:`<span class="im-need">Pick a building so BeeLine can walk you there</span>`}
+      </div>
+      <input class="im-in im-room" data-f="${i}:room" value="${esc(r.room)}" placeholder="Room (optional)" autocomplete="off">
+      ${miss.length?`<div class="im-miss">${pic('warning')}<span>Still needs: ${esc(miss.join(' · '))}</span></div>`:''}
+    </div>`;
+  },
+};
+
+/* ================================================================
+   ScanUI — state, wiring, and the one place that writes to the store.
+   ================================================================ */
+const ScanUI={
+  state:'intro', rows:[], onDone:null, lastErr:'',
+
+  open(opts){
+    opts=opts||{};
+    this.onDone = typeof opts.onDone==='function' ? opts.onDone : null;
+    this.state='intro'; this.rows=[]; this.lastErr='';
+    show('scan');
+    this.render();
+  },
+  close(){
+    ScanOCR.release();
+    this.onDone=null;
+    goTab(typeof lastTab!=='undefined' ? lastTab : 'home');
+  },
+
+  /* gazetteer binding for the parser — kept out of ScanParse so that
+     stays pure. Requires a confident hit; anything vaguer is left for
+     the user to pick on the confirm screen. */
+  matchPlace(raw){
+    const q=String(raw||'').replace(/\s+/g,' ').trim();
+    if(q.length<3 || typeof localSearch!=='function') return null;
+    /* OCR flattens a table row into one line, so the building is usually
+       buried mid-string ("Amsterdam Lindley Hall 008") — try every 2..4 word
+       window, not just the start. Words containing digits are dropped so a
+       room number can't poison the window. */
+    const words=q.split(' ').filter(w=>w.length>1 && !/\d/.test(w));
+    const tries=[];
+    for(let len=Math.min(4,words.length); len>=2; len--)
+      for(let i=0;i+len<=words.length;i++) tries.push(words.slice(i,i+len).join(' '));
+    if(words.length===1) tries.push(words[0]);
+    tries.push(q);
+    let best=null;
+    for(const t of tries){
+      if(t.length<3) continue;
+      const hits=localSearch(t)||[];
+      if(!hits.length) continue;
+      const h=hits[0];
+      if(h.sc>=55 && (!best || h.sc>best.sc)) best={n:h.name, lat:h.lat, lng:h.lng, sc:h.sc};
+    }
+    if(!best) return null;
+    return {n:best.n, lat:best.lat, lng:best.lng};
+  },
+
+  render(){
+    const body=$('scanBody'); if(!body) return;
+    if(this.state==='intro')       body.innerHTML=ScanView.intro();
+    else if(this.state==='busy')   body.innerHTML=ScanView.busy(this.stage||'Working…', this.pct||0);
+    else if(this.state==='failed') body.innerHTML=ScanView.failed(this.lastErr);
+    else                           body.innerHTML=ScanView.review(this.rows);
+    this.wire();
+  },
+  setBusy(stage,pct){ this.state='busy'; this.stage=stage; this.pct=pct; this.render(); },
+
+  wire(){
+    const pick=$('imPick'); if(pick) pick.addEventListener('click',()=>this.pickFile());
+    const retry=$('imRetry'); if(retry) retry.addEventListener('click',()=>{ this.state='intro'; this.render(); });
+    const man=$('imManual'); if(man) man.addEventListener('click',()=>{ this.close(); show('schedule'); if(typeof openClassEditor==='function') openClassEditor(); });
+    const cancel=$('imCancel'); if(cancel) cancel.addEventListener('click',()=>this.close());
+    const save=$('imSave'); if(save) save.addEventListener('click',()=>this.save());
+    const add=$('imAdd'); if(add) add.addEventListener('click',()=>{
+      this.rows.push({id:'s'+Date.now(), course:'', title:'', days:[], start:'', end:'', room:'', buildingRaw:'', place:null, source:[]});
+      this.render();
+    });
+    document.querySelectorAll('#scanBody [data-del]').forEach(b=>b.addEventListener('click',()=>{
+      this.rows.splice(+b.dataset.del,1); this.render();
+    }));
+    document.querySelectorAll('#scanBody [data-day]').forEach(b=>b.addEventListener('click',()=>{
+      const [i,code]=b.dataset.day.split(':'); const r=this.rows[+i]; if(!r) return;
+      const k=r.days.indexOf(code);
+      if(k>=0) r.days.splice(k,1); else r.days.push(code);
+      r.days.sort((a,c)=>ScanParse.DOW.indexOf(a)-ScanParse.DOW.indexOf(c));
+      this.render();
+    }));
+    document.querySelectorAll('#scanBody [data-f]').forEach(inp=>{
+      const [i,f]=inp.dataset.f.split(':'); const r=this.rows[+i]; if(!r) return;
+      if(f==='building'){ this.wireBuilding(inp, r, +i); return; }
+      inp.addEventListener('input',()=>{ r[f]=inp.value; });
+      inp.addEventListener('change',()=>{ r[f]=inp.value; this.refreshSave(); });
+    });
+  },
+  /* building field: type → suggestions from the gazetteer → bind a real place */
+  wireBuilding(inp, r, i){
+    const box=inp.parentElement.querySelector('.im-acl');
+    const clear=()=>{ box.style.display='none'; box.innerHTML=''; };
+    inp.addEventListener('input',()=>{
+      r.buildingRaw=inp.value; r.place=null;
+      const q=inp.value.trim();
+      if(q.length<2 || typeof localSearch!=='function'){ clear(); return; }
+      const hits=(localSearch(q)||[]).slice(0,5);
+      if(!hits.length){ clear(); return; }
+      box.innerHTML=hits.map((h,k)=>`<button type="button" class="im-acl-i" data-h="${k}">${esc(h.name)}<i>${esc(h.sub||'')}</i></button>`).join('');
+      box.style.display='';
+      box.querySelectorAll('[data-h]').forEach(b=>b.addEventListener('click',()=>{
+        const h=hits[+b.dataset.h];
+        r.place={n:h.name, lat:h.lat, lng:h.lng}; r.buildingRaw=h.name;
+        clear(); this.render();
+      }));
+    });
+  },
+  refreshSave(){
+    const btn=$('imSave'); if(!btn) return;
+    const ok=this.rows.filter(r=>!ScanParse.missing(r).length).length;
+    btn.disabled=!ok;
+    btn.querySelector('span').textContent = ok ? ('Save '+ok+' class'+(ok===1?'':'es')) : 'Fill in the missing bits';
+  },
+
+  /* ---- the scan itself ---- */
+  pickFile(){
+    if(ScanOCR.offline() && typeof Tesseract==='undefined'){
+      this.lastErr='engine-unreachable'; this.state='failed'; this.render(); return;
+    }
+    const inp=document.createElement('input');
+    inp.type='file'; inp.accept='image/*';
+    inp.style.cssText='position:fixed;left:-9999px;opacity:0';
+    document.body.appendChild(inp);
+    inp.addEventListener('change',()=>{
+      const f=inp.files && inp.files[0];
+      setTimeout(()=>{ try{ inp.remove(); }catch(e){} }, 0);
+      if(f) this.run(f);
+    });
+    inp.click();
+  },
+
+  async run(file){
+    try{
+      this.setBusy('Preparing the scanner…', 4);
+      let sawProgress=false;
+      const text=await ScanOCR.recognize(file, m=>{
+        sawProgress=true;
+        const p=Math.round((m.progress||0)*100);
+        const stage = /recogniz/i.test(m.status||'') ? 'Reading your schedule…' : 'Preparing the scanner…';
+        this.setBusy(stage, /recogniz/i.test(m.status||'') ? p : Math.max(4,Math.min(30,p)));
+      });
+      if(!sawProgress) this.setBusy('Reading your schedule…', 90);
+      const rows=ScanParse.parse(text, s=>this.matchPlace(s));
+      if(!rows.length){ this.lastErr='no-rows'; this.state='failed'; this.render(); return; }
+      this.rows=rows; this.state='review'; this.render();
+    }catch(e){
+      this.lastErr=(e && e.message==='engine-unreachable') ? 'engine-unreachable' : 'ocr-failed';
+      this.state='failed'; this.render();
+    }
+  },
+
+  /* ---- the ONLY write path: the same store the Schedule editor uses ---- */
+  save(){
+    const ready=this.rows.filter(r=>!ScanParse.missing(r).length);
+    if(!ready.length) return;
+    let added=0;
+    ready.forEach(r=>{
+      const obj={ id:'c'+Date.now()+'_'+(added++), course:r.course.trim(), title:(r.title||'').trim(),
+        days:r.days.slice(), start:r.start, end:r.end,
+        b:r.place.n, lat:r.place.lat, lng:r.place.lng, room:(r.room||'').trim(), note:'' };
+      const dupe=classList.some(c=>c.course===obj.course && c.start===obj.start && String(c.days)===String(obj.days));
+      if(!dupe) classList.push(obj);
+    });
+    saveClasses();
+    ScanOCR.release();
+    toast(added+' class'+(added===1?'':'es')+' added to your schedule','good');
+    /* let anyone who cares refresh (the Schedule screen re-renders on show) */
+    try{ document.dispatchEvent(new CustomEvent('beeline:classes-changed',{detail:{added}})); }catch(e){}
+    const done=this.onDone; this.onDone=null;
+    if(done) done(added); else { goTab('home'); if(typeof renderTimeModule==='function') renderTimeModule(); }
+  },
+};
+
+/* Home / Schedule call this; guarded so neither breaks if scan.js is absent */
+function openScheduleScan(opts){ if(typeof ScanUI!=='undefined') ScanUI.open(opts); else show('schedule'); }
 
 </script>
 </body>
