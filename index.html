@@ -1563,6 +1563,57 @@ input.inp:disabled{ background:var(--limestone-dk); color:var(--ink-soft); }
 .wfsh-photo{ margin:10px 0 4px; border-radius:var(--r-md); overflow:hidden; height:150px; }
 .wfsh-photo img{ width:100%; height:100%; object-fit:cover; display:block; }
 .wfsh-hero{ font-family:var(--font-display); font-weight:760; font-size:27px; letter-spacing:-.025em; margin:10px 0 2px; color:var(--ink); font-variant-numeric:tabular-nums; }
+/* Free time — appbar: back · centered title · close (user mockup) */
+.wfp-bar{ justify-content:space-between; gap:0; padding:12px 14px 10px; border-bottom:1px solid var(--line); }
+.wfp-bar button{ width:34px; height:34px; justify-content:center; color:var(--ink); }
+.wfp-title{ font-family:var(--font-display); font-size:16px; font-weight:720; letter-spacing:-.01em; color:var(--ink); }
+/* status row: intent · usable minutes · Change */
+.wfp-status{ display:flex; align-items:center; gap:9px; padding:13px 20px; border-bottom:1px solid var(--line); font-size:13.5px; color:var(--ink); }
+.wfp-int{ display:inline-flex; align-items:center; gap:6px; font-weight:700; }
+.wfp-int .pi{ width:17px; height:17px; }
+.wfp-dot{ color:var(--ink-faint); }
+.wfp-min{ display:inline-flex; align-items:center; gap:6px; font-weight:640; font-variant-numeric:tabular-nums; }
+.wfp-min .pi{ width:16px; height:16px; color:var(--honey-deep); flex:none; }
+.wfp-min.dim{ color:var(--ink-soft); font-weight:600; }
+.wfp-min.dim .pi{ color:var(--ink-faint); }
+.wfp-change{ margin-left:auto; border:none; background:none; cursor:pointer; font-family:var(--font-display); font-size:13px; font-weight:650; color:var(--ink); text-decoration:underline; text-underline-offset:3px; padding:0; }
+/* ranked plan bands */
+.wfp-plan{ padding:16px 20px 15px; border-bottom:1px solid var(--line); cursor:pointer; }
+.wfp-plan.best{ background:rgba(255,195,0,.09); }
+.wfp-plan:active{ opacity:.85; }
+.wfp-ribbon{ display:inline-block; background:var(--honey); color:var(--on-honey); font-family:var(--mono); font-size:10px; font-weight:750; letter-spacing:.1em; text-transform:uppercase; padding:4px 11px; border-radius:4px; clip-path:polygon(0 0,100% 0,calc(100% - 7px) 50%,100% 100%,0 100%); padding-right:16px; margin-bottom:9px; }
+.wfp-name{ display:flex; align-items:baseline; gap:13px; font-family:var(--font-display); }
+.wfp-name span{ font-size:17px; font-weight:640; color:var(--ink); font-variant-numeric:tabular-nums; }
+.wfp-name b{ font-size:20px; font-weight:740; letter-spacing:-.015em; color:var(--ink); min-width:0; }
+.wfp-row{ display:flex; align-items:center; gap:10px; margin-top:9px; font-size:13.5px; color:var(--ink); padding-left:1px; font-variant-numeric:tabular-nums; }
+.wfp-row .pi{ width:17px; height:17px; flex:none; color:var(--ink-soft); }
+.wfp-row.big{ margin-top:11px; }
+.wfp-row.big .pi{ color:var(--honey-deep); width:19px; height:19px; }
+.wfp-row.big em{ font-style:normal; font-family:var(--font-display); font-size:30px; font-weight:760; letter-spacing:-.02em; line-height:1; color:var(--ink); font-variant-numeric:tabular-nums; }
+.wfp-foot{ display:flex; align-items:center; gap:8px; margin-top:13px; }
+.wfp-chips{ display:flex; gap:7px; flex-wrap:wrap; min-width:0; }
+.wfp-chip{ font-size:12px; font-weight:660; border-radius:999px; padding:5px 11px; white-space:nowrap; max-width:170px; overflow:hidden; text-overflow:ellipsis; }
+.wfp-chip.open{ background:var(--good-tint); color:var(--good); }
+.wfp-chip.why{ background:rgba(255,195,0,.2); color:var(--honey-deep); }
+.wfp-chip.tight{ background:var(--paper-bg); color:var(--ink-soft); }
+.wfp-choose{ margin-left:auto; flex:none; border:none; cursor:pointer; background:var(--honey); color:var(--on-honey); border-radius:12px; padding:10px 16px; font-family:var(--font-display); font-size:13.5px; font-weight:720; }
+.wfp-choose.big{ padding:12px 19px; font-size:14.5px; }
+.wfp-more{ display:block; margin:18px auto 6px; border:none; background:none; cursor:pointer; font-family:var(--font-display); font-size:13.5px; font-weight:650; color:var(--ink); text-decoration:underline; text-underline-offset:3px; }
+/* "Somewhere else" — search-first */
+.wfe-search{ display:flex; align-items:center; gap:11px; margin:16px 20px 2px; padding:9px 2px; border-bottom:1.5px solid var(--ink); }
+.wfe-search .pi{ width:20px; height:20px; color:var(--ink); flex:none; }
+.wfe-search input{ flex:1; border:none; background:none; font-family:var(--font-display); font-size:16px; font-weight:600; color:var(--ink); min-width:0; }
+.wfe-search input:focus{ outline:none; }
+.wfe-search input::placeholder{ color:var(--ink-faint); font-weight:500; }
+.wfe-h{ font-family:var(--font-display); font-size:14.5px; font-weight:730; letter-spacing:-.01em; color:var(--ink); margin:22px 20px 4px; }
+.wfe-row{ display:flex; width:100%; align-items:center; gap:13px; border:none; background:none; cursor:pointer; padding:13px 20px; font-family:var(--font-display); font-size:15px; font-weight:650; color:var(--ink); text-align:left; }
+.wfe-row .pi{ width:20px; height:20px; flex:none; }
+.wfe-row .pi.ch{ margin-left:auto; width:15px; height:15px; color:var(--ink-faint); }
+.wfe-row:active{ opacity:.7; }
+.wfe-pill{ display:flex; width:calc(100% - 40px); align-items:center; gap:11px; margin:9px 20px 0; border:none; cursor:pointer; background:var(--surface); box-shadow:inset 0 0 0 1.4px var(--line); border-radius:14px; padding:13px 15px; font-family:var(--font-display); font-size:14.5px; font-weight:680; color:var(--ink); text-align:left; }
+.wfe-pill .pi{ width:19px; height:19px; flex:none; }
+.wfe-pill .pi.ch{ margin-left:auto; width:14px; height:14px; color:var(--ink-faint); }
+.wfe-pill:active{ transform:scale(.98); }
 /* Free time — intent screen: one true number, six intents, one CTA */
 .wfi-status{ display:flex; align-items:center; gap:7px; margin:8px 22px 0; font-size:13px; font-weight:650; color:var(--ink-soft); }
 .wfi-status .pi{ width:16px; height:16px; color:var(--honey-deep); flex:none; }
@@ -2392,7 +2443,7 @@ input.inp:disabled{ background:var(--limestone-dk); color:var(--ink-soft); }
         <div class="prow" id="pUpdates"><span class="prow-ic"><span data-pi="arrows-clockwise"></span></span><b class="prow-label">What’s new<span class="upd-dot" id="updDot" style="display:none"></span></b><span class="prow-val" id="pUpdatesVal"></span><span class="prow-ch"><span data-pi="caret-right"></span></span></div>
       </div>
 
-      <div class="profile-version">BeeLine 1.0.0 · build 2026-09-01 14:37 · your data stays on this phone<br>Map data © OpenStreetMap contributors · © CARTO</div>
+      <div class="profile-version">BeeLine 1.0.0 · build 2026-09-01 14:50 · your data stays on this phone<br>Map data © OpenStreetMap contributors · © CARTO</div>
       <button class="prow" id="pAdd" style="display:none"></button>
     </div>
   </section>
@@ -2409,7 +2460,7 @@ input.inp:disabled{ background:var(--limestone-dk); color:var(--ink-soft); }
 
   <!-- ============ FIT SOMETHING IN (pushed from Home) ============ -->
   <section class="screen" id="scr-fit">
-    <div class="pushbar"><button id="fitBack"><span data-pi="caret-left"></span>Back</button></div>
+    <div class="pushbar wfp-bar"><button id="fitBack" aria-label="Back"><span data-pi="caret-left"></span></button><span class="wfp-title" id="fitTitle">Free time</span><button id="fitClose" aria-label="Close"><span data-pi="x"></span></button></div>
     <div class="scroll" id="fitBody" style="padding:0 0 30px"></div>
   </section>
 
@@ -5289,11 +5340,13 @@ document.addEventListener('visibilitychange', ()=>{ if(!document.hidden && scree
    openFit keeps its old signature (callers pass nx/eta; the engine derives
    its own context from the schedule + live position). ---- */
 function openFit(){ if(typeof PlanUI!=='undefined') PlanUI.open(); }
-/* inside Free time, Back walks the flow (plans → intent) before leaving */
+/* inside Free time, Back walks the flow (plans/search → intent) before
+   leaving; X always closes outright */
 $('fitBack').addEventListener('click', ()=>{
-  if(typeof PlanUI!=='undefined' && PlanUI.stage==='plans' && PlanUI.ctx){ PlanUI.renderIntent(); return; }
+  if(typeof PlanUI!=='undefined' && (PlanUI.stage==='plans'||PlanUI.stage==='else') && PlanUI.ctx){ PlanUI.renderIntent(); return; }
   show('home');
 });
+$('fitClose').addEventListener('click', ()=>{ show('home'); });
 
 function updateOffBanner(){ $('offBanner').classList.toggle('show', !trackingOn); $('goWalk').disabled= !dest || !trackingOn; }
 [$('saveSheetBg'),$('privacySheetBg'),$('addSheetBg'),$('campusSheetBg'),$('prefsSheetBg'),$('notifySheetBg'),$('favsSheetBg')].forEach(bg=>bg.addEventListener('click',e=>{ if(e.target===bg) bg.classList.remove('show'); }));
@@ -6778,7 +6831,7 @@ function planTimeSheet(initial, cb, title){
 const ActivityProfiles={
   coffee:{ t:'Coffee', setup:4, exit:1, min:5,  good:12, ideal:18, type:'elastic',  verb:'for coffee' },
   eat:   { t:'Eat',    setup:6, exit:2, min:12, good:22, ideal:32, type:'threshold',verb:'to eat' },
-  gym:   { t:'Gym',    setup:6, exit:5, min:25, good:45, ideal:65, type:'compound', verb:'workout' },
+  gym:   { t:'Gym',    setup:6, exit:5, min:25, good:45, ideal:65, type:'compound', verb:'to work out' },
   study: { t:'Study',  setup:2, exit:1, min:10, good:30, ideal:60, type:'elastic',  verb:'to study' },
   home:  { t:'Home',   setup:2, exit:3, min:15, good:30, ideal:60, type:'threshold',verb:'at home' },
   errand:{ t:'Errand', setup:1, exit:1, min:5,  good:10, ideal:15, type:'fixed',    verb:'' },
@@ -6944,7 +6997,9 @@ const PlanEngine={
     if(opts.nearNext) score+=8;
     if(opts.stayHere) score+=12;
     if(there.src==='learned'||back.src==='learned') score+=4;      // confidence
-    let reason = why || (opts.stayHere?'No extra travel' : opts.onWay?('On your way'+(opts.added>0.7?(' · adds ~'+Math.round(opts.added)+' min'):'')) : opts.nearNext?('Near '+(ctx.nextB||'your next stop')) : (there.min<=4?'Close by':null));
+    /* chip-length by design: the next stop is already named in context, so
+       "Near your next stop" beats an ellipsized building name in a pill */
+    let reason = why || (opts.stayHere?'No extra travel' : opts.onWay?('On your way'+(opts.added>0.7?(' · adds ~'+Math.round(opts.added)+' min'):'')) : opts.nearNext?'Near your next stop' : (there.min<=4?'Close by':null));
     return {
       cat, prof, place:p, usableMin:usable, thereMin:there.min, backMin:back.min,
       thereSrc:there.src, backSrc:back.src, hours, score, reason, nearMiss:!!nearMiss,
@@ -7092,6 +7147,8 @@ const PlanUI={
      screen), then "what do you want to do?". Plans come pre-filtered. */
   renderIntent(){
     this.stage='intent';
+    this.showAll=false;
+    this.setTitle('Free time');
     const body=$('fitBody'); if(!body||!this.ctx) return;
     const c=this.ctx;
     const direct=PlanTravelService.leg(c.from.lat,c.from.lng,c.nextLat,c.nextLng);
@@ -7106,12 +7163,14 @@ const PlanUI={
     body.querySelectorAll('[data-wfi]').forEach(b=>b.addEventListener('click',()=>{ this._intent=b.dataset.wfi; this.renderIntent(); }));
     $('wfiGo').addEventListener('click',()=>{
       if(!this._intent) return;
-      this.filter=(this._intent==='else')?null:this._intent;
+      if(this._intent==='else'){ this.renderElse(); const q=$('wfeQ'); if(q) q.focus(); return; }
+      this.filter=this._intent;
       this.render();
-      if(this._intent==='else'){ const can=$('wfCanI'); if(can) can.focus(); }
     });
   },
   renderDeadlineAsk(){
+    this.stage='ask';
+    this.setTitle('Free time');
     const body=$('fitBody');
     const t=this._askTime||null;
     const timeLabel= t? fmtClockTime((d=>{const x=new Date(); x.setHours(+d.split(':')[0],+d.split(':')[1],0,0); return x;})(t)) : 'Pick a time';
@@ -7141,42 +7200,46 @@ const PlanUI={
       this.renderIntent();
     });
   },
-  header(){
+  setTitle(t){ const el=document.getElementById('fitTitle'); if(el) el.textContent=t; },
+  usable(){
     const c=this.ctx;
-    const when=fmtClockTime(new Date(c.nextStart));
     const direct=PlanTravelService.leg(c.from.lat,c.from.lng,c.nextLat,c.nextLng);
-    const leaveDirect=new Date(c.nextStart-(direct.min+c.buffer)*6e4);
-    const g= c.gapMin>=120 ? (Math.floor(c.gapMin/60)+'<span class="unit">h</span> '+String(c.gapMin%60).padStart(2,'0')+'<span class="unit">m</span>') : (c.gapMin+'<span class="unit">min</span>');
-    return `<div class="wfb">
-      <div class="wfb-top"><span class="wfb-title">What fits?</span><span class="wfb-next">${esc(c.nextName)} · ${when}</span></div>
-      <div class="wfb-gap">${g}<span class="wfb-free">free</span></div>
-      <div class="wfb-sub">leave by ${direct.src==='learned'?'':'~'}${fmtClockTime(leaveDirect)}</div>
-    </div>
-    <div class="wf-ask2"><span class="wf-can-ic">${pic('magnifying-glass')}</span><input type="text" id="wfCanI" placeholder="Can I… ?  gym · coffee · go home" value="${esc(this.lastQuery)}" autocomplete="off"></div>`;
+    return { slack:Math.max(0,Math.round(c.gapMin-direct.min-c.buffer)),
+             leaveDirect:new Date(c.nextStart-(direct.min+c.buffer)*6e4), est:direct.src!=='learned' };
   },
-  card(pl,i){
+  INTENTS:{eat:['Eat','fork-knife'],coffee:['Coffee','coffee'],study:['Study','books'],gym:['Work out','barbell'],errand:['Errands','signpost'],home:['Home','house-line']},
+  statusRow(opts){
+    const u=this.usable();
+    const im=this.INTENTS[this.filter]||null;
+    return `<div class="wfp-status">
+      ${im?`<span class="wfp-int">${pic(im[1])}<b>${im[0]}</b></span><span class="wfp-dot">·</span>`:''}
+      <span class="wfp-min">${pic('clock')}${u.slack} usable minutes</span>
+      ${(opts&&opts.leaveBy)?`<span class="wfp-dot">|</span><span class="wfp-min dim">Leave by ${u.est?'~':''}${fmtClockTime(u.leaveDirect)}</span>`:''}
+      ${(opts&&opts.change)?`<button class="wfp-change" id="wfpChange">Change</button>`:''}
+    </div>`;
+  },
+  /* one ranked plan as a full-width band (user mockup): number + name, three
+     icon rows (big usable minutes · walk · leave-by), honesty chips, Choose */
+  planBand(pl,i){
     const tilde=(pl.thereSrc==='est'||pl.backSrc==='est')?'~':'';
     const lv=fmtClockTime(new Date(pl.leaveThereBy));
-    const hero= `${pl.nearMiss?'about ':''}${tilde}${Math.max(0,pl.usableMin)} min ${esc(pl.prof.verb||'')}`;
-    const meta= pl.stayHere
-      ? `you're here · leave at ${lv}`
-      : `${tilde}${Math.max(1,Math.round(pl.thereMin))} min walk · leave there ${lv}`;
-    const ph=(typeof placePhoto==='function')?placePhoto({n:pl.place.n}):null;
-    const meta2=catMeta(pl.place.c||'offcampus');
-    /* tinted chip, not a saturated slab — the category color carries the icon,
-       the background stays quiet. Photo overlays when it loads; removes itself
-       on error, so the chip is always the floor. */
-    const tile= `<span class="wf-tile glyph" style="background:${meta2.color}24;color:${meta2.color}">${PIN_ICON[pl.place.c]||PIN_ICON.offcampus}${ph?`<img src="${esc(ph.t)}" alt="" loading="lazy" decoding="async" onerror="this.remove()">`:''}</span>`;
-    /* the ranking's voice lives in ONE quiet eyebrow — never colored prose
-       wrapping mid-card */
-    const eyebrow=[(i===0&&!pl.nearMiss)?'Best fit':null, pl.reason||null].filter(Boolean).join(' · ');
-    return `<div class="wf-card${i===0&&!pl.nearMiss?' top':''}${pl.nearMiss?' miss':''}" data-wf="${i}" role="button" tabindex="0">
-      <div class="wf-main">${tile}<div class="wf-body">
-        ${eyebrow?`<div class="wf-eyebrow${(i===0&&!pl.nearMiss)?' best':''}">${esc(eyebrow)}</div>`:''}
-        <b class="wf-place">${esc(String(pl.place.n).replace(/\s*\([^)]*\)\s*/g,' ').trim())}</b>
-        <div class="wf-hero">${hero}</div>
-        <div class="wf-meta">${meta}</div>
-      </div><span class="wf-go">${pic('caret-right')}</span></div>
+    const isHome=pl.cat==='home';
+    const chips=[];
+    if(pl.hours==='open') chips.push(['open','Open']);
+    if(pl.reason) chips.push(['why',pl.reason]);
+    else if(pl.stayHere) chips.push(['why',"You're here"]);
+    if(pl.nearMiss) chips.push(['tight','Tight fit']);
+    const best=i===0&&!pl.nearMiss;
+    return `<div class="wfp-plan${best?' best':''}" data-wf="${i}" role="button" tabindex="0">
+      ${best?`<div class="wfp-ribbon">Best fit</div>`:''}
+      <div class="wfp-name"><span>${i+1}</span><b>${esc(String(pl.place.n).replace(/\s*\([^)]*\)\s*/g,' ').trim())}</b></div>
+      <div class="wfp-row big">${pic('clock')}<em>${tilde}${Math.max(0,pl.usableMin)}</em><span>min ${esc(pl.prof.verb||pl.cat)}</span></div>
+      <div class="wfp-row">${pic('person-simple-walk')}<span>${pl.stayHere?"You're already here":`${tilde}${Math.max(1,Math.round(pl.thereMin))} min walk${isHome?' home':''}`}</span></div>
+      <div class="wfp-row">${pic(isHome?'house-line':'arrow-right')}<span>Leave ${isHome?'home':'there'} by <b>${lv}</b></span></div>
+      <div class="wfp-foot">
+        <div class="wfp-chips">${chips.map(([k,t])=>`<span class="wfp-chip ${k}">${esc(t)}</span>`).join('')}</div>
+        <button class="wfp-choose${best?' big':''}" data-wfc="${i}">${best?'Choose plan':'Choose'}</button>
+      </div>
     </div>`;
   },
   /* plan detail + commit: one bottom sheet, one honey action */
@@ -7213,68 +7276,51 @@ const PlanUI={
     });
     requestAnimationFrame(()=>bg.classList.add('show'));
   },
-  shelfCard(pl,idx){
-    const ph=(typeof placePhoto==='function')?placePhoto({n:pl.place.n}):null;
-    const meta2=catMeta(pl.place.c||'offcampus');
-    const tilde=(pl.thereSrc==='est'||pl.backSrc==='est')?'~':'';
-    const tile= `<span class="wfm-tile glyph" style="background:${meta2.color}24;color:${meta2.color}">${PIN_ICON[pl.place.c]||PIN_ICON.offcampus}${ph?`<img src="${esc(ph.t)}" alt="" loading="lazy" decoding="async" onerror="this.remove()">`:''}</span>`;
-    return `<button class="wfm-card" data-wfa="${idx}">${tile}<b>${esc(shortName(pl.place.n))}</b><span>${tilde}${Math.max(0,pl.usableMin)} min</span></button>`;
-  },
-  shelves(res){
-    const picked=new Set(res.plans.map(p=>p.place.n));
-    const groups=[['eat','Eat'],['study','Study'],['gym','Gym'],['coffee','Coffee'],['home','Home']];
-    let html='';
-    this.allRef=res.all;
-    groups.forEach(([cat,label])=>{
-      const items=res.all.map((pl,idx)=>({pl,idx}))
-        .filter(x=>x.pl.cat===cat && !x.pl.nearMiss && !picked.has(x.pl.place.n))
-        .slice(0,6);
-      if(!items.length) return;
-      html+=`<div class="wf-shelf"><div class="wf-shelf-h">${label}</div><div class="wf-shelf-row">${items.map(x=>this.shelfCard(x.pl,x.idx)).join('')}</div></div>`;
-    });
-    return html;
-  },
   render(){
     this.stage='plans';
+    this.setTitle('Plans that fit');
     const body=$('fitBody'); if(!body || !this.ctx) return;
     const c=this.ctx;
-    const direct=PlanTravelService.leg(c.from.lat,c.from.lng,c.nextLat,c.nextLng);
-    const slack=c.gapMin-direct.min-c.buffer;
+    const u=this.usable();
     const res=PlanEngine.whatFits(c, this.filter, false);
     res.plans.forEach(pl=>{ pl.busOpt=planBusBackOption(pl); });
-    let html=this.header();
-    if(slack<=3 || (!res.plans.length && slack<=12)){
+    let html=this.statusRow({change:true});
+    if(u.slack<=3 || (!res.plans.length && u.slack<=12)){
       html+=`<div class="wf-none"><b>Nothing fits comfortably before ${esc(c.nextName)}.</b>
-        You need to leave in about ${Math.max(1,Math.round(slack))} min.</div>
+        You need to leave in about ${Math.max(1,Math.round(u.slack))} min.</div>
         <button class="btn wf-headnow" id="wfHeadNow">Head toward ${esc(shortName(c.nextB||c.nextName))} now</button>`;
       body.innerHTML=html; this.wireCommon(res);
       const hn=$('wfHeadNow'); if(hn) hn.addEventListener('click',()=>{ setDest(c.nextLat,c.nextLng,c.nextB||c.nextName); show('home'); });
       return;
     }
-    html+=this.filterRow();
-    if(!res.plans.length){
+    /* ranked bands; "See more options" reveals the rest of the pool once */
+    const picked=new Set(res.plans.map(p=>p.place.n));
+    const more=(res.all||[]).filter(pl=>!picked.has(pl.place.n) && (!this.filter || pl.cat===this.filter));
+    let rows=res.plans;
+    if(this.showAll && more.length){ more.forEach(pl=>{ pl.busOpt=planBusBackOption(pl); }); rows=res.plans.concat(more.slice(0,9)); }
+    this._rows=rows;
+    if(!rows.length){
       html+=`<div class="wf-none">You're good — nothing you have to do. ${this.filter?('Nothing fits for '+esc(ActivityProfiles[this.filter].t.toLowerCase())+'.'):''}</div>`;
     } else {
-      html+=`<div class="wf-list">`+res.plans.map((pl,i)=>this.card(pl,i)).join('')+`</div>`;
-      if(!this.filter) html+=this.shelves(res);
+      html+=rows.map((pl,i)=>this.planBand(pl,i)).join('');
+      if(!this.showAll && more.length) html+=`<button class="wfp-more" id="wfpMore">See more options</button>`;
       const rp=PlanPersonalization.rolePrompt();
       if(rp) html+=`<div class="wf-roleask" id="wfRoleAsk">Make <b>${esc(rp.place)}</b> your ${esc(rp.role==='food'?'food spot':rp.role)}?<span><button data-ra="yes">Yes</button><button data-ra="no">No</button></span></div>`;
     }
     body.innerHTML=html;
     this.wireCommon(res);
   },
-  filterRow(){
-    const fs2=[['',null,'All',null],['eat','eat','Eat','fork-knife'],['gym','gym','Gym','barbell'],['study','study','Study','books'],['coffee','coffee','Coffee','coffee'],['errand','errand','Errands','signpost'],['home','home','Home','house-simple']];
-    return `<div class="wf-filters">`+fs2.map(([k,v,t,ic])=>`<button class="wf-f${this.filter===v?' on':''}" data-wff="${k}">${ic?pic(ic):''}<span>${t}</span></button>`).join('')+`</div>`;
-  },
   wireCommon(res){
     const body=$('fitBody');
-    body.querySelectorAll('[data-wff]').forEach(b=>b.addEventListener('click',()=>{ this.filter=b.dataset.wff||null; this.render(); }));
-    body.querySelectorAll('.wf-card[data-wf]').forEach(el=>el.addEventListener('click',()=>{
-      const pl=res.plans[+el.dataset.wf]; if(!pl) return; this.openPlanSheet(pl);
+    const rows=this._rows||res.plans||[];
+    const ch=$('wfpChange'); if(ch) ch.addEventListener('click',()=>this.renderIntent());
+    const mo=$('wfpMore'); if(mo) mo.addEventListener('click',()=>{ this.showAll=true; this.render(); });
+    body.querySelectorAll('.wfp-plan[data-wf]').forEach(el=>el.addEventListener('click',()=>{
+      const pl=rows[+el.dataset.wf]; if(!pl) return; this.openPlanSheet(pl);
     }));
-    body.querySelectorAll('.wfm-card[data-wfa]').forEach(el=>el.addEventListener('click',()=>{
-      const pl=(this.allRef||[])[+el.dataset.wfa]; if(!pl) return; pl.busOpt=planBusBackOption(pl); this.openPlanSheet(pl);
+    body.querySelectorAll('[data-wfc]').forEach(b=>b.addEventListener('click',e=>{
+      e.stopPropagation();
+      const pl=rows[+b.dataset.wfc]; if(!pl) return; planCommit(pl);
     }));
     const ra=$('wfRoleAsk');
     if(ra){ const rp=PlanPersonalization.rolePrompt();
@@ -7284,19 +7330,45 @@ const PlanUI={
           toast(rp.place+' saved as your '+(rp.role==='food'?'food spot':rp.role),'good'); }
         ra.remove();
       })); }
-    const can=$('wfCanI');
-    if(can){
-      can.addEventListener('keydown',e=>{ if(e.key==='Enter'){ this.canI(can.value); } });
-    }
+  },
+  /* "Somewhere else" — search-first screen (user mockup): saved places,
+     a search box over the whole gazetteer, and honest nearby starters */
+  renderElse(){
+    this.stage='else'; this.filter=null;
+    this.setTitle('Somewhere else');
+    const body=$('fitBody'); if(!body||!this.ctx) return;
+    const roleIc=f=> f.role==='home'?'house-line' : f.role==='food'?'fork-knife' : f.role==='gym'?'barbell' : 'bookmark-simple';
+    const favs=(typeof favorites!=='undefined'?favorites:[]).slice(0,5);
+    body.innerHTML=this.statusRow({leaveBy:true})+`
+      <div class="wfe-search">${pic('map-pin-simple')}<input id="wfeQ" type="text" placeholder="Search a place or activity" autocomplete="off" enterkeyhint="search" value="${esc(this.lastQuery)}"></div>
+      ${favs.length?`<div class="wfe-h">Saved</div>`:''}
+      ${favs.map((f,i)=>`<button class="wfe-row" data-wfe="${i}">${pic(roleIc(f))}<span>${esc(favLabel(f.name))}</span>${pic('caret-right','ch')}</button>`).join('')}
+      <button class="wfe-row" id="wfeAdd">${pic('plus')}<span>Add a new place</span>${pic('caret-right','ch')}</button>
+      <div class="wfe-h">Try something nearby</div>
+      <button class="wfe-pill" data-wfeq="eat">${pic('fork-knife')}<span>Get food</span>${pic('caret-right','ch')}</button>
+      <button class="wfe-pill" data-wfeq="coffee">${pic('coffee')}<span>Find coffee</span>${pic('caret-right','ch')}</button>
+      <button class="wfe-pill" data-wfeq="study">${pic('books')}<span>Somewhere to study</span>${pic('caret-right','ch')}</button>`;
+    const q=$('wfeQ');
+    q.addEventListener('keydown',e=>{ if(e.key==='Enter' && q.value.trim()) this.canI(q.value); });
+    body.querySelectorAll('[data-wfe]').forEach(b=>b.addEventListener('click',()=>{
+      const f=favs[+b.dataset.wfe]; if(!f) return;
+      const cat= f.role==='home'?'home' : f.role==='food'?'eat' : f.role==='gym'?'gym' : 'errand';
+      const ev=PlanEngine.evaluate(this.ctx,{p:{n:favLabel(f.name),lat:f.lat,lng:f.lng,c:f.c||'offcampus'},why:null},cat,{explicit:true});
+      if(!ev){ toast("That doesn't fit before "+this.ctx.nextName,'warn'); return; }
+      ev.busOpt=planBusBackOption(ev); this.openPlanSheet(ev);
+    }));
+    body.querySelectorAll('[data-wfeq]').forEach(b=>b.addEventListener('click',()=>{ this.filter=b.dataset.wfeq; this._intent=b.dataset.wfeq; this.render(); }));
+    const add=$('wfeAdd'); if(add) add.addEventListener('click',()=>{ show('saved'); });
   },
   canI(q){
-    this.stage='plans';
+    this.stage='else';
+    this.setTitle('Somewhere else');
     this.lastQuery=q.trim();
     const req=planParseCanI(q);
     const body=$('fitBody');
-    if(!req){ this.filter=null; this.render(); toast("Couldn't read that — try a place or 'gym', 'coffee', 'home'",'warn'); return; }
+    if(!req){ this.renderElse(); toast("Couldn't read that — try a place or 'gym', 'coffee', 'home'",'warn'); return; }
     const c=this.ctx;
-    let html=this.header();
+    let html=this.statusRow({leaveBy:true});
     let plans=[];
     if(req.place){
       const cat=req.cat||'errand';
@@ -7308,7 +7380,7 @@ const PlanUI={
       plans=res.all.filter(x=>x.cat===req.cat).slice(0,3);
     }
     plans.forEach(pl=>{ pl.busOpt=planBusBackOption(pl); });
-    html+=this.filterRow();
+    html+=`<div class="wfe-search">${pic('map-pin-simple')}<input id="wfeQ" type="text" placeholder="Search a place or activity" autocomplete="off" enterkeyhint="search" value="${esc(this.lastQuery)}"></div>`;
     if(req.errand){
       html+=`<div class="wf-none">BeeLine doesn't have reliable ${req.errand==='print'?'printer':'package-pickup'} locations yet — pick the place yourself and it'll do the math.</div>`;
     }
@@ -7321,10 +7393,13 @@ const PlanUI={
       } else if(best.nearMiss){
         html+=`<div class="wf-ask">You'd have about <b>${Math.max(0,best.usableMin)} min</b> — below your usual ${esc(best.prof.t.toLowerCase())}.</div>`;
       }
-      html+=`<div class="wf-list">`+plans.map((pl,i)=>this.card(pl,i)).join('')+`</div>`;
+      html+=plans.map((pl,i)=>this.planBand(pl,i)).join('');
     }
     body.innerHTML=html;
+    this._rows=plans;
     this.wireCommon({plans});
+    const qi=$('wfeQ');
+    if(qi) qi.addEventListener('keydown',e=>{ if(e.key==='Enter' && qi.value.trim()) this.canI(qi.value); });
   },
 };
 /* ---- Phase 6 (conservative): scheduled bus option for the PROTECTED leg.
