@@ -1157,28 +1157,39 @@ input.inp:disabled{ background:var(--limestone-dk); color:var(--ink-soft); }
 .br-veh{ position:relative; display:flex; align-items:center; gap:9px; padding:4px 0 4px 30px; }
 .br-veh::before{ content:""; position:absolute; left:11px; top:0; bottom:0; width:3px; background:var(--rc); opacity:.28; }
 .br-veh-chip{ font-size:11.5px; font-weight:700; color:#fff; border-radius:999px; padding:4px 10px; box-shadow:0 2px 8px rgba(20,19,15,.25); }
-/* ===== ROUTE SCHEDULE (.brx-*) — elegant pass =====
-   A sentence, one big time, the week as rhythm blocks, one footer line. */
-.brx-hero{ padding:4px 2px 18px; border-bottom:1px solid var(--line); margin-bottom:6px; }
-.brx-cap{ font-size:14px; color:var(--ink-soft); }
+/* ===== ROUTE SCHEDULE (.brx-*) — v4: the day, drawn =====
+   Hero card + week card with route-colored service-density bars on a
+   shared hour scale. Density = opacity tier; today gets a now-marker. */
+.brx-card{ background:var(--surface); border-radius:var(--r-lg); box-shadow:inset 0 0 0 1px var(--line); padding:16px 18px 15px; margin-bottom:12px; }
+.brx-eyeline{ font-size:13px; color:var(--ink-soft); }
 .brx-stopwrap{ position:relative; display:inline-block; max-width:100%; }
 .brx-stopwrap::after{ content:''; position:absolute; right:6px; top:50%; width:7px; height:7px; border-right:2.2px solid var(--honey-deep); border-bottom:2.2px solid var(--honey-deep); transform:translateY(-70%) rotate(45deg); pointer-events:none; }
-.brx-stop{ appearance:none; -webkit-appearance:none; border:none; background:transparent; padding:2px 26px 2px 0; font-family:var(--font-display); font-size:19px; font-weight:700; letter-spacing:-.015em; color:var(--ink); max-width:100%; white-space:nowrap; overflow:hidden; text-overflow:ellipsis; }
-.brx-big{ font-family:var(--font-display); font-weight:760; font-size:46px; letter-spacing:-.035em; line-height:1.05; margin-top:10px; font-variant-numeric:tabular-nums; color:var(--honey-deep); }
-.brx-big.none{ color:var(--ink-soft); font-size:28px; }
-.brx-big .brx-when{ font-size:16px; font-weight:640; color:var(--ink-soft); margin-left:10px; letter-spacing:0; }
-.brx-then{ font-size:14.5px; color:var(--ink-soft); margin-top:5px; font-variant-numeric:tabular-nums; }
-.brx-exc{ margin:12px 0 2px; padding:11px 14px; border-radius:var(--r-md); background:var(--honey-tint); font-size:13.5px; line-height:1.6; color:var(--ink); }
+.brx-stop{ appearance:none; -webkit-appearance:none; border:none; background:transparent; padding:2px 26px 2px 0; font-family:var(--font-display); font-size:18px; font-weight:700; letter-spacing:-.015em; color:var(--ink); max-width:100%; white-space:nowrap; overflow:hidden; text-overflow:ellipsis; }
+.brx-big{ font-family:var(--font-display); font-weight:760; font-size:44px; letter-spacing:-.035em; line-height:1.05; margin-top:8px; font-variant-numeric:tabular-nums; color:var(--honey-deep); }
+.brx-big.none{ color:var(--ink-soft); font-size:26px; }
+.brx-big .brx-when{ font-size:15.5px; font-weight:640; color:var(--ink-soft); margin-left:10px; letter-spacing:0; }
+.brx-then{ font-size:14px; color:var(--ink-soft); margin-top:5px; }
+.brx-pills{ display:flex; gap:8px; margin-top:9px; }
+.brx-pills span{ font-family:var(--font-num); font-size:13.5px; font-weight:650; color:var(--ink); background:var(--paper-bg); border-radius:999px; padding:6px 12px; font-variant-numeric:tabular-nums; }
+.brx-exc{ margin:0 0 12px; padding:11px 14px; border-radius:var(--r-md); background:var(--honey-tint); font-size:13.5px; line-height:1.6; color:var(--ink); }
 .brx-exc svg{ width:14px; height:14px; vertical-align:-2px; margin-right:4px; color:var(--honey-deep); }
-.brx-day{ padding:14px 2px 4px; }
-.brx-day-h{ font-family:var(--font-display); font-size:16.5px; font-weight:720; letter-spacing:-.015em; color:var(--ink); margin-bottom:2px; }
-.brx-day-h span{ font-size:13px; font-weight:500; letter-spacing:0; color:var(--ink-faint); margin-left:8px; }
-.brx-day-h.sm{ margin:16px 2px 2px; font-size:14.5px; }
-.brx-band{ display:flex; align-items:baseline; justify-content:space-between; gap:12px; padding:10px 0; border-bottom:1px solid var(--line); }
-.brx-band b{ font-family:var(--font-display); font-size:16.5px; font-weight:680; letter-spacing:-.01em; color:var(--ink); flex:none; }
-.brx-band span{ font-size:14px; color:var(--ink-soft); font-variant-numeric:tabular-nums; text-align:right; }
-.brx-none{ font-size:14px; color:var(--ink-faint); padding:6px 0 10px; }
-.brx-all-btn{ display:block; width:100%; border:none; background:none; cursor:pointer; text-align:left; padding:14px 2px; margin-top:4px; font-family:var(--font-display); font-size:15px; font-weight:680; color:var(--honey-deep); border-bottom:1px solid var(--line); }
+.brx-week{ padding-bottom:30px; }
+.brx-dayrow.sep{ margin-top:16px; padding-top:14px; border-top:1px solid var(--line); }
+.brx-dayhead{ display:flex; align-items:baseline; gap:8px; margin-bottom:9px; }
+.brx-dayhead b{ font-family:var(--font-display); font-size:16px; font-weight:720; letter-spacing:-.015em; color:var(--ink); }
+.brx-dayhead span{ font-size:12.5px; color:var(--ink-faint); }
+.brx-today{ margin-left:auto; font-style:normal; font-family:var(--font-display); font-size:11.5px; font-weight:680; color:var(--honey-deep); background:var(--honey-tint); border-radius:999px; padding:3px 10px; }
+.brx-track{ position:relative; height:14px; border-radius:7px; background:var(--paper-bg); overflow:visible; }
+.brx-segb{ position:absolute; top:0; height:100%; border-radius:7px; background:var(--rc); }
+.brx-segb.hi{ opacity:.9; } .brx-segb.mid{ opacity:.55; } .brx-segb.lo{ opacity:.3; }
+.brx-tick{ position:absolute; top:2px; width:3px; height:10px; border-radius:2px; background:var(--rc); opacity:.75; }
+.brx-nowmark{ position:absolute; top:-4px; width:2.5px; height:22px; border-radius:2px; background:var(--ink); box-shadow:0 0 0 2px var(--surface); }
+.brx-capline{ font-size:12.5px; color:var(--ink-soft); margin-top:8px; line-height:1.5; font-variant-numeric:tabular-nums; }
+.brx-nosvc{ font-size:13px; color:var(--ink-faint); padding:2px 0 4px; }
+.brx-ruler{ position:relative; height:16px; margin-top:14px; }
+.brx-ruler span{ position:absolute; transform:translateX(-50%); font-family:var(--mono); font-size:10px; font-weight:600; color:var(--ink-faint); font-variant-numeric:tabular-nums; }
+.brx-all-btn{ display:block; width:100%; border:none; background:none; cursor:pointer; text-align:left; padding:13px 2px; font-family:var(--font-display); font-size:15px; font-weight:680; color:var(--honey-deep); border-bottom:1px solid var(--line); }
+.brx-day-h.sm{ margin:16px 2px 2px; font-family:var(--font-display); font-size:14.5px; font-weight:720; color:var(--ink); }
 .brx-hours{ padding:4px 0 2px; }
 .brx-hour{ display:flex; align-items:baseline; gap:12px; padding:7px 2px; border-bottom:1px solid var(--line); }
 .brx-hh{ font-family:var(--mono); font-size:12px; font-weight:700; color:var(--ink-soft); width:48px; flex:none; text-align:right; }
@@ -1464,15 +1475,19 @@ input.inp:disabled{ background:var(--limestone-dk); color:var(--ink-soft); }
 .bs-mark{ width:88px; height:99px; animation:bsIn .55s cubic-bezier(.22,1,.36,1) both; }
 .bs-mark svg{ width:100%; height:100%; display:block; overflow:visible; }
 .bs-name{ font:600 26px/1 -apple-system,BlinkMacSystemFont,'SF Pro Display','Segoe UI',sans-serif; letter-spacing:-.02em; color:#14130F; animation:bsIn .55s cubic-bezier(.22,1,.36,1) .12s both; }
-.bs-fly{ position:relative; width:128px; height:22px; overflow:hidden; animation:bsIn .4s ease .25s both;
-  background-image:radial-gradient(circle, rgba(20,19,15,.22) 1.3px, transparent 1.6px); background-size:8px 4px; background-position:0 center; background-repeat:repeat-x; }
-.bs-fly-x{ position:absolute; top:50%; left:0; width:26px; height:5px; margin-top:-2.5px; will-change:transform; animation:bsFlyX 1.5s linear infinite; }
-.bs-fly-bee{ position:absolute; inset:0; border-radius:99px; will-change:transform;
-  background:linear-gradient(90deg, rgba(255,195,0,0), #FFC300 55%, #FFC300); animation:bsFlyY .75s ease-in-out infinite alternate; }
-.bs-fly-bee::after{ content:""; position:absolute; right:-2px; top:50%; width:8px; height:8px; margin-top:-4px; border-radius:50%; background:#FFC300; }
+.bs-fly{ position:relative; width:120px; height:50px; animation:bsIn .4s ease .25s both; }
+.bs-fly svg{ position:absolute; inset:0; width:100%; height:100%; display:block; }
+.bs-fly svg path{ fill:none; stroke:rgba(20,19,15,.22); stroke-width:2.6; stroke-linecap:round; stroke-dasharray:.5 5.5; }
+.bs-fly-bee{ position:absolute; top:-4.5px; left:-4.5px; width:9px; height:9px; border-radius:50%; background:#FFC300; will-change:transform;
+  animation:bsFlyPath 2s linear infinite, bsFlyFade 2s linear infinite; }
 @keyframes bsIn{ from{ opacity:0; transform:translateY(10px) scale(.94); } to{ opacity:1; transform:none; } }
-@keyframes bsFlyX{ from{ transform:translateX(-30px); } to{ transform:translateX(132px); } }
-@keyframes bsFlyY{ from{ transform:translateY(-3px); } to{ transform:translateY(3px); } }
+/* The bee's flight path: the dotted squiggle sampled at 40 equal-arc-length
+   points (constant speed, loop-the-loop included) baked into transform
+   keyframes — pure compositor motion, no per-frame path math or repaints. */
+@keyframes bsFlyPath{
+0%{transform:translate(5px,37.5px)} 2.5%{transform:translate(7.1px,33.5px)} 5%{transform:translate(9.5px,29.6px)} 7.5%{transform:translate(12.1px,25.9px)} 10%{transform:translate(15.1px,22.4px)} 12.5%{transform:translate(18.4px,19.3px)} 15%{transform:translate(22.2px,16.8px)} 17.5%{transform:translate(26.4px,15.2px)} 20%{transform:translate(31px,15px)} 22.5%{transform:translate(35.2px,16.5px)} 25%{transform:translate(38.7px,19.5px)} 27.5%{transform:translate(41px,23.4px)} 30%{transform:translate(41.3px,27.8px)} 32.5%{transform:translate(38.8px,31.5px)} 35%{transform:translate(34.4px,31.6px)} 37.5%{transform:translate(31.2px,28.6px)} 40%{transform:translate(30.1px,24.2px)} 42.5%{transform:translate(31.6px,19.9px)} 45%{transform:translate(34.6px,16.6px)} 47.5%{transform:translate(38.5px,14.2px)} 50%{transform:translate(42.8px,12.7px)} 52.5%{transform:translate(47.3px,12.1px)} 55%{transform:translate(51.9px,12.4px)} 57.5%{transform:translate(56.2px,13.7px)} 60%{transform:translate(60.2px,15.9px)} 62.5%{transform:translate(63.6px,18.9px)} 65%{transform:translate(66.5px,22.4px)} 67.5%{transform:translate(69.1px,26.2px)} 70%{transform:translate(71.7px,29.9px)} 72.5%{transform:translate(74.6px,33.3px)} 75%{transform:translate(78.3px,36px)} 77.5%{transform:translate(82.7px,37.3px)} 80%{transform:translate(87.2px,37.4px)} 82.5%{transform:translate(91.6px,36.3px)} 85%{transform:translate(95.6px,34.2px)} 87.5%{transform:translate(99.3px,31.5px)} 90%{transform:translate(102.6px,28.4px)} 92.5%{transform:translate(105.8px,25.1px)} 95%{transform:translate(108.8px,21.7px)} 97.5%{transform:translate(111.9px,18.3px)} 100%{transform:translate(115px,15px)}
+}
+@keyframes bsFlyFade{ 0%{opacity:0} 7%{opacity:1} 90%{opacity:1} 100%{opacity:0} }
 /* The loader animates TRANSFORM ONLY (GPU compositor thread) so it stays
    butter-smooth even while the main thread parses the app bundle — stroke/
    SMIL animations repaint on the main thread and stuttered during boot.
@@ -1481,16 +1496,15 @@ input.inp:disabled{ background:var(--limestone-dk); color:var(--ink-soft); }
    alive (entrances stay frozen, which is correct). */
 @media (prefers-reduced-motion:reduce){
   #bootSplash .bs-mark, #bootSplash .bs-name{ animation:none; }
-  #bootSplash .bs-fly-x{ animation-duration:1.5s !important; }
-  #bootSplash .bs-fly-bee{ animation-duration:.75s !important; }
+  #bootSplash .bs-fly-bee{ animation-duration:2s !important; }
 }
 @media (prefers-color-scheme: dark){
-  .bs-fly{ background-image:radial-gradient(circle, rgba(244,241,232,.25) 1.3px, transparent 1.6px); }
+  #bootSplash .bs-fly svg path{ stroke:rgba(244,241,232,.28); }
 }
 </style>
 <div class="bs-mark"><svg viewBox="0 0 486.82 546.21" fill="none"><path class="bs-b" fill="#14130F" d="M422.86,79.28s-4.99-6.4-11.91-7.52c-9.1-1.95-16.42,1.82-21.12,9.33-25.65,40.98-60.13,74.18-104.2,95.67,4.52-33.23,2.32-62.45-10.72-92.94-12.39-27.05-32.13-49.79-57.73-65.16-45.54-27.35-106.24-23.74-150.35,4.86C27.18,49.24.28,93.82.23,141.88L0,370.92c-.04,42.87,17.36,83.45,45.94,114.75,38.17,41.8,94.2,63.96,150.71,60.1,98.49-6.72,176.44-92.8,170.98-192.09-1.99-56.83-30.21-103.89-75.67-137.68,54.65-23.6,87.7-72.88,131.31-113.09,5.38-4.96,5.27-16.27-.41-23.63ZM327.04,343.48c5.38,41.92-7.55,83.48-35.91,114.76-32.78,36.16-80.52,54.3-129.35,46.78-33.27-5.13-63.96-21.51-86.49-46.47-22.64-25.07-35.85-57.2-35.82-91.24l.16-223.73c.02-25.12,10.22-49.46,26.52-68,18.14-20.63,43.39-32.84,70.51-35.94,60.77-6.95,110.88,43.59,111.79,103.86.26,17.11-1.94,33.52-5.33,50.09l-33.8,9.95c-19.36,5.7-37.41,13.2-55.1,22.93-27.11,15.31-55.05,37.85-61.5,69.35-2.11,10.3-1.65,20.7,3.18,30.08,10.14,19.69,32.91,26.55,54.6,24.09,51.53-5.85,95.02-57.07,115.8-103.04,7.34,4.52,13.42,10.12,19.71,16.03,22.76,21.39,37.05,49.42,41.04,80.5ZM227.69,237.92c-13.38,27.91-37.95,59.23-66.44,70.75-11.39,4.6-29.38,6.23-31.2-1.04-2.71-10.82,10.68-26.29,20.24-33.69,7.7-6.35,15.84-11.1,24.65-15.93,16.62-8.64,33.67-15.18,52.75-20.08Z"/><circle class="bs-dot" cx="453.73" cy="44.14" r="33.08" fill="#FFC300"></circle></svg></div>
 <div class="bs-name">BeeLine</div>
-<div class="bs-fly"><span class="bs-fly-x"><span class="bs-fly-bee"></span></span></div>
+<div class="bs-fly"><svg viewBox="0 0 96 40" aria-hidden="true"><path d="M4 30 C 14 10, 26 8, 32 17 C 36 24, 29 29, 25 23 C 21 16, 31 8, 42 10 C 56 13, 55 30, 68 30 C 78 30, 84 20, 92 12"/></svg><span class="bs-fly-bee"></span></div>
 </div>
 
 <div id="app">
@@ -1818,7 +1832,7 @@ input.inp:disabled{ background:var(--limestone-dk); color:var(--ink-soft); }
         <div class="prow" id="pUpdates"><span class="prow-ic"><span data-pi="arrows-clockwise"></span></span><b class="prow-label">What’s new<span class="upd-dot" id="updDot" style="display:none"></span></b><span class="prow-val" id="pUpdatesVal"></span><span class="prow-ch"><span data-pi="caret-right"></span></span></div>
       </div>
 
-      <div class="profile-version">BeeLine 1.0.0 · build 2026-09-01 08:51 · your data stays on this phone<br>Map data © OpenStreetMap contributors · © CARTO</div>
+      <div class="profile-version">BeeLine 1.0.0 · build 2026-09-01 09:02 · your data stays on this phone<br>Map data © OpenStreetMap contributors · © CARTO</div>
       <button class="prow" id="pAdd" style="display:none"></button>
     </div>
   </section>
@@ -5986,16 +6000,14 @@ const BusRouteDetail={
     if(!vehicles.length) html+='<div class="bz-mut" style="margin-top:10px">No buses on this route right now — check the Schedule tab for when service runs.</div>';
     return html;
   },
-  /* Schedule, elegant pass. One screen tells the whole story with zero
-     toggles: "Next bus from [your stop]" as a sentence, then the entire week
-     as frequency blocks (Weekdays / Weekends) — a route is a rhythm, not a
-     table. Full hour-grouped timetable behind one link. One footer line. */
+  /* Schedule v4 — the day is DRAWN, not listed. Hero card: next bus from
+     your stop with then-pills. Week card: per-pattern service bars on one
+     shared hour scale (route color; density = opacity) so weekday vs weekend
+     is a single glance. Bands humanized beneath. Timetable one link away. */
   schedHTML(p){
     const pats=BusSchedule.servicePatterns();
     if(!pats.length) return '<div class="bz-mut">No schedule data available.</div>';
     const today=new Date(), now=bzNowSec();
-    // only offer stops GTFS actually has times for (review find: live feed
-    // knows garage-adjacent renumbers the schedule doesn't)
     const known=new Set();
     (p.gtfsIds||[]).forEach(g=>{ const R=BEELINE_GTFS.trips[g]; if(R) R.patterns.forEach(pt=>pt.stops.forEach(x=>known.add(String(x)))); });
     let stops=p.stops.map(id=>BusModel.stop(id)).filter(Boolean);
@@ -6008,8 +6020,7 @@ const BusRouteDetail={
     }
     const stop=stops.find(s=>s.id===this.stopId);
 
-    // next departure — searches forward across the week so there is never a
-    // dead end ("7:49 AM · Monday" beats "done for today")
+    // next departure, week-aware
     let nextDep=null;
     for(let i=0;i<8 && !nextDep;i++){
       const d=new Date(); d.setDate(d.getDate()+i);
@@ -6017,8 +6028,23 @@ const BusRouteDetail={
       if(deps.length) nextDep={sec:deps[0].sec, off:i, date:d};
     }
 
+    // per-pattern day data (secs + bands), plus the shared hour scale
+    const days=pats.map(pt=>{
+      const d=BusSchedule.nextDateForPattern(pt);
+      const secs= d? BusSchedule.departures(p, stop.ext, d, 0, 500).map(x=>x.sec) : [];
+      return { pt, secs, bands: secs.length? BusSchedule.bands(secs) : null, isNow: pt.days[today.getDay()]===1 };
+    });
+    const withSvc=days.filter(x=>x.secs.length);
+    let sMin=Infinity, sMax=-Infinity;
+    withSvc.forEach(x=>{ sMin=Math.min(sMin,x.secs[0]); sMax=Math.max(sMax,x.secs[x.secs.length-1]); });
+    if(withSvc.length){ sMin=Math.floor(sMin/3600)*3600; sMax=Math.ceil(sMax/3600)*3600; }
+    const span=Math.max(1,sMax-sMin);
+    const pctOf=t=>((t-sMin)/span*100);
+    const hourLab=h=>{ h=h%24; const ap=h<12?'a':'p'; return (h%12||12)+ap; };
+
     let html='';
-    html+='<div class="brx-hero"><div class="brx-cap">Next bus from</div>'
+    // ---- hero card ----
+    html+='<div class="brx-card brx-hero2"><div class="brx-eyeline">Next bus from</div>'
       +'<div class="brx-stopwrap"><select class="brx-stop" id="brxStop">'
       +stops.map(s=>'<option value="'+s.id+'"'+(s.id===this.stopId?' selected':'')+'>'+esc(s.name)+'</option>').join('')
       +'</select></div>';
@@ -6030,13 +6056,13 @@ const BusRouteDetail={
       else when=nextDep.date.toLocaleDateString('en-US',{weekday:'long'});
       html+='<div class="brx-big">'+bzFmtSec(nextDep.sec)+'<span class="brx-when">'+esc(when)+'</span></div>';
       const more=BusSchedule.departures(p, stop.ext, nextDep.date, nextDep.sec+1, 2);
-      if(more.length) html+='<div class="brx-then">then '+more.map(x=>bzFmtSec(x.sec)).join(' · ')+'</div>';
+      if(more.length) html+='<div class="brx-pills">'+more.map(x=>'<span>'+bzFmtSec(x.sec)+'</span>').join('')+'</div>';
     } else {
       html+='<div class="brx-big none">No service</div><div class="brx-then">No scheduled buses at this stop in the next week.</div>';
     }
     html+='</div>';
 
-    // real calendar exceptions — only when they exist; silence is the default
+    // ---- exceptions (only when real) ----
     const exc=BusSchedule.exceptions(35);
     if(exc.length){
       const fmtD=d=>d.toLocaleDateString('en-US',{weekday:'short',month:'short',day:'numeric'});
@@ -6045,36 +6071,61 @@ const BusRouteDetail={
         +(exc.length>3?'<div class="bz-mut2">+'+(exc.length-3)+' more dates</div>':'')+'</div>';
     }
 
-    // the whole week, no toggle — one rhythm block per service pattern
-    pats.forEach(pt=>{
-      const d=BusSchedule.nextDateForPattern(pt);
-      const secs= d? BusSchedule.departures(p, stop.ext, d, 0, 500).map(x=>x.sec) : [];
-      const isNow= pt.days[today.getDay()]===1;
-      html+='<div class="brx-day"><div class="brx-day-h">'+esc(pt.label)+'<span>'+esc(pt.span)+(isNow?' · today':'')+'</span></div>';
-      if(!secs.length){ html+='<div class="brx-none">No '+(pt.label==='Weekends'?'weekend':'weekday')+' service at this stop</div></div>'; return; }
-      const bands=BusSchedule.bands(secs);
-      if(bands && bands.length && bands.length<=5){
-        bands.forEach(b=>{ html+='<div class="brx-band"><b>Every ~'+b.head+' min</b><span>'+bzFmtSec(b.from)+' – '+bzFmtSec(b.to)+'</span></div>'; });
-      } else {
-        html+='<div class="brx-band"><b>Runs at</b><span>'+secs.slice(0,8).map(t=>bzFmtSec(t)).join(', ')+(secs.length>8?' …':'')+'</span></div>';
-      }
-      html+='</div>';
-    });
+    // ---- the week card: drawn service bars on a shared scale ----
+    if(withSvc.length){
+      html+='<div class="brx-card brx-week">';
+      days.forEach((x,di)=>{
+        html+='<div class="brx-dayrow'+(di>0?' sep':'')+'">';
+        html+='<div class="brx-dayhead"><b>'+esc(x.pt.label)+'</b><span>'+esc(x.pt.span)+'</span>'+(x.isNow?'<i class="brx-today">Today</i>':'')+'</div>';
+        if(!x.secs.length){
+          html+='<div class="brx-nosvc">No service at this stop</div></div>';
+          return;
+        }
+        // the bar: one segment per band (opacity by frequency), route-colored
+        html+='<div class="brx-track" style="--rc:'+esc(p.color)+'">';
+        const bands=(x.bands&&x.bands.length&&x.bands.length<=6)?x.bands:[{from:x.secs[0],to:x.secs[x.secs.length-1],head:99}];
+        if(x.bands&&x.bands.length&&x.bands.length<=6){
+          bands.forEach(b=>{
+            const tier= b.head<=12?'hi' : b.head<=25?'mid' : 'lo';
+            html+='<span class="brx-segb '+tier+'" style="left:'+pctOf(b.from).toFixed(2)+'%;width:'+Math.max(1.5,(pctOf(b.to)-pctOf(b.from))).toFixed(2)+'%"></span>';
+          });
+        } else {
+          // sparse: a tick per departure
+          x.secs.forEach(t=>{ html+='<span class="brx-tick" style="left:'+pctOf(t).toFixed(2)+'%"></span>'; });
+        }
+        // "you are here" marker on today's bar
+        if(x.isNow && now>=sMin && now<=sMax) html+='<span class="brx-nowmark" style="left:'+pctOf(now).toFixed(2)+'%"></span>';
+        html+='</div>';
+        // caption, humanized
+        let cap;
+        if(x.bands&&x.bands.length&&x.bands.length<=6){
+          cap=x.bands.map((b,i)=> i===0
+            ? ('Every ~'+b.head+' min from '+bzFmtSec(b.from))
+            : ('then ~'+b.head+' min until '+bzFmtSec(b.to))).join(' · ');
+          if(x.bands.length===1) cap='Every ~'+x.bands[0].head+' min, '+bzFmtSec(x.bands[0].from)+' – '+bzFmtSec(x.bands[0].to);
+        } else {
+          cap='Runs '+x.secs.length+' time'+(x.secs.length===1?'':'s')+': '+x.secs.slice(0,6).map(t=>bzFmtSec(t)).join(', ')+(x.secs.length>6?' …':'');
+        }
+        html+='<div class="brx-capline">'+cap+'</div></div>';
+      });
+      // shared hour ruler
+      html+='<div class="brx-ruler">';
+      for(let t=sMin;t<=sMax;t+=3*3600){ html+='<span style="left:'+pctOf(t).toFixed(2)+'%">'+hourLab(Math.round(t/3600))+'</span>'; }
+      html+='</div></div>';
+    }
 
+    // ---- full timetable ----
     html+='<button class="brx-all-btn" id="brxAll">'+(this.showAll?'Hide the full timetable':'See the full timetable')+'</button>';
     if(this.showAll){
-      pats.forEach(pt=>{
-        const d=BusSchedule.nextDateForPattern(pt);
-        const secs= d? BusSchedule.departures(p, stop.ext, d, 0, 500).map(x=>x.sec) : [];
-        if(!secs.length) return;
-        const isNow=pt.days[today.getDay()]===1;
-        html+='<div class="brx-day-h sm">'+esc(pt.label)+'</div>';
+      days.forEach(x=>{
+        if(!x.secs.length) return;
+        html+='<div class="brx-day-h sm">'+esc(x.pt.label)+'</div>';
         const byHour={};
-        secs.forEach(t=>{ const t2=Math.round(t/60); const h=Math.floor(t2/60)%24; (byHour[h]=byHour[h]||[]).push({mm:t2%60, t}); });
+        x.secs.forEach(t=>{ const t2=Math.round(t/60); const h=Math.floor(t2/60)%24; (byHour[h]=byHour[h]||[]).push({mm:t2%60, t}); });
         html+='<div class="brx-hours">'+Object.keys(byHour).map(Number).sort((a,b)=>a-b).map(h=>{
           const lab=(h%12||12)+(h<12?' AM':' PM');
-          return '<div class="brx-hour" data-h="'+(isNow?h:'x')+'"><span class="brx-hh">'+lab+'</span><span class="brx-mins">'+
-            byHour[h].map(x=>'<i class="'+(isNow&&x.t<now?'past':'')+'">:'+String(x.mm).padStart(2,'0')+'</i>').join('')+'</span></div>';
+          return '<div class="brx-hour" data-h="'+(x.isNow?h:'x')+'"><span class="brx-hh">'+lab+'</span><span class="brx-mins">'+
+            byHour[h].map(v=>'<i class="'+(x.isNow&&v.t<now?'past':'')+'">:'+String(v.mm).padStart(2,'0')+'</i>').join('')+'</span></div>';
         }).join('')+'</div>';
       });
     }
