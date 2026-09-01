@@ -1042,7 +1042,7 @@ input.inp:disabled{ background:var(--limestone-dk); color:var(--ink-soft); }
 #busMap .maplibregl-ctrl-bottom-left, #busMap .maplibregl-ctrl-bottom-right{ bottom:calc(80px + env(safe-area-inset-bottom)); }
 .bz-updated{ background:rgba(20,19,15,.6); color:#F4EBDC; font-family:var(--mono); font-size:10.5px; padding:5px 10px; border-radius:999px; box-shadow:inset 0 0 0 1px rgba(244,235,220,.16); }
 #scr-buses[data-bview="routes"] .bz-updated{ display:none !important; }
-.bz-livewrap .x-locate{ z-index:8; top:auto; bottom:calc(100px + env(safe-area-inset-bottom)); }
+.bz-livewrap .x-locate{ z-index:7; top:auto; bottom:calc(172px + env(safe-area-inset-bottom)); }
 /* live vehicle marker: cream-cased route-color bus; glow only when LIVE.
    position MUST stay absolute: MapLibre's own .maplibregl-marker rule sets it,
    and this class loads later at equal specificity — a `relative` here put every
@@ -1074,16 +1074,16 @@ input.inp:disabled{ background:var(--limestone-dk); color:var(--ink-soft); }
 .bz-mut2{ font-size:12px; color:var(--ink-faint); }
 .bz-busid{ font-style:normal; font-family:var(--mono); font-size:10.5px; color:var(--ink-faint); margin-left:6px; }
 .bz-detour-tag{ display:inline-block; font-size:10px; font-weight:700; letter-spacing:.04em; text-transform:uppercase; color:var(--honey-deep); background:var(--honey-tint); border-radius:var(--r-xs); padding:2.5px 7px; margin-left:6px; }
-/* peek */
-.bz-sheet.peek{ padding:12px 16px; }
+/* peek — compact two-liner; the whole card is the tap target */
+.bz-sheet.peek{ padding:11px 16px 12px; }
 .bz-peek{ cursor:pointer; }
 .bz-peek-k{ display:block; font-family:var(--mono); font-size:9.5px; font-weight:700; letter-spacing:.08em; text-transform:uppercase; color:var(--ink-faint); }
-.bz-peek-head b{ font-family:var(--font-display); font-size:16.5px; }
-.bz-peek-walk{ float:right; font-size:12px; color:var(--ink-soft); margin-top:3px; }
-.bz-peek-rows{ display:flex; gap:14px; flex-wrap:wrap; margin-top:8px; }
-.bz-peek-row{ display:inline-flex; align-items:center; gap:6px; font-size:13.5px; }
+.bz-peek-head b{ font-family:var(--font-display); font-size:16px; }
+.bz-peek-rows{ display:flex; gap:14px; flex-wrap:wrap; margin-top:6px; }
+.bz-peek-row{ display:inline-flex; align-items:center; gap:6px; font-size:13px; }
 .bz-peek-row b{ font-family:var(--mono); font-variant-numeric:tabular-nums; }
-.bz-peek-cta{ margin-top:8px; font-size:11.5px; color:var(--ink-faint); }
+.bz-arr-main{ display:flex; flex-direction:column; min-width:0; }
+.bz-toward{ font-size:11.5px; color:var(--ink-soft); white-space:nowrap; overflow:hidden; text-overflow:ellipsis; max-width:170px; }
 /* arrivals rows */
 .bz-arr{ display:flex; align-items:center; gap:12px; padding:11px 2px; border-top:1px solid var(--line); min-height:48px; }
 .bz-arr[data-eq]{ cursor:pointer; }
@@ -1150,20 +1150,22 @@ input.inp:disabled{ background:var(--limestone-dk); color:var(--ink-soft); }
 .br-title{ font-family:var(--font-display); font-weight:700; font-size:24px; letter-spacing:-.02em; margin:0 0 3px; }
 .br-seg{ margin:0 0 14px; }
 .br-seg.sub{ margin:0 0 10px; }
-.br-line{ position:relative; padding-left:6px; }
-.br-stop{ position:relative; display:flex; align-items:center; gap:13px; padding:12px 2px 12px 6px; cursor:pointer; min-height:46px; }
-.br-stop::before{ content:""; position:absolute; left:11px; top:0; bottom:0; width:3px; background:var(--rc); opacity:.28; }
+/* route strip: a fixed rail GUTTER (bus slots + line) then the stop list.
+   Buses are floating annotations inside the gutter — they can never cover a
+   stop name, and two buses at one stop split left/right of the line. */
+.br-line{ position:relative; padding-left:0; }
+.br-stop{ position:relative; display:flex; align-items:center; gap:10px; padding:13px 2px 13px 80px; cursor:pointer; min-height:50px; }
+.br-stop::before{ content:""; position:absolute; left:29px; top:0; bottom:0; width:3px; background:var(--rc); opacity:.28; }
 .br-stop:first-child::before{ top:50%; } .br-stop:last-child::before{ bottom:50%; }
-.br-node{ position:relative; z-index:1; width:13px; height:13px; flex:none; border-radius:50%; background:var(--paper); border:3px solid var(--rc); }
+.br-node{ position:absolute; left:24px; top:50%; transform:translateY(-50%); z-index:1; width:13px; height:13px; border-radius:50%; background:var(--paper); border:3px solid var(--rc); }
 .br-stop-name{ flex:1; font-size:14.5px; font-weight:560; }
-/* live bus ON the line: the top-down map icon, nose pointing DOWN the strip
-   (down = direction of travel), tiny fleet number above, ETA beside */
-.br-veh2{ position:relative; display:flex; align-items:center; gap:11px; padding:6px 0; min-height:52px; }
-.br-veh2::before{ content:""; position:absolute; left:11px; top:0; bottom:0; width:3px; background:var(--rc); opacity:.28; }
-.br-veh-icon{ position:relative; z-index:2; flex:none; width:25px; display:flex; justify-content:center; }
-.br-veh-icon svg{ width:19px; height:38px; transform:rotate(180deg); filter:drop-shadow(0 1px 3px rgba(20,19,15,.4)); }
-.br-veh-num{ position:absolute; top:-8px; left:50%; transform:translateX(-50%); z-index:3; font-style:normal; font-family:var(--mono); font-size:8.5px; font-weight:700; letter-spacing:.02em; color:var(--paper); background:var(--ink); border-radius:999px; padding:1.5px 6px; white-space:nowrap; }
-.br-veh-eta{ font-family:var(--mono); font-size:13px; font-weight:700; font-variant-numeric:tabular-nums; }
+.br-bus{ position:absolute; z-index:2; top:-26px; width:34px; display:flex; flex-direction:column; align-items:center; gap:2px; cursor:pointer; }
+.br-bus.slotL{ left:-2px; }
+.br-bus.slotR{ left:42px; }
+.br-bus.at{ top:2px; }                    /* pulling in: beside the stop, not above it */
+.br-bus.first{ top:4px; }                 /* first stop: nothing above to straddle */
+.br-bus svg{ width:18px; height:36px; transform:rotate(180deg); filter:drop-shadow(0 1px 3px rgba(20,19,15,.35)); }
+.br-bus-eta{ font-style:normal; font-family:var(--mono); font-size:9px; font-weight:750; letter-spacing:.02em; border-radius:999px; padding:2px 7px; white-space:nowrap; box-shadow:0 1px 4px rgba(20,19,15,.25); }
 .br-dir{ display:flex; align-items:center; gap:8px; margin:0 0 10px; font-size:12px; color:var(--ink-soft); }
 .br-dir .pi{ width:15px; height:15px; flex:none; color:var(--ink-faint); }
 /* ===== ROUTE SCHEDULE (.brx-*) — v4: the day, drawn =====
@@ -2609,7 +2611,7 @@ input.inp:disabled{ background:var(--limestone-dk); color:var(--ink-soft); }
         <div class="prow" id="pUpdates"><span class="prow-ic"><span data-pi="arrows-clockwise"></span></span><b class="prow-label">What’s new<span class="upd-dot" id="updDot" style="display:none"></span></b><span class="prow-val" id="pUpdatesVal"></span><span class="prow-ch"><span data-pi="caret-right"></span></span></div>
       </div>
 
-      <div class="profile-version">BeeLine 1.0.0 · build 2026-09-01 15:23 · your data stays on this phone<br>Map data © OpenStreetMap contributors · © CARTO</div>
+      <div class="profile-version">BeeLine 1.0.0 · build 2026-09-01 15:30 · your data stays on this phone<br>Map data © OpenStreetMap contributors · © CARTO</div>
       <button class="prow" id="pAdd" style="display:none"></button>
     </div>
   </section>
@@ -6472,10 +6474,10 @@ const BusUI={
     if(!near.length){ el.style.display='none'; return; }
     const {s,d}=near[0];
     el.style.display='block'; el.className='bz-sheet peek';
+    /* compact: two quiet lines, the whole card is the tap target */
     el.innerHTML=`<div class="bz-peek" data-sid="${s.id}">
-      <div class="bz-peek-head"><span class="bz-peek-k">Nearest stop</span><b>${esc(s.name)}</b><span class="bz-peek-walk">${Math.max(1,Math.round(estWalkMin(d)))} min walk</span></div>
-      <div class="bz-peek-rows" id="bzPeekRows"><span class="ldots"><i></i><i></i><i></i></span></div>
-      <div class="bz-peek-cta">Tap for all arrivals</div></div>`;
+      <div class="bz-peek-head"><span class="bz-peek-k">Nearest stop · ${Math.max(1,Math.round(estWalkMin(d)))} min walk</span><b>${esc(s.name)}</b></div>
+      <div class="bz-peek-rows" id="bzPeekRows"><span class="ldots"><i></i><i></i><i></i></span></div></div>`;
     el.querySelector('.bz-peek').addEventListener('click',()=>this.openStop(s.id));
     const rows=await BusLive.stopEtas(s.id);
     const host=$('bzPeekRows'); if(!host) return;
@@ -6512,10 +6514,13 @@ const BusUI={
       // far-future scheduled rows read as clock time, not "361 min"
       const primary = r.state==='LIVE' ? (r.minutes<1?'Now':r.minutes+' min')
                     : (r.minutes<60 ? r.minutes+' min' : (r.clock||r.minutes+' min'));
+      /* where it's HEADED beats which vehicle it is: the next stop after this
+         one names the direction; the fleet number lives in the bus sheet */
+      const tw=bzTowardName(r.parent, this.openStopId);
       return `<div class="bz-arr" ${r.equipmentId?`data-eq="${esc(r.equipmentId)}"`:''}>
       <span class="bz-dot lg" style="background:${esc(r.parent.color)}">${esc(r.parent.abbr)}</span>
-      <b class="bz-arr-min">${esc(String(primary))}</b>
-      <span class="bz-arr-state">${r.state==='LIVE' ? BZ_LIVE_BADGE+(r.equipmentId?`<i class="bz-busid">Bus ${esc(r.equipmentId)}</i>`:'')+((f=>f?`<span class="bz-fullness ${f.cls}">${f.t} · ${f.n}</span>`:'')(bzFullness(r))) : `<span class="bz-sched">Scheduled${(r.minutes<60&&r.clock)?' · '+esc(r.clock):''}</span>`}</span></div>`;
+      <span class="bz-arr-main"><b class="bz-arr-min">${esc(String(primary))}</b>${tw?`<span class="bz-toward">toward ${esc(tw)}</span>`:''}</span>
+      <span class="bz-arr-state">${r.state==='LIVE' ? BZ_LIVE_BADGE+((f=>f?`<span class="bz-fullness ${f.cls}">${f.t} · ${f.n}</span>`:'')(bzFullness(r))) : `<span class="bz-sched">Scheduled${(r.minutes<60&&r.clock)?' · '+esc(r.clock):''}</span>`}</span></div>`;
     }).join('');
     host.querySelectorAll('[data-eq]').forEach(rw=>rw.addEventListener('click',()=>this.openBus(rw.dataset.eq)));
     clearTimeout(this.etaTimer);
@@ -6700,6 +6705,13 @@ const BusUI={
    Route detail (pushed screen): Live metro line w/ real vehicle positions
    between stops + per-stop taps; Schedule from GTFS (today/tomorrow).
    ================================================================ */
+/* the stop AFTER this one on the route = the direction a bus here is headed */
+function bzTowardName(parent, stopId){
+  if(!parent || !parent.stops || stopId==null) return null;
+  const i=parent.stops.indexOf(stopId); if(i<0) return null;
+  const nxt=BusModel.stop(parent.stops[(i+1)%parent.stops.length]);
+  return nxt ? nxt.name : null;
+}
 const BusRouteDetail={
   pid:null, mode:'live',
   open(pid){ this.pid=pid; const par=BusModel.parentById[pid]; this.mode=(par&&par.schedOnly)?'sched':'live'; this.patKey=null; this.stopId=null; this.showAll=false; this.render(); show('busroute'); },
@@ -6725,6 +6737,7 @@ const BusRouteDetail={
     host.innerHTML=html;
     host.querySelectorAll('.brh-seg button').forEach(b=>b.addEventListener('click',()=>{ this.mode=b.dataset.m; this.render(); }));
     host.querySelectorAll('.br-stop[data-sid]').forEach(el=>el.addEventListener('click',()=>{ show('buses'); BusUI.openStop(+el.dataset.sid); }));
+    host.querySelectorAll('.br-bus[data-eq]').forEach(el=>el.addEventListener('click',ev=>{ ev.stopPropagation(); show('buses'); BusUI.openBus(el.dataset.eq); }));
     const vm=host.querySelector('#brViewMap'); if(vm) vm.addEventListener('click',()=>{ show('buses'); BusUI.setView('live'); BusMap.filter=new Set([p.id]); BusUI.renderChips(); BusMap.drawRoutes(); BusMap.syncVehicles(); });
   },
   liveHTML(p,vehicles){
@@ -6740,17 +6753,21 @@ const BusRouteDetail={
     let html=`<button class="btn ghost sm" id="brViewMap" style="margin:0 0 12px">View on live map</button>
       <div class="br-dir">${pic(isLoop?'arrows-clockwise':'caret-down')}<span>${isLoop?'Loop route — buses travel down this list, then start over at the top':'Buses travel down this list'}</span></div>
       <div class="br-line" style="--rc:${esc(p.color)}">`;
-    p.stops.forEach(sid=>{
+    /* The stop LIST is sacred: stops keep their rows and nothing ever covers a
+       name. Buses live in the rail gutter as floating annotations — icon nose
+       down, ETA in a small pill above it (that pill IS the label; fleet
+       numbers live in the bus sheet). Two buses reaching the same stop split
+       left and right of the line instead of piling up. */
+    p.stops.forEach((sid,si)=>{
       const s=BusModel.stop(sid); if(!s) return;
-      (approaching[sid]||[]).forEach(v=>{
-        const eta=v.nextStopEta!=null?(v.nextStopEta<1?'arriving':Math.round(v.nextStopEta)+' min'):'';
-        html+=`<div class="br-veh2">
-          <span class="br-veh-icon"><i class="br-veh-num">${esc(v.equipmentId)}</i>${bzBusSVG(p.color)}</span>
-          ${eta?`<span class="br-veh-eta" style="color:${esc(p.color)}">${eta}</span>`:''}
-          ${(f=>f?`<span class="bz-fullness ${f.cls}">${f.t}</span>`:'')(bzFullness({state:'LIVE',load:v.load,capacity:v.capacity}))}
-        </div>`;
-      });
-      html+=`<div class="br-stop" data-sid="${s.id}"><span class="br-node"></span><span class="br-stop-name">${esc(s.name)}</span><span class="bz-chev">${pic('caret-right')}</span></div>`;
+      const here=(approaching[sid]||[]).slice(0,2);
+      const buses=here.map((v,k)=>{
+        const eta=v.nextStopEta!=null?(v.nextStopEta<1?'now':Math.round(v.nextStopEta)+'m'):'';
+        const at=v.nextStopEta!=null&&v.nextStopEta<1;
+        return `<span class="br-bus ${k===0?'slotL':'slotR'}${at?' at':''}${si===0?' first':''}" data-eq="${esc(v.equipmentId)}" role="button" aria-label="Bus toward ${esc(s.name)}">
+          ${eta?`<i class="br-bus-eta" style="background:${esc(p.color)};color:${bzTextOn(p.color)}">${eta}</i>`:''}${bzBusSVG(p.color)}</span>`;
+      }).join('');
+      html+=`<div class="br-stop" data-sid="${s.id}">${buses}<span class="br-node"></span><span class="br-stop-name">${esc(s.name)}</span><span class="bz-chev">${pic('caret-right')}</span></div>`;
     });
     html+='</div>';
     const unplaced=vehicles.filter(v=>BusLive.state(v)==='LIVE').length-placed;
