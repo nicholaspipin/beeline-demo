@@ -209,14 +209,14 @@ body{ font-family:var(--ui); color:var(--ink); background:var(--limestone);
 /* opacity (not transform) so an active screen never becomes a containing block
    for position:fixed children (which broke the place sheet's anchoring) */
 @keyframes scrIn{ from{ opacity:.4; } to{ opacity:1; } }
-.scroll{ flex:1; min-height:0; overflow-y:auto; overflow-x:hidden; -webkit-overflow-scrolling:touch; padding:4px 22px 30px; }
+.scroll{ flex:1; min-height:0; overflow-y:auto; overflow-x:hidden; overflow-anchor:none; -webkit-overflow-scrolling:touch; padding:4px 22px 30px; }
 
 /* ---- Display face: titles, section headings, prominent names & buttons ----
    Centralized so the hierarchy lives in one place. Everything else inherits the
    Text face from <body>; numeric data uses --font-num. Nav labels & captions
    stay in Text intentionally. Unmatched selectors here are harmless (future-proof). */
 .page-h, .onb-h, .onb-name, .bname,
-.sectionhead h2, .qd-head h2, .sheet h3, .sd-section h3, .home-hero h1,
+.sectionhead h2, .sheet h3, .sd-section h3,
 .cname, .wd-name, .dc-name, .ps-name, .sc-title, .sd-title, .xrow-main b,
 .sched-next-course, .sched-course{
   font-family:var(--font-display);
@@ -256,19 +256,7 @@ body{ font-family:var(--ui); color:var(--ink); background:var(--limestone);
 .spacer{ flex:1; }
 
 /* ---- home ---- */
-.home-h{ font-weight:760; font-size:clamp(34px,9vw,42px); letter-spacing:-.045em; margin:18px 0 0; line-height:1; }
-.searchbox{ position:relative; margin-top:16px; }
-.searchbox input{ width:100%; height:60px; border:none; border-radius:var(--r-lg); background:var(--paper);
-  box-shadow:inset 0 0 0 1px var(--line2); padding:0 18px 0 52px; font-size:17px; color:var(--ink); font-family:var(--ui); outline:none; }
-.searchbox input::placeholder{ color:var(--ink-faint); }
-.searchbox input:focus{ box-shadow:inset 0 0 0 2px var(--crimson); }
-.searchbox .s-ic{ position:absolute; left:19px; top:50%; transform:translateY(-50%); color:var(--ink-faint); display:flex; pointer-events:none; }
 .quick{ display:flex; gap:9px; margin-top:14px; overflow-x:auto; padding-bottom:2px; scrollbar-width:none; }
-.quick::-webkit-scrollbar{ display:none; }
-.qchip{ flex:none; border:none; background:var(--paper); box-shadow:inset 0 0 0 1px var(--line2); color:var(--ink);
-  font-family:var(--ui); font-size:14px; font-weight:600; padding:10px 16px; border-radius:999px; cursor:pointer; white-space:nowrap; transition:transform .1s, box-shadow .14s, color .14s; }
-.qchip:active{ transform:scale(.95); }
-.qchip:hover{ box-shadow:inset 0 0 0 1.5px var(--crimson); color:var(--crimson); }
 #goWalk{ margin-top:20px; }
 .linkbtn.subtle{ display:block; width:100%; text-align:center; margin-top:2px; }
 
@@ -372,6 +360,7 @@ input.inp{ width:100%; border:none; box-shadow:inset 0 0 0 1px var(--line2); bac
 input.inp:focus{ box-shadow:inset 0 0 0 2px var(--crimson); }
 input.inp:disabled{ background:var(--limestone-dk); color:var(--ink-soft); }
 .hint{ font-size:12.5px; color:var(--ink-soft); margin:8px 2px 0; line-height:1.45; }
+.hm-top .hint{ margin-inline:0; padding-bottom:8px; }
 
 /* ---- banners ---- */
 .offbanner{ background:var(--limestone-dk); padding:10px 20px; font-size:12.5px; color:var(--ink-soft); display:none; align-items:center; gap:8px; }
@@ -474,24 +463,8 @@ input.inp:disabled{ background:var(--limestone-dk); color:var(--ink-soft); }
 .bell{ position:relative; }
 .bell .dot{ position:absolute; top:11px; right:12px; width:8px; height:8px; border-radius:50%; background:var(--crimson); box-shadow:0 0 0 2px var(--paper); }
 
-/* serif accent headline */
-.home-hero{ font-weight:780; font-size:clamp(36px,11vw,46px); letter-spacing:-.045em; line-height:1.02; margin:14px 0 0; }
-.home-hero .accent{ display:block; font-family:'Newsreader', Georgia, serif; font-weight:500; font-style:italic; color:var(--crimson); letter-spacing:-.02em; }
 
-/* search w/ locate button */
-.searchbox.with-locate input{ padding-right:58px; }
-.locate-btn{ position:absolute; right:8px; top:50%; transform:translateY(-50%); width:44px; height:44px; border:none;
-  background:transparent; color:var(--crimson); display:grid; place-items:center; cursor:pointer; border-radius:50%; transition:background .14s; }
-.locate-btn:active{ background:var(--crimson-tint); }
 
-/* icon chips — Quick Destinations ribbon: 5 equal-width tiles fit the row, no scroll */
-.quick.icon-chips{ display:flex; gap:8px; margin-top:0; overflow-x:auto; padding-bottom:4px; scrollbar-width:none; }
-.ichip{ flex:none; display:flex; align-items:center; height:40px; padding:0 16px; background:var(--surface); box-shadow:inset 0 0 0 1px var(--line);
-  border:none; border-radius:999px; cursor:pointer; transition:transform .1s; }
-.ichip:active{ transform:scale(.96); background:var(--surface-dim); }
-.ichip-ic{ display:flex; width:17px; height:17px; margin-right:7px; color:var(--ink-soft); }
-.ichip-ic svg{ width:100%; height:100%; }
-.ichip-name{ font-family:var(--font-display); font-size:14px; font-weight:650; letter-spacing:-.01em; color:var(--ink); white-space:nowrap; }
 /* Home: selected destination card + Quick Destinations header */
 .dest-card{ position:relative; margin-top:18px; padding:16px; background:var(--paper); border-radius:var(--r); box-shadow:inset 0 0 0 1px var(--line); }
 .dc-clear{ position:absolute; top:10px; right:10px; z-index:3; width:30px; height:30px; flex:none; border:none; background:var(--paper); border-radius:50%; display:grid; place-items:center; color:var(--ink-soft); cursor:pointer; box-shadow:inset 0 0 0 1px var(--line), 0 1px 5px rgba(0,0,0,.14); }
@@ -531,8 +504,6 @@ input.inp:disabled{ background:var(--limestone-dk); color:var(--ink-soft); }
 .dc-preview svg{ width:100%; height:100%; display:block; }
 .dc-preview .ps-preview-empty{ width:100%; height:100%; display:grid; place-items:center; color:var(--ink-faint); }
 .dest-card .big-go{ margin-top:14px; }
-.qd-head{ display:flex; align-items:baseline; justify-content:space-between; margin:24px 2px 10px; }
-.qd-head h2{ font-family:var(--mono); font-weight:700; font-size:11px; letter-spacing:.12em; text-transform:uppercase; color:var(--ink-faint); margin:0; }
 
 /* recent destination card */
 .recent{ display:flex; align-items:stretch; gap:14px; margin-top:18px; padding:16px; width:100%; max-width:100%; background:var(--paper);
@@ -625,9 +596,6 @@ input.inp:disabled{ background:var(--limestone-dk); color:var(--ink-soft); }
 .switch .knob{ position:absolute; top:3px; left:3px; width:22px; height:22px; border-radius:50%; background:#fff; box-shadow:0 1px 3px rgba(20,20,30,.25); transition:transform .18s; }
 .switch.on{ background:var(--crimson); box-shadow:none; }
 .switch.on .knob{ transform:translateX(18px); }
-/* favorites ribbon: trailing Edit chip + edit sheet */
-.ichip-edit{ box-shadow:inset 0 0 0 1.4px var(--line2); }
-.ichip-edit .ichip-ic, .ichip-edit .ichip-name{ color:var(--crimson); }
 .fav-search{ position:relative; margin-bottom:8px; }
 .fav-search input{ width:100%; height:50px; border:none; border-radius:var(--r-md); background:var(--limestone-dk); box-shadow:inset 0 0 0 1px var(--line2); padding:0 16px 0 44px; font-size:15.5px; font-family:var(--ui); color:var(--ink); outline:none; }
 .fav-search input::placeholder{ color:var(--ink-faint); }
@@ -1268,57 +1236,11 @@ input.inp:disabled{ background:var(--limestone-dk); color:var(--ink-soft); }
 /* ================================================================
    BLINE REDESIGN LAYER — Ink · Paper · Honey
    ================================================================ */
-/* ---- centered brand block (Home / Explore / You headers) ---- */
-/* ---- HOME MASTHEAD — lockup left, privacy bell right ---- */
-.masthead{ display:flex; align-items:center; gap:10px; padding:12px 2px 0; }
-.masthead .logomark{ width:30px; height:30px; }
 .wordmark{ font-family:var(--font-display); font-weight:740; font-size:22px; letter-spacing:-.02em; color:var(--ink); }
-.mast-bell{ margin-left:auto; }
 .brandblock.sm .logomark{ width:34px; height:34px; }
 .brandblock.sm .wordmark{ font-size:13px; }
 
-/* ---- HOME HERO CARD — the one card that matters (mockup base) ---- */
-.tm{ margin-top:16px; }
-.tm-card{ background:var(--surface); border-radius:var(--r-lg); box-shadow:inset 0 0 0 1px var(--line), 0 1px 10px rgba(20,19,15,.045); padding:18px 18px 16px; }
-.tm-toprow{ display:flex; align-items:center; justify-content:space-between; }
-.tm-eyebrow{ font-family:var(--mono); font-size:10.5px; font-weight:700; letter-spacing:.15em; text-transform:uppercase; color:var(--ink-faint); }
-.tm-chip{ font-family:var(--font-display); font-size:12px; font-weight:680; padding:5px 11px; border-radius:999px; background:var(--honey-tint); color:var(--honey-deep); }
-.tm-chip.calm{ background:var(--paper-bg); color:var(--ink-soft); }
-.tm-who{ display:flex; align-items:center; gap:13px; margin-top:13px; }
-.tm-ic{ width:46px; height:46px; flex:none; border-radius:50%; background:var(--paper-bg); display:grid; place-items:center; color:var(--ink); }
-.tm-ic svg{ width:22px; height:22px; }
-.tm-course{ font-family:var(--font-display); font-weight:740; font-size:23px; letter-spacing:-.025em; line-height:1.08; }
-.tm-sub{ font-size:13.5px; color:var(--ink-soft); margin-top:2px; line-height:1.35; }
-.tm-sub .tnum, .tm-sub b{ font-variant-numeric:tabular-nums; color:var(--ink); font-weight:650; }
-.tm-stats{ display:flex; margin-top:15px; padding-top:15px; border-top:1px solid var(--line); }
-.tm-stat{ flex:1; min-width:0; }
-.tm-stat + .tm-stat{ border-left:1px solid var(--line); padding-left:16px; margin-left:16px; }
-.tm-k{ font-size:13px; color:var(--ink-soft); }
-.tm-v{ font-family:var(--font-display); font-weight:760; font-size:40px; letter-spacing:-.04em; line-height:1.05; margin-top:2px; font-variant-numeric:tabular-nums; color:var(--ink); white-space:nowrap; }
-.tm-v .unit{ font-size:19px; font-weight:680; letter-spacing:-.01em; margin-left:3px; }
-.tm-v.honey{ color:var(--honey-deep); }
-.tm-basis{ font-size:12px; color:var(--ink-faint); margin-top:5px; }
-.tm-cta{ display:flex; align-items:center; justify-content:center; gap:9px; width:100%; height:52px; margin-top:15px; border:none; border-radius:var(--r-md); cursor:pointer;
-  background:var(--honey); color:var(--on-honey); font-family:var(--font-display); font-weight:700; font-size:16.5px; letter-spacing:-.01em; }
-.tm-cta:active{ transform:scale(.985); }
-.tm-cta svg{ width:18px; height:18px; }
-.tm-cta.quiet{ background:var(--paper-bg); color:var(--ink); box-shadow:inset 0 0 0 1px var(--line2); }
-/* invitation (no schedule) */
-.tm-invite{ position:relative; background:var(--surface); border-radius:var(--r-lg); box-shadow:inset 0 0 0 1px var(--line); padding:18px; margin-top:16px; }
-.tm-invite-p{ font-size:14.5px; line-height:1.5; color:var(--ink-soft); margin:0; padding-right:26px; }
-.tm-invite-p b{ color:var(--ink); }
-.tm-teaser-x{ position:absolute; top:14px; right:14px; width:30px; height:30px; border:none; background:none; color:var(--ink-faint); cursor:pointer; display:grid; place-items:center; }
-.tm-teaser-x svg{ width:14px; height:14px; }
-.tm-fit{ display:flex; align-items:center; gap:6px; border:none; background:none; cursor:pointer; padding:10px 2px 0;
-  font-family:var(--font-display); font-weight:660; font-size:15px; color:var(--ink); }
-.tm-fit svg{ width:16px; height:16px; color:var(--ink-faint); }
 
-/* ---- QUICK-ACTION TILES — the two shortcuts the tab bar doesn't cover ---- */
-.qa-tiles{ display:grid; grid-template-columns:repeat(auto-fit,minmax(140px,1fr)); gap:12px; margin-top:14px; }
-/* when the hero card's CTA is already "Go — walk to class", the Walk tile would repeat it */
-#scr-home.cta-go #qaWalk{ display:none; }
-.qa-tile{ background:var(--surface); border:none; border-radius:var(--r-md); box-shadow:inset 0 0 0 1px var(--line); padding:14px 15px; text-align:left; cursor:pointer; }
-.qa-tile:active{ transform:scale(.98); }
 .qa-t{ display:block; font-family:var(--font-display); font-weight:690; font-size:15px; letter-spacing:-.01em; color:var(--ink); }
 .qa-s{ display:block; font-size:12px; color:var(--ink-faint); margin-top:2px; }
 
@@ -1424,7 +1346,6 @@ input.inp:disabled{ background:var(--limestone-dk); color:var(--ink-soft); }
 .xcat .swatch{ display:none; }
 .xrow-ic{ background:var(--surface-dim) !important; color:var(--ink); }
 .fav-ic{ background:var(--surface-dim) !important; color:var(--ink); }
-.ichip .ichip-ic{ color:var(--ink); }
 /* markers on the LIGHT Explore basemap (user's explicit call): ink dots with a
    white ring + ink labels with white halo; selected = honey (the one honey pop) */
 .xmark .xmark-dot{ background:var(--ink) !important; box-shadow:0 0 0 2.5px #fff, 0 1px 3px rgba(20,19,15,.4); }
@@ -1598,7 +1519,6 @@ input.inp:disabled{ background:var(--limestone-dk); color:var(--ink-soft); }
 .bz-fullness.near{ background:var(--honey-tint); color:var(--ink); }
 .bz-fullness.full{ background:#E5484D; color:#fff; }
 
-.tm-planrow{ display:flex; gap:18px; }
 
 /* What Fits — modern pass: gap hero, tile cards, icon chips */
 .wf-hero2 .fit-title{ margin-bottom:2px; }
@@ -1649,7 +1569,7 @@ input.inp:disabled{ background:var(--limestone-dk); color:var(--ink-soft); }
 .wfsh-leave{ margin-top:10px; font-size:14.5px; color:var(--ink-soft); }
 .wfsh-leave b{ color:var(--ink); font-variant-numeric:tabular-nums; }
 .wfsh-miss{ margin-top:10px; padding:10px 13px; border-radius:var(--r-sm); background:var(--honey-tint); font-size:13px; color:var(--ink); }
-.brxsh .tm-cta{ margin-top:16px; }
+.brxsh .hm-act{ margin-top:16px; }
 .wf-nfm.center{ display:block; margin:10px auto 2px; }
 
 /* What Fits shelves — many options, tiny cards, zero crowding */
@@ -1665,17 +1585,9 @@ input.inp:disabled{ background:var(--limestone-dk); color:var(--ink-soft); }
 .wfm-tile.glyph .pi, .wfm-tile.glyph svg{ width:20px; height:20px; }
 .wfm-card b{ display:block; font-family:var(--font-display); font-size:12px; font-weight:680; letter-spacing:-.01em; color:var(--ink); line-height:1.2; margin-top:7px; white-space:nowrap; overflow:hidden; text-overflow:ellipsis; }
 .wfm-card span{ display:block; font-size:11.5px; font-weight:640; color:var(--ink-soft); margin-top:1px; font-variant-numeric:tabular-nums; }
-/* Home gap-strip — the mini What Fits banner */
-.tm-gapstrip{ display:flex; align-items:center; justify-content:space-between; width:100%; margin-top:15px; border:none; cursor:pointer;
-  background:var(--honey); color:var(--on-honey); border-radius:var(--r-md); padding:13px 16px; }
-.tm-gapstrip b{ font-family:var(--font-display); font-size:16.5px; font-weight:740; letter-spacing:-.015em; font-variant-numeric:tabular-nums; }
-.tm-gapstrip span{ display:inline-flex; align-items:center; gap:6px; font-family:var(--font-display); font-size:13.5px; font-weight:680; }
-.tm-gapstrip .arrow svg{ width:16px; height:16px; display:block; }
-.tm-gapstrip:active{ transform:scale(.985); }
 
 /* masthead weather chip — compact, honest, morning-friendly */
 .mast-sp{ flex:1; }
-.masthead .mast-bell{ margin-left:10px; }
 .wx{ display:flex; align-items:center; gap:7px; border:none; background:var(--surface); box-shadow:inset 0 0 0 1px var(--line); border-radius:999px; padding:6px 12px 6px 9px; cursor:default; }
 .wx-ic{ display:flex; color:var(--honey-deep); }
 .wx-ic svg{ width:19px; height:19px; }
@@ -1686,6 +1598,248 @@ input.inp:disabled{ background:var(--limestone-dk); color:var(--ink-soft); }
 /* walk screen: compass opt-in chip (only when iOS gates motion + not yet granted) */
 .compass-ask{ display:block; margin:10px auto 0; border:none; cursor:pointer; font-family:var(--font-display); font-size:12.5px; font-weight:680;
   color:var(--walk-soft, var(--ink-soft)); background:rgba(255,255,255,.08); box-shadow:inset 0 0 0 1px rgba(255,255,255,.16); border-radius:999px; padding:8px 15px; }
+
+/* ================================================================
+   HOME — the state-aware surface (markup + logic in home.js).
+   Editorial type carries the hierarchy; surfaces stay flat; the only
+   fills are honey (one primary action) and the restrained good/tint
+   strips. No floating cards, no gradients, no shadows. 8-pt rhythm.
+   ================================================================ */
+/* The header block does not scroll. Keeping the search row out of .scroll is
+   what makes it structurally impossible for it to slide up under the masthead
+   (the on-device bug); it also shares one 22px gutter with the content, so the
+   lockup lines up instead of hanging 20px to its left. */
+.hm-top{ flex:none; position:relative; z-index:20; padding:0 22px; background:var(--paper-bg); }
+.hm-mast{ display:flex; align-items:center; gap:10px; padding:12px 0 0; }
+.hm-mast .logomark{ width:28px; height:28px; }
+.hm-mast .wordmark{ font-size:20px; }
+.hm-icbtn{ display:grid; place-items:center; width:44px; height:44px; margin-right:-10px;
+  border:none; background:none; color:var(--ink); cursor:pointer; border-radius:50%; }
+.hm-icbtn .pi{ width:22px; height:22px; }
+.hm-icbtn:active{ background:var(--surface-dim); }
+
+/* ---- search row: a rule, not a capsule ---- */
+.hm-search{ display:flex; align-items:center; gap:10px; margin-top:8px; padding:6px 0 10px; border-bottom:1px solid var(--line2); }
+.hm-search-ic{ display:flex; color:var(--ink-faint); }
+.hm-search-ic .pi{ width:19px; height:19px; }
+.hm-search input{ flex:1; min-width:0; height:32px; border:none; background:none; outline:none;
+  font-family:var(--font-text); font-size:16px; color:var(--ink); }
+.hm-search input::placeholder{ color:var(--ink-faint); }
+.hm-search-loc{ display:grid; place-items:center; width:40px; height:40px; margin-right:-8px; border:none; background:none; color:var(--ink-soft); cursor:pointer; border-radius:50%; }
+.hm-search-loc .pi{ width:20px; height:20px; }
+.hm-search-loc:active{ background:var(--surface-dim); }
+.hm-search:focus-within{ border-bottom-color:var(--ink); }
+
+/* ---- shared parts ---- */
+.hm-state{ padding-top:16px; }
+.hm-rule{ height:1px; background:var(--line2); margin:24px 0; }
+.hm-eyebrow{ font-family:var(--font-num); font-size:11px; font-weight:700; letter-spacing:.14em;
+  text-transform:uppercase; color:var(--ink-faint); }
+.hm-eyebrow.honey{ color:var(--honey-deep); }
+.hm-hero{ font-family:var(--font-display); font-weight:770; font-size:clamp(30px,8.6vw,38px);
+  letter-spacing:-.035em; line-height:1.06; color:var(--ink); margin:10px 0 0; text-wrap:balance; }
+.hm-hero b{ font-weight:770; font-variant-numeric:tabular-nums; }
+.hm-hero .u{ font-size:.5em; font-weight:680; letter-spacing:0; margin-left:2px; }
+.hm-herosub{ font-size:15px; line-height:1.45; color:var(--ink-soft); margin:8px 0 0; }
+.hm-herosub b{ color:var(--ink); font-weight:660; font-variant-numeric:tabular-nums; }
+.hm-herosub .u{ font-size:.78em; margin-left:1px; }
+.hm-big{ font-family:var(--font-display); font-size:22px; font-weight:700; letter-spacing:-.02em; color:var(--ink); margin-top:16px; }
+.hm-big b{ font-size:34px; font-weight:770; letter-spacing:-.035em; font-variant-numeric:tabular-nums; }
+.hm-foot{ font-size:12.5px; line-height:1.5; color:var(--ink-faint); margin:12px 0 0; }
+.hm-basis{ font-size:12.5px; color:var(--ink-faint); margin:12px 0 0; }
+.hm-skel{ min-height:120px; display:flex; align-items:center; }
+
+/* next-commitment block: honey rule, then facts, thumbnail last */
+.hm-next{ display:flex; align-items:flex-start; gap:16px; padding-top:16px; }
+.hm-next-b{ flex:1; min-width:0; border-left:2px solid var(--honey); padding-left:12px; }
+.hm-next-w{ font-family:var(--font-display); font-size:18px; font-weight:720; letter-spacing:-.02em;
+  color:var(--ink); margin-top:6px; line-height:1.2; }
+.hm-next-w .u{ font-size:.68em; font-weight:660; margin-left:2px; }
+.hm-next-l{ font-size:13.5px; color:var(--ink-soft); margin-top:3px; font-variant-numeric:tabular-nums; }
+.hm-next-l .u{ font-size:.8em; margin-left:1px; }
+
+/* supporting building image — small, straight-edged, never dominant */
+.hm-thumb{ position:relative; flex:none; width:28%; max-width:104px; aspect-ratio:4/3; overflow:hidden;
+  border-radius:var(--r-xs); background:var(--surface-dim); box-shadow:inset 0 0 0 1px var(--line); }
+.hm-thumb img{ position:absolute; inset:0; width:100%; height:100%; object-fit:cover; opacity:0; transition:opacity .3s ease; }
+.hm-thumb img.ld{ opacity:1; }
+.hm-thumb.empty{ display:grid; place-items:center; color:var(--ink-faint); }
+.hm-thumb.empty .pi, .hm-thumb.empty svg{ width:22px; height:22px; }
+/* Campus-default thumbnail (Sample Gates) — used when a place has no verified
+   photo of its own. It is a BACKDROP, never a portrait of the building: dimmed
+   and desaturated so it never reads as "this is that place", with the category
+   glyph carrying the actual meaning on top. Same small straight-edged tile. */
+/* the fallback is decorative, so it does NOT wait on the fade-in class the
+   real photos use — if it arrives late it simply paints, never stays invisible */
+.hm-thumb.fallback img{ opacity:.42; filter:grayscale(.35) contrast(.94); }
+.hm-thumb.fallback::after{ content:""; position:absolute; inset:0; background:var(--surface-dim); opacity:.5; }
+.hm-thumb-glyph{ position:absolute; inset:0; z-index:2; display:grid; place-items:center; color:var(--ink); }
+.hm-thumb-glyph .pi, .hm-thumb-glyph svg{ width:22px; height:22px; }
+@media (prefers-color-scheme: dark){
+  .hm-thumb.fallback img{ opacity:.3; }
+  .hm-thumb.fallback::after{ opacity:.45; }
+}
+
+
+/* the one primary action: flat honey, full width */
+.hm-act{ display:flex; align-items:center; justify-content:center; gap:10px; width:100%; min-height:52px;
+  margin-top:24px; padding:14px 18px; border:none; border-radius:var(--r-sm); cursor:pointer;
+  font-family:var(--font-display); font-size:16.5px; font-weight:700; letter-spacing:-.01em;
+  background:var(--surface); color:var(--ink); box-shadow:inset 0 0 0 1px var(--line2); }
+.hm-act.honey{ background:var(--honey); color:var(--on-honey); box-shadow:none; }
+.hm-act.ink{ background:var(--ink); color:var(--paper-bg); box-shadow:none; }
+.hm-act.quiet{ background:var(--surface); color:var(--ink); }
+.hm-act:active{ transform:scale(.985); }
+.hm-act-ic{ display:flex; }
+.hm-act-ic .pi{ width:19px; height:19px; }
+.hm-link{ display:block; width:100%; min-height:44px; margin-top:4px; border:none; background:none; cursor:pointer;
+  font-family:var(--font-display); font-size:14.5px; font-weight:660; color:var(--ink-soft); text-decoration:underline; text-underline-offset:3px; }
+.hm-link:active{ color:var(--ink); }
+
+/* meta rows: icon + fact */
+.hm-meta{ margin-top:20px; }
+.hm-meta-r{ display:flex; align-items:center; gap:12px; padding:9px 0; border-top:1px solid var(--line); }
+.hm-meta-r:first-child{ border-top:none; padding-top:0; }
+.hm-meta-ic{ display:flex; color:var(--ink-soft); }
+.hm-meta-ic .pi{ width:19px; height:19px; }
+.hm-meta-t{ font-size:14.5px; color:var(--ink-soft); font-variant-numeric:tabular-nums; }
+.hm-meta-t b{ color:var(--ink); font-weight:680; }
+.hm-meta-t .u{ font-size:.78em; margin-left:1px; }
+.hm-meta-t .warn{ color:var(--honey-deep); font-weight:660; }
+.hm-meta-t .ok{ color:var(--good); font-weight:660; }
+
+/* transit alternative — route colour only where it encodes route identity */
+.hm-alt{ display:flex; align-items:flex-start; gap:12px; margin-top:16px; padding:12px 14px;
+  border-radius:var(--r-sm); background:var(--surface); box-shadow:inset 0 0 0 1px var(--line); }
+.hm-alt-ic{ display:flex; }
+.hm-alt-ic .pi{ width:20px; height:20px; }
+.hm-alt-t{ font-size:14px; color:var(--ink-soft); line-height:1.4; font-variant-numeric:tabular-nums; }
+.hm-alt-t b{ color:var(--ink); font-weight:700; }
+.hm-alt-t i{ display:block; font-style:normal; font-size:12.5px; color:var(--ink-faint); margin-top:2px; }
+
+/* timeline */
+.hm-tl{ list-style:none; margin:24px 0 0; padding:0; }
+.hm-tl-i{ position:relative; display:flex; gap:14px; padding-bottom:22px; }
+.hm-tl-i:last-child{ padding-bottom:0; }
+.hm-tl-i::before{ content:""; position:absolute; left:15px; top:34px; bottom:-2px; width:1.5px; background:var(--line2); }
+.hm-tl-i:last-child::before{ display:none; }
+.hm-tl-i.on::before{ background:var(--honey); }
+.hm-tl-node{ position:relative; z-index:1; flex:none; display:grid; place-items:center; width:32px; height:32px;
+  border-radius:50%; background:var(--paper-bg); box-shadow:inset 0 0 0 1.5px var(--line2); color:var(--ink-soft); }
+.hm-tl-i.on .hm-tl-node{ box-shadow:inset 0 0 0 2px var(--honey); color:var(--ink); }
+.hm-tl-node .pi{ width:17px; height:17px; }
+.hm-tl-body{ padding-top:3px; min-width:0; }
+.hm-tl-time{ display:block; font-family:var(--font-num); font-size:12px; font-weight:700; letter-spacing:.04em;
+  text-transform:uppercase; color:var(--ink-faint); font-variant-numeric:tabular-nums; }
+.hm-tl-title{ display:block; font-family:var(--font-display); font-size:16px; font-weight:700; letter-spacing:-.015em; color:var(--ink); margin-top:2px; }
+.hm-tl-sub{ display:block; font-size:13px; color:var(--ink-soft); margin-top:1px; }
+
+/* strips: confirmation (green) / caution (honey) / flat prompt */
+.hm-strip{ display:flex; align-items:flex-start; gap:10px; margin-top:16px; padding:12px 14px; border-radius:var(--r-sm); }
+.hm-strip.ok{ background:var(--good-tint); }
+.hm-strip.ok .hm-strip-ic{ color:var(--good); }
+.hm-strip.warn{ background:var(--honey-tint); }
+.hm-strip.warn .hm-strip-ic{ color:var(--honey-deep); }
+.hm-strip.flat{ align-items:center; background:var(--surface); box-shadow:inset 0 0 0 1px var(--line); }
+.hm-strip.flat .hm-strip-ic{ color:var(--ink-soft); }
+.hm-strip-ic{ display:flex; margin-top:1px; }
+.hm-strip-ic .pi{ width:18px; height:18px; }
+.hm-strip-t{ flex:1; min-width:0; font-size:13.5px; line-height:1.4; color:var(--ink); }
+.hm-strip-t b{ font-weight:700; font-variant-numeric:tabular-nums; }
+.hm-strip-t i{ display:block; font-style:normal; font-size:12px; color:var(--ink-soft); margin-top:2px; }
+/* the honey panel above is this screen’s one honey moment, so the prompt’s
+   action is an ink outline rather than a second yellow fill */
+.hm-strip-cta{ flex:none; min-height:36px; padding:8px 14px; border:none; border-radius:var(--r-xs); cursor:pointer;
+  background:none; color:var(--ink); box-shadow:inset 0 0 0 1.5px var(--ink); font-family:var(--font-display); font-size:13.5px; font-weight:700; }
+.hm-strip-cta:active{ background:var(--surface-dim); }
+.hm-strip-x{ flex:none; display:grid; place-items:center; width:36px; height:36px; margin-right:-8px;
+  border:none; background:none; color:var(--ink-faint); cursor:pointer; }
+.hm-strip-x .pi{ width:14px; height:14px; }
+
+/* tappable summary row (Next up) */
+.hm-row{ display:flex; align-items:center; gap:14px; width:100%; padding:14px 0; border:none; background:none;
+  cursor:pointer; text-align:left; border-top:1px solid var(--line); margin-top:8px; }
+.hm-row-ic{ flex:none; display:grid; place-items:center; width:38px; height:38px; border-radius:50%;
+  background:var(--paper-bg); color:var(--ink); box-shadow:inset 0 0 0 1px var(--line); }
+.hm-row-ic .pi{ width:19px; height:19px; }
+.hm-row-b{ flex:1; min-width:0; }
+.hm-row-b b{ display:block; font-family:var(--font-display); font-size:15.5px; font-weight:700; letter-spacing:-.015em; color:var(--ink); }
+.hm-row-b i{ display:block; font-style:normal; font-size:12.5px; color:var(--ink-soft); margin-top:2px; font-variant-numeric:tabular-nums; }
+.hm-row-ch{ flex:none; display:flex; color:var(--ink-faint); }
+.hm-row-ch .pi{ width:17px; height:17px; }
+
+/* no-schedule panel — flat honey, ink controls on top of it */
+.hm-panel{ margin-top:24px; padding:20px; border-radius:var(--r-md); background:var(--honey); color:var(--on-honey); }
+.hm-panel-h{ display:flex; align-items:center; gap:9px; font-family:var(--font-display); font-size:17px; font-weight:740; letter-spacing:-.02em; }
+.hm-panel-h .pi{ width:20px; height:20px; }
+.hm-field{ display:block; position:relative; margin-top:16px; }
+.hm-field > span{ display:block; font-size:12.5px; font-weight:640; color:rgba(20,19,15,.7); margin-bottom:6px; }
+/* Everything inside the honey panel sits ON a light fill in BOTH themes, so
+   it is pinned to the on-honey palette instead of following the dark scale —
+   the same law as .btn on honey: text on honey is always ink. */
+.hm-field input{ width:100%; min-height:48px; border:none; border-radius:var(--r-xs); background:var(--onwhite);
+  padding:12px 14px; font-family:var(--font-text); font-size:16px; color:var(--on-honey); outline:none;
+  box-shadow:inset 0 0 0 1px rgba(20,19,15,.14); font-variant-numeric:tabular-nums; color-scheme:light; }
+.hm-field input::placeholder{ color:rgba(20,19,15,.42); }
+.hm-field input:focus{ box-shadow:inset 0 0 0 2px var(--on-honey); }
+.hm-panel .hm-act{ margin-top:20px; }
+.hm-panel .hm-act.ink{ background:var(--on-honey); color:var(--onwhite); }
+/* the suggestion list floats over the honey panel — same light pinning */
+.hm-panel .hm-acl{ background:var(--onwhite); color-scheme:light; }
+.hm-panel .hm-acl-i{ color:var(--on-honey); }
+.hm-panel .hm-acl-i i{ color:rgba(20,19,15,.6); }
+.hm-panel .hm-acl-i:active{ background:rgba(20,19,15,.07); }
+.hm-acl{ position:absolute; left:0; right:0; top:100%; z-index:40; margin-top:6px; padding:6px;
+  background:var(--surface); border-radius:var(--r-sm); box-shadow:var(--shadow-pop), inset 0 0 0 1px var(--line); max-height:240px; overflow-y:auto; }
+.hm-acl-i{ display:block; width:100%; padding:11px 12px; border:none; background:none; cursor:pointer; text-align:left;
+  border-radius:var(--r-xs); font-family:var(--font-text); font-size:15px; color:var(--ink); }
+.hm-acl-i i{ display:block; font-style:normal; font-size:12.5px; color:var(--ink-soft); margin-top:2px; }
+.hm-acl-i:active{ background:var(--surface-dim); }
+
+/* quick places — three equal preset navigation tiles */
+.hm-qhead{ display:flex; align-items:center; justify-content:space-between; margin-bottom:12px; }
+.hm-qhead h2{ font-family:var(--font-num); font-size:11px; font-weight:700; letter-spacing:.14em;
+  text-transform:uppercase; color:var(--ink-faint); margin:0; }
+.hm-qadd{ display:grid; place-items:center; width:36px; height:36px; margin-right:-8px; border:none; cursor:pointer;
+  border-radius:50%; background:var(--surface); color:var(--ink); box-shadow:inset 0 0 0 1px var(--line2); }
+.hm-qadd .pi{ width:16px; height:16px; }
+.hm-qadd:active{ background:var(--surface-dim); }
+.hm-tiles{ display:grid; grid-template-columns:repeat(3,1fr); gap:8px; }
+.hm-tile{ display:flex; flex-direction:column; align-items:center; justify-content:center; gap:8px;
+  min-height:84px; padding:14px 8px; border:none; cursor:pointer; border-radius:var(--r-sm);
+  background:var(--surface); color:var(--ink); box-shadow:inset 0 0 0 1px var(--line2); }
+.hm-tile:active{ background:var(--surface-dim); }
+.hm-tile-ic{ display:flex; color:var(--ink); }
+.hm-tile-ic .pi, .hm-tile-ic svg{ width:24px; height:24px; }
+.hm-tile-t{ font-family:var(--font-display); font-size:13.5px; font-weight:680; letter-spacing:-.01em;
+  color:var(--ink); text-align:center; line-height:1.15; overflow-wrap:anywhere; }
+
+/* narrow phones (iPhone SE / 320px): tighten type and spacing, never clip */
+@media (max-width:359px){
+  .hm-hero{ font-size:27px; letter-spacing:-.03em; }
+  .hm-big b{ font-size:29px; }
+  .hm-next{ gap:12px; }
+  .hm-thumb{ max-width:82px; }
+  .hm-tiles{ gap:6px; }
+  .hm-tile{ min-height:78px; padding:12px 4px; }
+  .hm-tile-t{ font-size:12px; }
+  .hm-act{ font-size:15.5px; }
+  .hm-meta-t, .hm-strip-t{ font-size:13px; }
+  .hm-panel{ padding:16px; }
+}
+@media (prefers-reduced-motion:reduce){
+  .hm-thumb img{ transition:none; }
+  .hm-act:active, .hm-tile:active{ transform:none; }
+}
+
+/* dev-only state switcher (localhost preview; never ships in the WebView) */
+.hm-dev{ display:flex; flex-wrap:wrap; align-items:center; gap:5px; margin-top:28px; padding:10px;
+  border-radius:var(--r-xs); background:var(--surface-dim); }
+.hm-dev b{ font-family:var(--font-num); font-size:10px; letter-spacing:.12em; color:var(--ink-faint); }
+.hm-dev button{ border:none; cursor:pointer; border-radius:6px; padding:5px 8px; background:var(--surface);
+  color:var(--ink-soft); font-family:var(--font-num); font-size:10.5px; box-shadow:inset 0 0 0 1px var(--line); }
+.hm-dev button.on{ background:var(--ink); color:var(--paper-bg); }
+.hm-dev-n{ font-size:10px; color:var(--ink-faint); margin-left:auto; }
 
 </style>
 </head>
@@ -1898,15 +2052,26 @@ input.inp:disabled{ background:var(--limestone-dk); color:var(--ink-soft); }
 
   <!-- ============ HOME ============ -->
   <section class="screen" id="scr-home" data-tab="home">
-    <div class="masthead"><span class="logomark"></span><div class="wordmark">BeeLine</div><span class="mast-sp"></span><button class="wx" id="wxChip" style="display:none" title="Weather"></button><button class="wx" id="wxChip" style="display:none" title="Weather"></button><button class="circ bell mast-bell" id="btnPrivacy" title="Privacy &amp; location"><span data-pi="bell-simple"></span></button></div>
-    <header class="appbar home-bar" style="display:none">
-      <span class="logomark sm" id="brandLogo2"></span>
-      <div class="brand-stack">
-        <span class="bname">BeeLine</span>
-        <span class="brand-campus"><svg class="iu-trident" viewBox="0 0 210.06 279.65" fill="currentColor"><polygon points="141.36 252.47 141.35 279.65 68.67 279.65 68.69 252.49 84.14 252.42 84.16 221.18 40.69 221.18 25.81 205.14 15.47 193.96 15.47 58.26 .04 58.28 0 37.19 68.49 37.2 68.52 58.25 54.66 58.28 54.66 175.48 84.15 175.47 84.15 21.08 68.69 21.05 68.66 0 141.26 0 141.26 21.06 125.89 21.03 125.88 175.47 155.39 175.48 155.38 58.3 141.52 58.26 141.52 37.19 205.01 37.2 210.04 37.28 210.06 58.23 194.54 58.29 194.55 194.09 180.23 209.47 169.39 221.18 125.88 221.19 125.89 252.44 141.36 252.47"></polygon></svg><span id="campusTag">IU Bloomington</span></span>
+    <!-- FIXED HEADER BLOCK — masthead + search row live OUTSIDE .scroll so no
+         amount of scrolling (or WebKit scroll-anchoring) can ever slide the
+         search row up under the masthead. One shared 22px gutter, so the
+         lockup lines up with the content instead of hanging 20px left of it. -->
+    <div class="hm-top">
+      <div class="hm-mast">
+        <span class="logomark"></span><div class="wordmark">BeeLine</div>
+        <span class="mast-sp"></span>
+        <button class="wx" id="wxChip" style="display:none" title="Weather"></button>
+        <button class="hm-icbtn" id="btnPrivacy" title="Notifications, privacy &amp; location" aria-label="Notifications, privacy and location"><span data-pi="bell-simple"></span></button>
       </div>
-      <div class="spacer"></div>
-    </header>
+      <!-- SEARCH ROW — understated: rule under, not a floating capsule -->
+      <div class="ac hm-search">
+        <span class="hm-search-ic"><span data-pi="magnifying-glass"></span></span>
+        <input type="text" id="destSearch" placeholder="Where are you headed?" autocomplete="off">
+        <button class="hm-search-loc" id="homeLocate" title="Use my location" aria-label="Use my location"><span data-pi="crosshair"></span></button>
+        <div class="ac-list" id="acList" style="display:none"></div>
+      </div>
+      <div class="hint" id="destHint" style="display:none"></div>
+    </div>
     <div class="offbanner" id="secureBanner" style="background:var(--honey-tint); color:var(--ink)">
       <span><span data-pi="warning" style="vertical-align:-2px;margin-right:4px"></span> Location is blocked because this page isn't secure. Open over <b>https://</b> or <b>localhost</b>.</span>
     </div>
@@ -1916,14 +2081,6 @@ input.inp:disabled{ background:var(--limestone-dk); color:var(--ink-soft); }
     </div>
 
     <div class="scroll">
-      <div class="ac searchbox with-locate">
-        <span class="s-ic"><span data-pi="magnifying-glass"></span></span>
-        <input type="text" id="destSearch" placeholder="Where to?" autocomplete="off">
-        <button class="locate-btn" id="homeLocate" title="Use my location"><svg width="22" height="22" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.9" stroke-linecap="round" stroke-linejoin="round"><circle cx="12" cy="12" r="6.5"></circle><circle cx="12" cy="12" r="1.8" fill="currentColor" stroke="none"></circle><path d="M12 2 v3 M12 19 v3 M2 12 h3 M19 12 h3"></path></svg></button>
-        <div class="ac-list" id="acList" style="display:none"></div>
-      </div>
-      <div class="hint" id="destHint" style="display:none"></div>
-
       <!-- selected destination card: "When will I get there?" -->
       <div class="dest-card" id="destCard" style="display:none">
         <button class="dc-clear" id="dcX" aria-label="Clear destination" title="Clear destination"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.4" stroke-linecap="round"><path d="M6 6 L18 18 M18 6 L6 18"/></svg></button>
@@ -1941,21 +2098,13 @@ input.inp:disabled{ background:var(--limestone-dk); color:var(--ink-soft); }
       <input type="number" id="googleMins" style="display:none">
       <div class="hint" id="baseHint" style="display:none"></div>
 
-      <!-- state-driven commitment / time module (hero card) -->
-      <div id="timeModule"></div>
+      <!-- STATE-DRIVEN BODY — rendered by home.js (HomeUI). One of:
+           usable time · commitment approaching · active plan · time to go ·
+           no schedule · in class · done for today. -->
+      <div id="homeBody"></div>
 
-      <!-- two real shortcuts — Explore/Buses tiles would duplicate the tab bar -->
-      <div class="qa-tiles">
-        <button class="qa-tile" id="qaWalk"><span class="qa-t">Walk to class</span><span class="qa-s">See your route</span></button>
-        <button class="qa-tile" id="qaSched"><span class="qa-t">Edit schedule</span><span class="qa-s">Manage classes</span></button>
-      </div>
-
-      <!-- the user's places as chips -->
-      <div class="qd-head">
-        <h2>Your places</h2>
-        <button class="learn-more" id="qdEdit">Edit</button>
-      </div>
-      <div class="quick icon-chips" id="quickChips"></div>
+      <!-- QUICK PLACES — preset navigation tiles; hidden while a plan is active -->
+      <div id="homeQuick"></div>
 
       <!-- learned-line insight — renders only with real measured data -->
       <div id="homeInsight"></div>
@@ -1964,7 +2113,7 @@ input.inp:disabled{ background:var(--limestone-dk); color:var(--ink-soft); }
 
   <!-- ============ MAP / EXPLORE ============ -->
   <section class="screen" id="scr-map" data-tab="map" data-xview="map">
-    <header class="appbar" style="padding-bottom:0"><h1 class="page-h" style="margin:6px 0 0">Explore</h1><div class="spacer"></div></header>
+    <header class="appbar" style="padding-bottom:0"><h1 class="page-h" style="margin:6px 0 0">Plan</h1><div class="spacer"></div></header>
     <div class="x-top">
       <div class="x-search">
         <span class="s-ic"><span data-pi="magnifying-glass"></span></span>
@@ -2075,7 +2224,7 @@ input.inp:disabled{ background:var(--limestone-dk); color:var(--ink-soft); }
         <div class="prow" id="pUpdates"><span class="prow-ic"><span data-pi="arrows-clockwise"></span></span><b class="prow-label">What’s new<span class="upd-dot" id="updDot" style="display:none"></span></b><span class="prow-val" id="pUpdatesVal"></span><span class="prow-ch"><span data-pi="caret-right"></span></span></div>
       </div>
 
-      <div class="profile-version">BeeLine 1.0.0 · build 2026-09-01 11:32 · your data stays on this phone<br>Map data © OpenStreetMap contributors · © CARTO</div>
+      <div class="profile-version">BeeLine 1.0.0 · build 2026-09-01 13:13 · your data stays on this phone<br>Map data © OpenStreetMap contributors · © CARTO</div>
       <button class="prow" id="pAdd" style="display:none"></button>
     </div>
   </section>
@@ -2129,7 +2278,7 @@ input.inp:disabled{ background:var(--limestone-dk); color:var(--ink-soft); }
 
   <nav class="tabbar" id="tabbar">
     <button class="tab on" data-go="home"><span class="tab-ic" data-pi="house-simple" data-pib></span><span>Home</span></button>
-    <button class="tab" data-go="map"><span class="tab-ic" data-pi="compass" data-pib></span><span>Explore</span></button>
+    <button class="tab" data-go="map"><span class="tab-ic" data-pi="compass" data-pib></span><span>Plan</span></button>
     <button class="tab" data-go="buses"><span class="tab-ic" data-pi="bus" data-pib></span><span>Buses</span></button>
     <button class="tab" data-go="profile"><span class="tab-ic" data-pi="user" data-pib></span><span>You</span></button>
   </nav>
@@ -2371,11 +2520,13 @@ var BEELINE_ENRICH = {"Owen Hall":{"address":"790 East Kirkwood Avenue","descrip
 </script>
 
 <script>
-// AUTO-GENERATED by build/photos-gen.mjs (v2 deep-dive) — do not edit.
-// Freely-licensed building photos from Wikimedia Commons geosearch. Every photo
-// carries license + attribution + source URL; galleries are best-photo-first.
+// AUTO-GENERATED by build/photos-deep.mjs — do not edit.
+// Freely-licensed Wikimedia Commons photos, best-first per place, with
+// attribution + license + source URL. Evidence-gated: a photo is attached
+// only when the place's name appears in the file's own title/description
+// (and never as a mere camera position) — proximity alone is not proof.
 var BEELINE_PHOTOS_BUILT = "2026-09-01";
-var BEELINE_PHOTOS = {"Owen Hall":[{"t":"https://upload.wikimedia.org/wikipedia/commons/thumb/8/83/Owen_Hall_at_IU%2C_front.jpg/960px-Owen_Hall_at_IU%2C_front.jpg","s":"https://commons.wikimedia.org/wiki/File:Owen_Hall_at_IU,_front.jpg","l":"Public domain","lu":"","a":"Nyttend","w":800},{"t":"https://upload.wikimedia.org/wikipedia/commons/thumb/3/30/Owen_Hall_at_IU%2C_rear.jpg/960px-Owen_Hall_at_IU%2C_rear.jpg","s":"https://commons.wikimedia.org/wiki/File:Owen_Hall_at_IU,_rear.jpg","l":"Public domain","lu":"","a":"Nyttend","w":800}],"Wylie Hall":[{"t":"https://upload.wikimedia.org/wikipedia/commons/thumb/f/fc/Wylie_Hall_comprehensive.jpg/960px-Wylie_Hall_comprehensive.jpg","s":"https://commons.wikimedia.org/wiki/File:Wylie_Hall_comprehensive.jpg","l":"Public domain","lu":"","a":"Nyttend","w":800},{"t":"https://upload.wikimedia.org/wikipedia/commons/thumb/e/e9/Wylie_Hall_rear.jpg/960px-Wylie_Hall_rear.jpg","s":"https://commons.wikimedia.org/wiki/File:Wylie_Hall_rear.jpg","l":"Public domain","lu":"","a":"Nyttend","w":800},{"t":"https://upload.wikimedia.org/wikipedia/commons/thumb/7/76/Wylie_Hall_front_closeup.jpg/960px-Wylie_Hall_front_closeup.jpg","s":"https://commons.wikimedia.org/wiki/File:Wylie_Hall_front_closeup.jpg","l":"Public domain","lu":"","a":"Nyttend","w":800},{"t":"https://upload.wikimedia.org/wikipedia/commons/thumb/6/67/Wylie_Hall_entrance.jpg/960px-Wylie_Hall_entrance.jpg","s":"https://commons.wikimedia.org/wiki/File:Wylie_Hall_entrance.jpg","l":"Public domain","lu":"","a":"Nyttend","w":800}],"Maxwell Hall":[{"t":"https://upload.wikimedia.org/wikipedia/commons/thumb/8/85/Maxwell_Hall_morning_from_southwest.jpg/960px-Maxwell_Hall_morning_from_southwest.jpg","s":"https://commons.wikimedia.org/wiki/File:Maxwell_Hall_morning_from_southwest.jpg","l":"Public domain","lu":"","a":"Nyttend","w":800},{"t":"https://upload.wikimedia.org/wikipedia/commons/thumb/d/d9/Maxwell_Hall_ground_view.jpg/960px-Maxwell_Hall_ground_view.jpg","s":"https://commons.wikimedia.org/wiki/File:Maxwell_Hall_ground_view.jpg","l":"Public domain","lu":"","a":"Nyttend","w":800},{"t":"https://upload.wikimedia.org/wikipedia/commons/thumb/6/6b/Maxwell_Hall_from_southwest.jpg/960px-Maxwell_Hall_from_southwest.jpg","s":"https://commons.wikimedia.org/wiki/File:Maxwell_Hall_from_southwest.jpg","l":"Public domain","lu":"","a":"Nyttend","w":800},{"t":"https://upload.wikimedia.org/wikipedia/commons/thumb/2/2c/Maxwell_Hall_morning_from_southeast.jpg/960px-Maxwell_Hall_morning_from_southeast.jpg","s":"https://commons.wikimedia.org/wiki/File:Maxwell_Hall_morning_from_southeast.jpg","l":"Public domain","lu":"","a":"Nyttend","w":800}],"Kirkwood Hall":[{"t":"https://upload.wikimedia.org/wikipedia/commons/thumb/0/0f/Kirkwood_Hall_comprehensive.jpg/960px-Kirkwood_Hall_comprehensive.jpg","s":"https://commons.wikimedia.org/wiki/File:Kirkwood_Hall_comprehensive.jpg","l":"Public domain","lu":"","a":"Nyttend","w":800},{"t":"https://upload.wikimedia.org/wikipedia/commons/thumb/d/dd/Kirkwood_Hall_entrance.jpg/960px-Kirkwood_Hall_entrance.jpg","s":"https://commons.wikimedia.org/wiki/File:Kirkwood_Hall_entrance.jpg","l":"Public domain","lu":"","a":"Nyttend","w":800},{"t":"https://upload.wikimedia.org/wikipedia/commons/thumb/2/21/Kirkwood_Hall_rear_from_north.jpg/960px-Kirkwood_Hall_rear_from_north.jpg","s":"https://commons.wikimedia.org/wiki/File:Kirkwood_Hall_rear_from_north.jpg","l":"Public domain","lu":"","a":"Nyttend","w":800},{"t":"https://upload.wikimedia.org/wikipedia/commons/thumb/e/ee/Kirkwood_Hall_rear_from_south.jpg/960px-Kirkwood_Hall_rear_from_south.jpg","s":"https://commons.wikimedia.org/wiki/File:Kirkwood_Hall_rear_from_south.jpg","l":"Public domain","lu":"","a":"Nyttend","w":800}],"Lindley Hall":[{"t":"https://upload.wikimedia.org/wikipedia/commons/thumb/b/b7/Lindley_Hall_comprehensive.jpg/960px-Lindley_Hall_comprehensive.jpg","s":"https://commons.wikimedia.org/wiki/File:Lindley_Hall_comprehensive.jpg","l":"Public domain","lu":"","a":"Nyttend","w":800},{"t":"https://upload.wikimedia.org/wikipedia/commons/thumb/d/d9/Lindley_Hall_rear_from_north.jpg/960px-Lindley_Hall_rear_from_north.jpg","s":"https://commons.wikimedia.org/wiki/File:Lindley_Hall_rear_from_north.jpg","l":"Public domain","lu":"","a":"Nyttend","w":800},{"t":"https://upload.wikimedia.org/wikipedia/commons/thumb/1/1e/Lindley_Hall_rear_from_south.jpg/960px-Lindley_Hall_rear_from_south.jpg","s":"https://commons.wikimedia.org/wiki/File:Lindley_Hall_rear_from_south.jpg","l":"Public domain","lu":"","a":"Nyttend","w":800}],"Franklin Hall (Media School)":[{"t":"https://upload.wikimedia.org/wikipedia/commons/thumb/1/1b/Franklin_Hall_and_Student_Building.jpg/960px-Franklin_Hall_and_Student_Building.jpg","s":"https://commons.wikimedia.org/wiki/File:Franklin_Hall_and_Student_Building.jpg","l":"Public domain","lu":"","a":"Nyttend","w":800},{"t":"https://upload.wikimedia.org/wikipedia/commons/thumb/6/60/Franklin_Hall_comprehensive.jpg/960px-Franklin_Hall_comprehensive.jpg","s":"https://commons.wikimedia.org/wiki/File:Franklin_Hall_comprehensive.jpg","l":"Public domain","lu":"","a":"Nyttend","w":800},{"t":"https://upload.wikimedia.org/wikipedia/commons/thumb/e/ec/Franklin_Hall_front.jpg/960px-Franklin_Hall_front.jpg","s":"https://commons.wikimedia.org/wiki/File:Franklin_Hall_front.jpg","l":"Public domain","lu":"","a":"Nyttend","w":800},{"t":"https://upload.wikimedia.org/wikipedia/commons/thumb/0/06/Franklin_Hall_rear.jpg/960px-Franklin_Hall_rear.jpg","s":"https://commons.wikimedia.org/wiki/File:Franklin_Hall_rear.jpg","l":"Public domain","lu":"","a":"Nyttend","w":800}],"Simon Hall (Multidisciplinary Science)":[{"t":"https://upload.wikimedia.org/wikipedia/commons/thumb/3/33/Simon_Hall_.JPG/960px-Simon_Hall_.JPG","s":"https://commons.wikimedia.org/wiki/File:Simon_Hall_.JPG","l":"CC BY-SA 4.0","lu":"https://creativecommons.org/licenses/by-sa/4.0","a":"User: Greencarrot2","w":800}],"School of Public Health (HPER)":[{"t":"https://upload.wikimedia.org/wikipedia/commons/thumb/d/da/Indiana_University_School_of_Public_Health-Bloomington.png/960px-Indiana_University_School_of_Public_Health-Bloomington.png","s":"https://commons.wikimedia.org/wiki/File:Indiana_University_School_of_Public_Health-Bloomington.png","l":"CC BY-SA 4.0","lu":"https://creativecommons.org/licenses/by-sa/4.0","a":"Chaztron","w":800}],"Lilly Library":[{"t":"https://upload.wikimedia.org/wikipedia/commons/thumb/f/f2/IUB_Lilly_Library_P1000231.jpg/960px-IUB_Lilly_Library_P1000231.jpg","s":"https://commons.wikimedia.org/wiki/File:IUB_Lilly_Library_P1000231.jpg","l":"CC BY-SA 3.0","a":"User:Vmenkov","lu":"https://creativecommons.org/licenses/by-sa/3.0","w":640}],"Musical Arts Center (MAC)":[{"t":"https://upload.wikimedia.org/wikipedia/commons/thumb/a/ad/Musical_Arts_Center_Right.jpg/960px-Musical_Arts_Center_Right.jpg","s":"https://commons.wikimedia.org/wiki/File:Musical_Arts_Center_Right.jpg","l":"CC0","lu":"http://creativecommons.org/publicdomain/zero/1.0/deed.en","a":"MatthewBA08","w":800},{"t":"https://upload.wikimedia.org/wikipedia/commons/thumb/8/8d/Musical_Arts_Center.jpg/960px-Musical_Arts_Center.jpg","s":"https://commons.wikimedia.org/wiki/File:Musical_Arts_Center.jpg","l":"CC0","lu":"http://creativecommons.org/publicdomain/zero/1.0/deed.en","a":"MatthewBA08","w":800}],"Auer Hall":[{"t":"https://upload.wikimedia.org/wikipedia/commons/thumb/e/ed/Auer_Hall_Right.jpg/960px-Auer_Hall_Right.jpg","s":"https://commons.wikimedia.org/wiki/File:Auer_Hall_Right.jpg","l":"CC0","lu":"http://creativecommons.org/publicdomain/zero/1.0/deed.en","a":"MatthewBA08","w":800}],"IU Cinema":[{"t":"https://upload.wikimedia.org/wikipedia/commons/thumb/a/af/Indiana_University_Cinema.jpg/960px-Indiana_University_Cinema.jpg","s":"https://commons.wikimedia.org/wiki/File:Indiana_University_Cinema.jpg","l":"CC BY-SA 4.0","lu":"https://creativecommons.org/licenses/by-sa/4.0","a":"Stickman42","w":800}],"Mathers Museum":[{"t":"https://upload.wikimedia.org/wikipedia/commons/thumb/d/da/Eighth_Street%2C_601%2C_Mathers_Museum%2C_University_Courts.jpg/960px-Eighth_Street%2C_601%2C_Mathers_Museum%2C_University_Courts.jpg","s":"https://commons.wikimedia.org/wiki/File:Eighth_Street,_601,_Mathers_Museum,_University_Courts.jpg","l":"Public domain","lu":"","a":"Nyttend","w":800},{"t":"https://upload.wikimedia.org/wikipedia/commons/thumb/6/62/Mathers-Museum-of-World-Cultures.jpg/960px-Mathers-Museum-of-World-Cultures.jpg","s":"https://commons.wikimedia.org/wiki/File:Mathers-Museum-of-World-Cultures.jpg","l":"CC BY-SA 4.0","lu":"https://creativecommons.org/licenses/by-sa/4.0","a":"MateoTimateo","w":800},{"t":"https://upload.wikimedia.org/wikipedia/commons/thumb/a/ad/Mathers_Museum_of_World_Cultures.jpg/960px-Mathers_Museum_of_World_Cultures.jpg","s":"https://commons.wikimedia.org/wiki/File:Mathers_Museum_of_World_Cultures.jpg","l":"CC BY-SA 4.0","lu":"https://creativecommons.org/licenses/by-sa/4.0","a":"Matthew Timothy Bradley","w":800}],"Indiana Memorial Union (IMU)":[{"t":"https://upload.wikimedia.org/wikipedia/commons/thumb/1/1b/Indiana_Memorial_Union_10152005.JPG/960px-Indiana_Memorial_Union_10152005.JPG","s":"https://commons.wikimedia.org/wiki/File:Indiana_Memorial_Union_10152005.JPG","l":"CC BY-SA 3.0","a":"Knnk417","lu":"https://creativecommons.org/licenses/by-sa/3.0","w":640}],"Forest Quad":[{"t":"https://upload.wikimedia.org/wikipedia/commons/thumb/b/b1/Forest_Dorms_%283011699161%29_%282%29.jpg/960px-Forest_Dorms_%283011699161%29_%282%29.jpg","s":"https://commons.wikimedia.org/wiki/File:Forest_Dorms_(3011699161)_(2).jpg","l":"CC BY-SA 2.0","lu":"https://creativecommons.org/licenses/by-sa/2.0","a":"StevenW. from Bloomington, USA","w":800}],"Eigenmann Hall":[{"t":"https://upload.wikimedia.org/wikipedia/commons/thumb/3/32/Eigenmann_Hall%2C_Bloomington%2C_Indiana%2C_June_2021.jpg/960px-Eigenmann_Hall%2C_Bloomington%2C_Indiana%2C_June_2021.jpg","s":"https://commons.wikimedia.org/wiki/File:Eigenmann_Hall,_Bloomington,_Indiana,_June_2021.jpg","l":"CC BY 2.0","lu":"https://creativecommons.org/licenses/by/2.0","a":"Bart Everson","w":800}],"Simon Skjodt Assembly Hall":[{"t":"https://upload.wikimedia.org/wikipedia/commons/thumb/4/44/Assembly_Hall_-_Bloomington%2C_IN_-_December_2015.jpg/960px-Assembly_Hall_-_Bloomington%2C_IN_-_December_2015.jpg?utm_source=commons.wikimedia.org&utm_campaign=imageinfo&utm_content=thumbnail","s":"https://commons.wikimedia.org/wiki/File:Assembly_Hall_-_Bloomington,_IN_-_December_2015.jpg","l":"CC BY-SA 4.0","a":"Rhatsa26X","lu":"https://creativecommons.org/licenses/by-sa/4.0","w":640},{"t":"https://upload.wikimedia.org/wikipedia/commons/thumb/1/1f/Assemblyhallindiana.jpg/960px-Assemblyhallindiana.jpg","s":"https://commons.wikimedia.org/wiki/File:Assemblyhallindiana.jpg","l":"CC BY 2.0","lu":"https://creativecommons.org/licenses/by/2.0","a":"Sean Benham from Chicago","w":800}],"Forest Dining":[{"t":"https://upload.wikimedia.org/wikipedia/commons/thumb/b/b1/Forest_Dorms_%283011699161%29_%282%29.jpg/960px-Forest_Dorms_%283011699161%29_%282%29.jpg","s":"https://commons.wikimedia.org/wiki/File:Forest_Dorms_(3011699161)_(2).jpg","l":"CC BY-SA 2.0","lu":"https://creativecommons.org/licenses/by-sa/2.0","a":"StevenW. from Bloomington, USA","w":800}],"The Runcible Spoon":[{"t":"https://upload.wikimedia.org/wikipedia/commons/thumb/f/f1/Sixth_Street_East%2C_412%2C_Runcible_Spoon%2C_Old_Library_HD.jpg/960px-Sixth_Street_East%2C_412%2C_Runcible_Spoon%2C_Old_Library_HD.jpg","s":"https://commons.wikimedia.org/wiki/File:Sixth_Street_East,_412,_Runcible_Spoon,_Old_Library_HD.jpg","l":"Public domain","lu":"","a":"Nyttend","w":800}],"Global & International Studies (GISB)":[{"t":"https://upload.wikimedia.org/wikipedia/commons/thumb/2/23/IU_Bloomington_Global_and_International_Studies_building.jpg/960px-IU_Bloomington_Global_and_International_Studies_building.jpg","s":"https://commons.wikimedia.org/wiki/File:IU_Bloomington_Global_and_International_Studies_building.jpg","l":"CC BY-SA 4.0","a":"Towards a greater good","lu":"https://creativecommons.org/licenses/by-sa/4.0","w":640}],"Monroe County Courthouse":[{"t":"https://upload.wikimedia.org/wikipedia/commons/thumb/0/0c/Monroe_County_Courthouse%2C_Bloomington.jpg/960px-Monroe_County_Courthouse%2C_Bloomington.jpg","s":"https://commons.wikimedia.org/wiki/File:Monroe_County_Courthouse,_Bloomington.jpg","l":"Public domain","a":"Nyttend","lu":"","w":640},{"t":"https://upload.wikimedia.org/wikipedia/commons/thumb/1/1e/Monroe_County_Courthouse_in_Bloomington_from_west.jpg/960px-Monroe_County_Courthouse_in_Bloomington_from_west.jpg","s":"https://commons.wikimedia.org/wiki/File:Monroe_County_Courthouse_in_Bloomington_from_west.jpg","l":"Public domain","lu":"","a":"Nyttend","w":800},{"t":"https://upload.wikimedia.org/wikipedia/commons/thumb/e/e0/Basement_of_the_Monroe_County_Courthouse_in_Bloomington.jpg/960px-Basement_of_the_Monroe_County_Courthouse_in_Bloomington.jpg","s":"https://commons.wikimedia.org/wiki/File:Basement_of_the_Monroe_County_Courthouse_in_Bloomington.jpg","l":"Public domain","lu":"","a":"Nyttend","w":800},{"t":"https://upload.wikimedia.org/wikipedia/commons/thumb/3/3b/Monroe_County_Courthouse_in_Bloomington%2C_rotunda_northern_side_painting.jpg/960px-Monroe_County_Courthouse_in_Bloomington%2C_rotunda_northern_side_painting.jpg","s":"https://commons.wikimedia.org/wiki/File:Monroe_County_Courthouse_in_Bloomington,_rotunda_northern_side_painting.jpg","l":"Public domain","lu":"","a":"Nyttend","w":800}],"School of Education":[{"t":"https://upload.wikimedia.org/wikipedia/commons/thumb/a/a5/IUB-SchoolofEducation.jpg/960px-IUB-SchoolofEducation.jpg","s":"https://commons.wikimedia.org/wiki/File:IUB-SchoolofEducation.jpg","l":"CC BY-SA 3.0","a":"No machine-readable author provided. Durin assumed (based on copyright claims).","lu":"http://creativecommons.org/licenses/by-sa/3.0/","w":640}],"Maurer School of Law":[{"t":"https://upload.wikimedia.org/wikipedia/commons/thumb/a/ae/Maurer_School_of_Law.jpg/960px-Maurer_School_of_Law.jpg","s":"https://commons.wikimedia.org/wiki/File:Maurer_School_of_Law.jpg","l":"CC BY 3.0","a":"Wsj8526","lu":"https://creativecommons.org/licenses/by/3.0","w":640}],"O'Neill (SPEA)":[{"t":"https://upload.wikimedia.org/wikipedia/commons/thumb/d/d3/O-neill-school-building.jpg/960px-O-neill-school-building.jpg","s":"https://commons.wikimedia.org/wiki/File:O-neill-school-building.jpg","l":"CC BY-SA 4.0","a":"Indiana University","lu":"https://creativecommons.org/licenses/by-sa/4.0","w":640}],"Memorial Stadium":[{"t":"https://upload.wikimedia.org/wikipedia/commons/thumb/3/3d/GEU_0557.jpg/960px-GEU_0557.jpg","s":"https://commons.wikimedia.org/wiki/File:GEU_0557.jpg","l":"CC BY-SA 4.0","a":"JYDecker","lu":"https://creativecommons.org/licenses/by-sa/4.0","w":640}],"Bart Kaufman Field":[{"t":"https://upload.wikimedia.org/wikipedia/commons/thumb/c/c1/Kaufman_field.jpg/960px-Kaufman_field.jpg","s":"https://commons.wikimedia.org/wiki/File:Kaufman_field.jpg","l":"CC BY-SA 3.0","a":"Evan Fetherolf","lu":"https://creativecommons.org/licenses/by-sa/3.0","w":640}],"Buskirk-Chumley Theater":[{"t":"https://upload.wikimedia.org/wikipedia/commons/thumb/c/ce/Buskirk-Chumley_Theater.jpg/960px-Buskirk-Chumley_Theater.jpg","s":"https://commons.wikimedia.org/wiki/File:Buskirk-Chumley_Theater.jpg","l":"CC BY-SA 2.0","a":"Geoffrey McKim","lu":"https://creativecommons.org/licenses/by-sa/2.0","w":640}],"Eskenazi Museum of Art":[{"t":"https://upload.wikimedia.org/wikipedia/commons/thumb/d/d8/IU_Art_Museum.jpg/960px-IU_Art_Museum.jpg","s":"https://commons.wikimedia.org/wiki/File:IU_Art_Museum.jpg","l":"CC BY-SA 3.0","a":"Kzollman (Kevin J.S. Zollman).","lu":"http://creativecommons.org/licenses/by-sa/3.0/","w":640}],"Mellencamp Pavilion":[{"t":"https://upload.wikimedia.org/wikipedia/commons/5/5d/John_Mellencamp_Pavilion.jpg","s":"https://commons.wikimedia.org/wiki/File:John_Mellencamp_Pavilion.jpg","l":"CC BY-SA 4.0","a":"ZCash1104","lu":"https://creativecommons.org/licenses/by-sa/4.0","w":960}],"IU Auditorium":[{"t":"https://upload.wikimedia.org/wikipedia/commons/thumb/1/19/IU_Auditorium_Bloomington_July_2024.jpg/960px-IU_Auditorium_Bloomington_July_2024.jpg","s":"https://commons.wikimedia.org/wiki/File:IU_Auditorium_Bloomington_July_2024.jpg","l":"CC BY-SA 4.0","a":"Tails Wx","lu":"https://creativecommons.org/licenses/by-sa/4.0","w":640}],"Bill Armstrong Stadium":[{"t":"https://upload.wikimedia.org/wikipedia/commons/9/96/Bill_armstrong_stadium_indiana.jpg","s":"https://commons.wikimedia.org/wiki/File:Bill_armstrong_stadium_indiana.jpg","l":"Public domain","a":"Chris Eller","lu":"","w":700}],"Sample Gates":[{"t":"https://upload.wikimedia.org/wikipedia/commons/thumb/1/13/Indiana_University_Bloomington_Sample_Gates_-_panoramio.jpg/960px-Indiana_University_Bloomington_Sample_Gates_-_panoramio.jpg","s":"https://commons.wikimedia.org/wiki/File:Indiana_University_Bloomington_Sample_Gates_-_panoramio.jpg","l":"CC BY-SA 3.0","lu":"https://creativecommons.org/licenses/by-sa/3.0","a":"SUZUKI Hironobu","w":800}],"Dunn's Woods":[{"t":"https://upload.wikimedia.org/wikipedia/commons/thumb/b/b6/Dunn%27s_Woods_pathway_southwestward.jpg/960px-Dunn%27s_Woods_pathway_southwestward.jpg","s":"https://commons.wikimedia.org/wiki/File:Dunn%27s_Woods_pathway_southwestward.jpg","l":"Public domain","lu":"","a":"Nyttend","w":800},{"t":"https://upload.wikimedia.org/wikipedia/commons/thumb/3/37/Dunn%27s_Woods_pathway_northwestward.jpg/960px-Dunn%27s_Woods_pathway_northwestward.jpg","s":"https://commons.wikimedia.org/wiki/File:Dunn%27s_Woods_pathway_northwestward.jpg","l":"Public domain","lu":"","a":"Nyttend","w":800},{"t":"https://upload.wikimedia.org/wikipedia/commons/thumb/d/d5/Dunn%27s_Woods_pathway_eastward.jpg/960px-Dunn%27s_Woods_pathway_eastward.jpg","s":"https://commons.wikimedia.org/wiki/File:Dunn%27s_Woods_pathway_eastward.jpg","l":"Public domain","lu":"","a":"Nyttend","w":800},{"t":"https://upload.wikimedia.org/wikipedia/commons/thumb/3/35/Dunn%27s_Woods_pathway.jpg/960px-Dunn%27s_Woods_pathway.jpg","s":"https://commons.wikimedia.org/wiki/File:Dunn%27s_Woods_pathway.jpg","l":"Public domain","lu":"","a":"Nyttend","w":800}],"BuffaLouie's at the Gables":[{"t":"https://upload.wikimedia.org/wikipedia/commons/thumb/b/b3/The_Gables_in_Bloomington.jpg/960px-The_Gables_in_Bloomington.jpg","s":"https://commons.wikimedia.org/wiki/File:The_Gables_in_Bloomington.jpg","l":"Public domain","lu":"","a":"Nyttend","w":800}]};
+var BEELINE_PHOTOS = {"Owen Hall":[{"t":"https://upload.wikimedia.org/wikipedia/commons/thumb/8/83/Owen_Hall_at_IU%2C_front.jpg/960px-Owen_Hall_at_IU%2C_front.jpg","s":"https://commons.wikimedia.org/wiki/File:Owen_Hall_at_IU,_front.jpg","l":"Public domain","lu":"","a":"Nyttend","w":800},{"t":"https://upload.wikimedia.org/wikipedia/commons/thumb/3/30/Owen_Hall_at_IU%2C_rear.jpg/960px-Owen_Hall_at_IU%2C_rear.jpg","s":"https://commons.wikimedia.org/wiki/File:Owen_Hall_at_IU,_rear.jpg","l":"Public domain","lu":"","a":"Nyttend","w":800}],"Wylie Hall":[{"t":"https://upload.wikimedia.org/wikipedia/commons/thumb/f/fc/Wylie_Hall_comprehensive.jpg/960px-Wylie_Hall_comprehensive.jpg","s":"https://commons.wikimedia.org/wiki/File:Wylie_Hall_comprehensive.jpg","l":"Public domain","lu":"","a":"Nyttend","w":800},{"t":"https://upload.wikimedia.org/wikipedia/commons/thumb/e/e9/Wylie_Hall_rear.jpg/960px-Wylie_Hall_rear.jpg","s":"https://commons.wikimedia.org/wiki/File:Wylie_Hall_rear.jpg","l":"Public domain","lu":"","a":"Nyttend","w":800},{"t":"https://upload.wikimedia.org/wikipedia/commons/thumb/7/76/Wylie_Hall_front_closeup.jpg/960px-Wylie_Hall_front_closeup.jpg","s":"https://commons.wikimedia.org/wiki/File:Wylie_Hall_front_closeup.jpg","l":"Public domain","lu":"","a":"Nyttend","w":800},{"t":"https://upload.wikimedia.org/wikipedia/commons/thumb/6/67/Wylie_Hall_entrance.jpg/960px-Wylie_Hall_entrance.jpg","s":"https://commons.wikimedia.org/wiki/File:Wylie_Hall_entrance.jpg","l":"Public domain","lu":"","a":"Nyttend","w":800}],"Maxwell Hall":[{"t":"https://upload.wikimedia.org/wikipedia/commons/thumb/8/85/Maxwell_Hall_morning_from_southwest.jpg/960px-Maxwell_Hall_morning_from_southwest.jpg","s":"https://commons.wikimedia.org/wiki/File:Maxwell_Hall_morning_from_southwest.jpg","l":"Public domain","lu":"","a":"Nyttend","w":800},{"t":"https://upload.wikimedia.org/wikipedia/commons/thumb/d/d9/Maxwell_Hall_ground_view.jpg/960px-Maxwell_Hall_ground_view.jpg","s":"https://commons.wikimedia.org/wiki/File:Maxwell_Hall_ground_view.jpg","l":"Public domain","lu":"","a":"Nyttend","w":800},{"t":"https://upload.wikimedia.org/wikipedia/commons/thumb/6/6b/Maxwell_Hall_from_southwest.jpg/960px-Maxwell_Hall_from_southwest.jpg","s":"https://commons.wikimedia.org/wiki/File:Maxwell_Hall_from_southwest.jpg","l":"Public domain","lu":"","a":"Nyttend","w":800},{"t":"https://upload.wikimedia.org/wikipedia/commons/thumb/2/2c/Maxwell_Hall_morning_from_southeast.jpg/960px-Maxwell_Hall_morning_from_southeast.jpg","s":"https://commons.wikimedia.org/wiki/File:Maxwell_Hall_morning_from_southeast.jpg","l":"Public domain","lu":"","a":"Nyttend","w":800}],"Kirkwood Hall":[{"t":"https://upload.wikimedia.org/wikipedia/commons/thumb/0/0f/Kirkwood_Hall_comprehensive.jpg/960px-Kirkwood_Hall_comprehensive.jpg","s":"https://commons.wikimedia.org/wiki/File:Kirkwood_Hall_comprehensive.jpg","l":"Public domain","lu":"","a":"Nyttend","w":800},{"t":"https://upload.wikimedia.org/wikipedia/commons/thumb/d/dd/Kirkwood_Hall_entrance.jpg/960px-Kirkwood_Hall_entrance.jpg","s":"https://commons.wikimedia.org/wiki/File:Kirkwood_Hall_entrance.jpg","l":"Public domain","lu":"","a":"Nyttend","w":800},{"t":"https://upload.wikimedia.org/wikipedia/commons/thumb/2/21/Kirkwood_Hall_rear_from_north.jpg/960px-Kirkwood_Hall_rear_from_north.jpg","s":"https://commons.wikimedia.org/wiki/File:Kirkwood_Hall_rear_from_north.jpg","l":"Public domain","lu":"","a":"Nyttend","w":800},{"t":"https://upload.wikimedia.org/wikipedia/commons/thumb/e/ee/Kirkwood_Hall_rear_from_south.jpg/960px-Kirkwood_Hall_rear_from_south.jpg","s":"https://commons.wikimedia.org/wiki/File:Kirkwood_Hall_rear_from_south.jpg","l":"Public domain","lu":"","a":"Nyttend","w":800}],"Lindley Hall":[{"t":"https://upload.wikimedia.org/wikipedia/commons/thumb/b/b7/Lindley_Hall_comprehensive.jpg/960px-Lindley_Hall_comprehensive.jpg","s":"https://commons.wikimedia.org/wiki/File:Lindley_Hall_comprehensive.jpg","l":"Public domain","lu":"","a":"Nyttend","w":800},{"t":"https://upload.wikimedia.org/wikipedia/commons/thumb/d/d9/Lindley_Hall_rear_from_north.jpg/960px-Lindley_Hall_rear_from_north.jpg","s":"https://commons.wikimedia.org/wiki/File:Lindley_Hall_rear_from_north.jpg","l":"Public domain","lu":"","a":"Nyttend","w":800},{"t":"https://upload.wikimedia.org/wikipedia/commons/thumb/1/1e/Lindley_Hall_rear_from_south.jpg/960px-Lindley_Hall_rear_from_south.jpg","s":"https://commons.wikimedia.org/wiki/File:Lindley_Hall_rear_from_south.jpg","l":"Public domain","lu":"","a":"Nyttend","w":800},{"t":"https://upload.wikimedia.org/wikipedia/commons/2/25/Lindley_Hall.jpg","s":"https://commons.wikimedia.org/wiki/File:Lindley_Hall.jpg","l":"CC BY-SA 4.0","a":"Upstateherd","lu":"https://creativecommons.org/licenses/by-sa/4.0","w":640}],"Franklin Hall (Media School)":[{"t":"https://upload.wikimedia.org/wikipedia/commons/thumb/1/1b/Franklin_Hall_and_Student_Building.jpg/960px-Franklin_Hall_and_Student_Building.jpg","s":"https://commons.wikimedia.org/wiki/File:Franklin_Hall_and_Student_Building.jpg","l":"Public domain","lu":"","a":"Nyttend","w":800},{"t":"https://upload.wikimedia.org/wikipedia/commons/thumb/6/60/Franklin_Hall_comprehensive.jpg/960px-Franklin_Hall_comprehensive.jpg","s":"https://commons.wikimedia.org/wiki/File:Franklin_Hall_comprehensive.jpg","l":"Public domain","lu":"","a":"Nyttend","w":800},{"t":"https://upload.wikimedia.org/wikipedia/commons/thumb/e/ec/Franklin_Hall_front.jpg/960px-Franklin_Hall_front.jpg","s":"https://commons.wikimedia.org/wiki/File:Franklin_Hall_front.jpg","l":"Public domain","lu":"","a":"Nyttend","w":800},{"t":"https://upload.wikimedia.org/wikipedia/commons/thumb/0/06/Franklin_Hall_rear.jpg/960px-Franklin_Hall_rear.jpg","s":"https://commons.wikimedia.org/wiki/File:Franklin_Hall_rear.jpg","l":"Public domain","lu":"","a":"Nyttend","w":800}],"Simon Hall (Multidisciplinary Science)":[{"t":"https://upload.wikimedia.org/wikipedia/commons/thumb/3/33/Simon_Hall_.JPG/960px-Simon_Hall_.JPG","s":"https://commons.wikimedia.org/wiki/File:Simon_Hall_.JPG","l":"CC BY-SA 4.0","lu":"https://creativecommons.org/licenses/by-sa/4.0","a":"User: Greencarrot2","w":800}],"School of Public Health (HPER)":[{"t":"https://upload.wikimedia.org/wikipedia/commons/thumb/d/da/Indiana_University_School_of_Public_Health-Bloomington.png/960px-Indiana_University_School_of_Public_Health-Bloomington.png","s":"https://commons.wikimedia.org/wiki/File:Indiana_University_School_of_Public_Health-Bloomington.png","l":"CC BY-SA 4.0","lu":"https://creativecommons.org/licenses/by-sa/4.0","a":"Chaztron","w":800}],"Lilly Library":[{"t":"https://upload.wikimedia.org/wikipedia/commons/thumb/f/f2/IUB_Lilly_Library_P1000231.jpg/960px-IUB_Lilly_Library_P1000231.jpg","s":"https://commons.wikimedia.org/wiki/File:IUB_Lilly_Library_P1000231.jpg","l":"CC BY-SA 3.0","a":"User:Vmenkov","lu":"https://creativecommons.org/licenses/by-sa/3.0","w":640}],"Musical Arts Center (MAC)":[{"t":"https://upload.wikimedia.org/wikipedia/commons/thumb/a/ad/Musical_Arts_Center_Right.jpg/960px-Musical_Arts_Center_Right.jpg","s":"https://commons.wikimedia.org/wiki/File:Musical_Arts_Center_Right.jpg","l":"CC0","lu":"http://creativecommons.org/publicdomain/zero/1.0/deed.en","a":"MatthewBA08","w":800},{"t":"https://upload.wikimedia.org/wikipedia/commons/thumb/8/8d/Musical_Arts_Center.jpg/960px-Musical_Arts_Center.jpg","s":"https://commons.wikimedia.org/wiki/File:Musical_Arts_Center.jpg","l":"CC0","lu":"http://creativecommons.org/publicdomain/zero/1.0/deed.en","a":"MatthewBA08","w":800}],"Auer Hall":[{"t":"https://upload.wikimedia.org/wikipedia/commons/thumb/e/ed/Auer_Hall_Right.jpg/960px-Auer_Hall_Right.jpg","s":"https://commons.wikimedia.org/wiki/File:Auer_Hall_Right.jpg","l":"CC0","lu":"http://creativecommons.org/publicdomain/zero/1.0/deed.en","a":"MatthewBA08","w":800}],"IU Cinema":[{"t":"https://upload.wikimedia.org/wikipedia/commons/thumb/a/af/Indiana_University_Cinema.jpg/960px-Indiana_University_Cinema.jpg","s":"https://commons.wikimedia.org/wiki/File:Indiana_University_Cinema.jpg","l":"CC BY-SA 4.0","lu":"https://creativecommons.org/licenses/by-sa/4.0","a":"Stickman42","w":800}],"Mathers Museum":[{"t":"https://upload.wikimedia.org/wikipedia/commons/thumb/d/da/Eighth_Street%2C_601%2C_Mathers_Museum%2C_University_Courts.jpg/960px-Eighth_Street%2C_601%2C_Mathers_Museum%2C_University_Courts.jpg","s":"https://commons.wikimedia.org/wiki/File:Eighth_Street,_601,_Mathers_Museum,_University_Courts.jpg","l":"Public domain","lu":"","a":"Nyttend","w":800},{"t":"https://upload.wikimedia.org/wikipedia/commons/thumb/6/62/Mathers-Museum-of-World-Cultures.jpg/960px-Mathers-Museum-of-World-Cultures.jpg","s":"https://commons.wikimedia.org/wiki/File:Mathers-Museum-of-World-Cultures.jpg","l":"CC BY-SA 4.0","lu":"https://creativecommons.org/licenses/by-sa/4.0","a":"MateoTimateo","w":800},{"t":"https://upload.wikimedia.org/wikipedia/commons/thumb/a/ad/Mathers_Museum_of_World_Cultures.jpg/960px-Mathers_Museum_of_World_Cultures.jpg","s":"https://commons.wikimedia.org/wiki/File:Mathers_Museum_of_World_Cultures.jpg","l":"CC BY-SA 4.0","lu":"https://creativecommons.org/licenses/by-sa/4.0","a":"Matthew Timothy Bradley","w":800}],"Indiana Memorial Union (IMU)":[{"t":"https://upload.wikimedia.org/wikipedia/commons/thumb/1/1b/Indiana_Memorial_Union_10152005.JPG/960px-Indiana_Memorial_Union_10152005.JPG","s":"https://commons.wikimedia.org/wiki/File:Indiana_Memorial_Union_10152005.JPG","l":"CC BY-SA 3.0","a":"Knnk417","lu":"https://creativecommons.org/licenses/by-sa/3.0","w":640}],"Forest Quad":[{"t":"https://upload.wikimedia.org/wikipedia/commons/thumb/b/b1/Forest_Dorms_%283011699161%29_%282%29.jpg/960px-Forest_Dorms_%283011699161%29_%282%29.jpg","s":"https://commons.wikimedia.org/wiki/File:Forest_Dorms_(3011699161)_(2).jpg","l":"CC BY-SA 2.0","lu":"https://creativecommons.org/licenses/by-sa/2.0","a":"StevenW. from Bloomington, USA","w":800}],"Eigenmann Hall":[{"t":"https://upload.wikimedia.org/wikipedia/commons/thumb/3/32/Eigenmann_Hall%2C_Bloomington%2C_Indiana%2C_June_2021.jpg/960px-Eigenmann_Hall%2C_Bloomington%2C_Indiana%2C_June_2021.jpg","s":"https://commons.wikimedia.org/wiki/File:Eigenmann_Hall,_Bloomington,_Indiana,_June_2021.jpg","l":"CC BY 2.0","lu":"https://creativecommons.org/licenses/by/2.0","a":"Bart Everson","w":800}],"Simon Skjodt Assembly Hall":[{"t":"https://upload.wikimedia.org/wikipedia/commons/thumb/1/1f/Assemblyhallindiana.jpg/960px-Assemblyhallindiana.jpg","s":"https://commons.wikimedia.org/wiki/File:Assemblyhallindiana.jpg","l":"CC BY 2.0","lu":"https://creativecommons.org/licenses/by/2.0","a":"Sean Benham from Chicago","w":800}],"Forest Dining":[{"t":"https://upload.wikimedia.org/wikipedia/commons/thumb/b/b1/Forest_Dorms_%283011699161%29_%282%29.jpg/960px-Forest_Dorms_%283011699161%29_%282%29.jpg","s":"https://commons.wikimedia.org/wiki/File:Forest_Dorms_(3011699161)_(2).jpg","l":"CC BY-SA 2.0","lu":"https://creativecommons.org/licenses/by-sa/2.0","a":"StevenW. from Bloomington, USA","w":800}],"The Runcible Spoon":[{"t":"https://upload.wikimedia.org/wikipedia/commons/thumb/f/f1/Sixth_Street_East%2C_412%2C_Runcible_Spoon%2C_Old_Library_HD.jpg/960px-Sixth_Street_East%2C_412%2C_Runcible_Spoon%2C_Old_Library_HD.jpg","s":"https://commons.wikimedia.org/wiki/File:Sixth_Street_East,_412,_Runcible_Spoon,_Old_Library_HD.jpg","l":"Public domain","lu":"","a":"Nyttend","w":800}],"Global & International Studies (GISB)":[{"t":"https://upload.wikimedia.org/wikipedia/commons/thumb/2/23/IU_Bloomington_Global_and_International_Studies_building.jpg/960px-IU_Bloomington_Global_and_International_Studies_building.jpg","s":"https://commons.wikimedia.org/wiki/File:IU_Bloomington_Global_and_International_Studies_building.jpg","l":"CC BY-SA 4.0","a":"Towards a greater good","lu":"https://creativecommons.org/licenses/by-sa/4.0","w":640}],"Monroe County Courthouse":[{"t":"https://upload.wikimedia.org/wikipedia/commons/thumb/0/0c/Monroe_County_Courthouse%2C_Bloomington.jpg/960px-Monroe_County_Courthouse%2C_Bloomington.jpg","s":"https://commons.wikimedia.org/wiki/File:Monroe_County_Courthouse,_Bloomington.jpg","l":"Public domain","a":"Nyttend","lu":"","w":640},{"t":"https://upload.wikimedia.org/wikipedia/commons/thumb/1/1e/Monroe_County_Courthouse_in_Bloomington_from_west.jpg/960px-Monroe_County_Courthouse_in_Bloomington_from_west.jpg","s":"https://commons.wikimedia.org/wiki/File:Monroe_County_Courthouse_in_Bloomington_from_west.jpg","l":"Public domain","lu":"","a":"Nyttend","w":800},{"t":"https://upload.wikimedia.org/wikipedia/commons/thumb/e/e0/Basement_of_the_Monroe_County_Courthouse_in_Bloomington.jpg/960px-Basement_of_the_Monroe_County_Courthouse_in_Bloomington.jpg","s":"https://commons.wikimedia.org/wiki/File:Basement_of_the_Monroe_County_Courthouse_in_Bloomington.jpg","l":"Public domain","lu":"","a":"Nyttend","w":800},{"t":"https://upload.wikimedia.org/wikipedia/commons/thumb/3/3b/Monroe_County_Courthouse_in_Bloomington%2C_rotunda_northern_side_painting.jpg/960px-Monroe_County_Courthouse_in_Bloomington%2C_rotunda_northern_side_painting.jpg","s":"https://commons.wikimedia.org/wiki/File:Monroe_County_Courthouse_in_Bloomington,_rotunda_northern_side_painting.jpg","l":"Public domain","lu":"","a":"Nyttend","w":800}],"School of Education":[{"t":"https://upload.wikimedia.org/wikipedia/commons/thumb/a/a5/IUB-SchoolofEducation.jpg/960px-IUB-SchoolofEducation.jpg","s":"https://commons.wikimedia.org/wiki/File:IUB-SchoolofEducation.jpg","l":"CC BY-SA 3.0","a":"No machine-readable author provided. Durin assumed (based on copyright claims).","lu":"http://creativecommons.org/licenses/by-sa/3.0/","w":640}],"Maurer School of Law":[{"t":"https://upload.wikimedia.org/wikipedia/commons/thumb/a/ae/Maurer_School_of_Law.jpg/960px-Maurer_School_of_Law.jpg","s":"https://commons.wikimedia.org/wiki/File:Maurer_School_of_Law.jpg","l":"CC BY 3.0","a":"Wsj8526","lu":"https://creativecommons.org/licenses/by/3.0","w":640}],"O'Neill (SPEA)":[{"t":"https://upload.wikimedia.org/wikipedia/commons/thumb/d/d3/O-neill-school-building.jpg/960px-O-neill-school-building.jpg","s":"https://commons.wikimedia.org/wiki/File:O-neill-school-building.jpg","l":"CC BY-SA 4.0","a":"Indiana University","lu":"https://creativecommons.org/licenses/by-sa/4.0","w":640}],"Memorial Stadium":[{"t":"https://upload.wikimedia.org/wikipedia/commons/thumb/3/3d/GEU_0557.jpg/960px-GEU_0557.jpg","s":"https://commons.wikimedia.org/wiki/File:GEU_0557.jpg","l":"CC BY-SA 4.0","a":"JYDecker","lu":"https://creativecommons.org/licenses/by-sa/4.0","w":640}],"Bart Kaufman Field":[{"t":"https://upload.wikimedia.org/wikipedia/commons/thumb/c/c1/Kaufman_field.jpg/960px-Kaufman_field.jpg","s":"https://commons.wikimedia.org/wiki/File:Kaufman_field.jpg","l":"CC BY-SA 3.0","a":"Evan Fetherolf","lu":"https://creativecommons.org/licenses/by-sa/3.0","w":640}],"Buskirk-Chumley Theater":[{"t":"https://upload.wikimedia.org/wikipedia/commons/thumb/c/ce/Buskirk-Chumley_Theater.jpg/960px-Buskirk-Chumley_Theater.jpg","s":"https://commons.wikimedia.org/wiki/File:Buskirk-Chumley_Theater.jpg","l":"CC BY-SA 2.0","a":"Geoffrey McKim","lu":"https://creativecommons.org/licenses/by-sa/2.0","w":640}],"Eskenazi Museum of Art":[{"t":"https://upload.wikimedia.org/wikipedia/commons/thumb/d/d8/IU_Art_Museum.jpg/960px-IU_Art_Museum.jpg","s":"https://commons.wikimedia.org/wiki/File:IU_Art_Museum.jpg","l":"CC BY-SA 3.0","a":"Kzollman (Kevin J.S. Zollman).","lu":"http://creativecommons.org/licenses/by-sa/3.0/","w":640}],"IU Auditorium":[{"t":"https://upload.wikimedia.org/wikipedia/commons/thumb/1/19/IU_Auditorium_Bloomington_July_2024.jpg/960px-IU_Auditorium_Bloomington_July_2024.jpg","s":"https://commons.wikimedia.org/wiki/File:IU_Auditorium_Bloomington_July_2024.jpg","l":"CC BY-SA 4.0","a":"Tails Wx","lu":"https://creativecommons.org/licenses/by-sa/4.0","w":640}],"Bill Armstrong Stadium":[{"t":"https://upload.wikimedia.org/wikipedia/commons/9/96/Bill_armstrong_stadium_indiana.jpg","s":"https://commons.wikimedia.org/wiki/File:Bill_armstrong_stadium_indiana.jpg","l":"Public domain","a":"Chris Eller","lu":"","w":700}],"Sample Gates":[{"t":"https://upload.wikimedia.org/wikipedia/commons/thumb/1/13/Indiana_University_Bloomington_Sample_Gates_-_panoramio.jpg/960px-Indiana_University_Bloomington_Sample_Gates_-_panoramio.jpg","s":"https://commons.wikimedia.org/wiki/File:Indiana_University_Bloomington_Sample_Gates_-_panoramio.jpg","l":"CC BY-SA 3.0","lu":"https://creativecommons.org/licenses/by-sa/3.0","a":"SUZUKI Hironobu","w":800}],"Dunn's Woods":[{"t":"https://upload.wikimedia.org/wikipedia/commons/thumb/b/b6/Dunn%27s_Woods_pathway_southwestward.jpg/960px-Dunn%27s_Woods_pathway_southwestward.jpg","s":"https://commons.wikimedia.org/wiki/File:Dunn%27s_Woods_pathway_southwestward.jpg","l":"Public domain","lu":"","a":"Nyttend","w":800},{"t":"https://upload.wikimedia.org/wikipedia/commons/thumb/3/37/Dunn%27s_Woods_pathway_northwestward.jpg/960px-Dunn%27s_Woods_pathway_northwestward.jpg","s":"https://commons.wikimedia.org/wiki/File:Dunn%27s_Woods_pathway_northwestward.jpg","l":"Public domain","lu":"","a":"Nyttend","w":800},{"t":"https://upload.wikimedia.org/wikipedia/commons/thumb/d/d5/Dunn%27s_Woods_pathway_eastward.jpg/960px-Dunn%27s_Woods_pathway_eastward.jpg","s":"https://commons.wikimedia.org/wiki/File:Dunn%27s_Woods_pathway_eastward.jpg","l":"Public domain","lu":"","a":"Nyttend","w":800},{"t":"https://upload.wikimedia.org/wikipedia/commons/thumb/3/35/Dunn%27s_Woods_pathway.jpg/960px-Dunn%27s_Woods_pathway.jpg","s":"https://commons.wikimedia.org/wiki/File:Dunn%27s_Woods_pathway.jpg","l":"Public domain","lu":"","a":"Nyttend","w":800}],"BuffaLouie's at the Gables":[{"t":"https://upload.wikimedia.org/wikipedia/commons/thumb/b/b3/The_Gables_in_Bloomington.jpg/960px-The_Gables_in_Bloomington.jpg","s":"https://commons.wikimedia.org/wiki/File:The_Gables_in_Bloomington.jpg","l":"Public domain","lu":"","a":"Nyttend","w":800}],"Showalter Fountain":[{"t":"https://upload.wikimedia.org/wikipedia/commons/1/1e/IUB-Showalter_Fountain_2.jpg","s":"https://commons.wikimedia.org/wiki/File:IUB-Showalter_Fountain_2.jpg","l":"CC BY-SA 2.5","a":"Unknown","lu":"https://creativecommons.org/licenses/by-sa/2.5","w":640}]};
 
 </script>
 
@@ -4513,11 +4664,9 @@ $('toggleTracking').addEventListener('click', ()=>{
 });
 $('reenableLoc').addEventListener('click', ()=>{ trackingOn=true; updateOffBanner(); renderProfile(); });
 $('homeLocate').addEventListener('click', ()=>{ destInput.focus(); if(secureOK()) getPos().catch(()=>{}); });
-$('qdEdit').addEventListener('click', openFavsSheet);
-// home quick-action tiles — the two shortcuts the tab bar doesn't already cover
-const qaW=$('qaWalk'), qaS=$('qaSched');
-if(qaS) qaS.addEventListener('click', ()=>show('schedule'));
-if(qaW) qaW.addEventListener('click', ()=>{ const nx=scheduleNow(); if(!nx){ show('schedule'); return; } const c=nx.c; setDest(c.lat,c.lng,c.b+(c.room?(' · '+c.room):'')); document.querySelector('#scr-home .scroll').scrollTo({top:0,behavior:'smooth'}); });
+/* Quick Places editing + the old quick-action tiles now live in Home's own
+   render pass (home.js): the tiles were replaced by the three preset
+   navigation tiles, and "manage presets" is the + in the section header. */
 
 /* ---- You rows + pushed-screen backs ---- */
 $('pCampus').addEventListener('click', openCampusPicker);
@@ -4545,7 +4694,8 @@ function openCampusPicker(){
     campus={name:c.name, tag:c.tag};
     lsSet(LS_CAMPUS, JSON.stringify(campus));
     list.querySelectorAll('.crow').forEach(r=>r.classList.toggle('sel', r===el));
-    $('campusTag').textContent=campus.name; renderProfile();
+    const ctag=$('campusTag'); if(ctag) ctag.textContent=campus.name;   // Home's old brand header is gone; You still shows the campus
+    renderProfile();
     toast(c.def ? ('Campus set to '+c.name) : (c.name+' isn’t live yet — saved for when it is'), c.def?'good':'info');
   }));
   $('campusSheetBg').classList.add('show');
@@ -4579,11 +4729,14 @@ $('notifyClose').addEventListener('click', ()=>$('notifySheetBg').classList.remo
    Persisted to LS_FAVS as [{name,lat,lng,c}]; defaults to the original 5.
    ================================================================ */
 // default quick destinations with compact ribbon labels (the original short chips)
+/* Home shows the first THREE as its Quick Places tiles, so the order here is
+   the default preset: Wells · IMU · Kelley. The rest stay available in the
+   manage sheet (+ on Home) and everywhere favorites are used. */
 const DEFAULT_FAVS=[
   {name:'Herman B Wells Library', short:'Wells'},
   {name:'Indiana Memorial Union (IMU)', short:'IMU'},
-  {name:'Luddy Hall (Informatics & Computing)', short:'Luddy'},
   {name:'Kelley School of Business (Hodge Hall)', short:'Kelley'},
+  {name:'Luddy Hall (Informatics & Computing)', short:'Luddy'},
   {name:'Student Rec Sports Center (SRSC)', short:'SRSC'}
 ];
 const FAV_STAR='<svg viewBox="0 0 24 24" fill="currentColor"><path d="M12 3.4 l2.6 5.3 5.8 .8 -4.2 4.1 1 5.8 -5.2 -2.8 -5.2 2.8 1 -5.8 -4.2 -4.1 5.8 -.8 z"/></svg>';
@@ -4609,14 +4762,8 @@ function favShort(f){
   let s=w[0]; if(s.length<=4 && w[1]) s+=' '+w[1];
   return s.length>12 ? s.slice(0,11)+'…' : s;
 }
-// Home ribbon: up to 5 equal-width chips that fit the row without scrolling.
-// Edit lives in the section header (#qdEdit), not as a 6th chip.
-// Home chips: icon + short name per place (mockup base)
-function renderFavs(){
-  const wrap=$('quickChips'); if(!wrap) return;
-  wrap.innerHTML = favorites.slice(0,5).map((f,i)=>`<button class="ichip" data-i="${i}"><span class="ichip-ic">${favIcon(f.c)}</span><span class="ichip-name">${esc(favShort(f))}</span></button>`).join('');
-  wrap.querySelectorAll('.ichip[data-i]').forEach(b=>b.addEventListener('click',()=>{ const f=favorites[+b.dataset.i]; if(f) setDest(f.lat,f.lng,f.name); }));
-}
+// Home's Quick Places tiles are rendered by home.js (HomeUI.renderQuick),
+// which re-exports renderFavs() so every caller here stays as it was.
 function openFavsSheet(){ $('favSearch').value=''; hideFavAc(); renderFavList(); $('favsSheetBg').classList.add('show'); setTimeout(()=>{ try{ $('favSearch').focus(); }catch(e){} }, 60); }
 function renderFavList(){
   const list=$('favList');
@@ -4679,18 +4826,11 @@ const DOW_SHORT={Su:'Sun',Mo:'Mon',Tu:'Tue',We:'Wed',Th:'Thu',Fr:'Fri',Sa:'Sat'}
 const DOW_FULL={Su:'Sunday',Mo:'Monday',Tu:'Tuesday',We:'Wednesday',Th:'Thursday',Fr:'Friday',Sa:'Saturday'};
 const SCHED_PIN='<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.9" stroke-linecap="round" stroke-linejoin="round"><path d="M12 21 c5 -5.2 7 -8.4 7 -11.4 a7 7 0 0 0-14 0 c0 3 2 6.2 7 11.4 z"/><circle cx="12" cy="9.6" r="2.4"/></svg>';
 const SCHED_CHEV='<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M9 6 L15 12 L9 18"/></svg>';
-// building coords reused from the gazetteer (Hodge Hall = the Kelley building)
-const _HODGE={b:'Kelley School of Business (Hodge Hall)',lat:39.172577,lng:-86.518436};
-const _LINDLEY={b:'Lindley Hall',lat:39.165343,lng:-86.523601};
-const DEFAULT_CLASSES=[
-  {course:'BUS-A 310',title:'Interm Financial Reporting: Users',days:['Mo','We'],start:'08:00',end:'09:15',b:_HODGE.b,lat:_HODGE.lat,lng:_HODGE.lng,room:'HH 3034'},
-  {course:'BUS-L 201',title:'Legal Environment of Business',days:['Mo','We'],start:'09:35',end:'10:50',b:_HODGE.b,lat:_HODGE.lat,lng:_HODGE.lng,room:'HH 1006'},
-  {course:'BUS-A 327',title:'Tax Analysis and Applications',days:['Mo','We'],start:'11:10',end:'12:25',b:_HODGE.b,lat:_HODGE.lat,lng:_HODGE.lng,room:'HH 2046',note:'1st 8 weeks only'},
-  {course:'BUS-A 324',title:'Mgmt Accounting for Finance',days:['Mo','We'],start:'19:05',end:'20:20',b:_HODGE.b,lat:_HODGE.lat,lng:_HODGE.lng,room:'HH 3034',note:'1st 8 weeks only'},
-  {course:'BUS-G 202',title:'Business, Government, and Society',days:['Tu','Th'],start:'08:00',end:'09:15',b:_HODGE.b,lat:_HODGE.lat,lng:_HODGE.lng,room:'HH 2075'},
-  {course:'GER-E 141',title:'Amsterdam',days:['Tu','Th'],start:'15:55',end:'17:10',b:_LINDLEY.b,lat:_LINDLEY.lat,lng:_LINDLEY.lng,room:'LH 008'}
-];
-function loadClasses(){ const v=lsGet(LS_CLASSES); return Array.isArray(v) ? v : DEFAULT_CLASSES.map((c,i)=>Object.assign({id:'c'+(i+1)},c)); }
+/* No example schedule ships in production logic. An install with no classes is a
+   REAL state (Home renders "Got some time?" — the no-schedule plan setup), not a
+   gap to paper over with someone else's timetable. Realistic typed classes for
+   browser QA come from HomeDev in home.js, in memory only, on localhost. */
+function loadClasses(){ const v=lsGet(LS_CLASSES); return Array.isArray(v) ? v : []; }
 let classList=loadClasses();
 function saveClasses(){ lsSet(LS_CLASSES, JSON.stringify(classList)); }
 function hm(s){ const x=String(s||'').split(':'); return (+x[0]||0)*60+(+x[1]||0); }
@@ -4876,7 +5016,7 @@ function savePlan(){ if(plan) lsSet(LS_PLAN, JSON.stringify(plan)); else { try{ 
 function clearPlan(){ plan=null; savePlan(); renderTimeModule(); }
 
 // ---- ETA to a commitment (cached ~2.5 min; measured line wins) ----
-let tmEta=null, tmEtaSeq=0;
+let tmEta=null;
 function resolveEta(lat,lng){
   const lr=learnedForDest({lat,lng});
   if(lr && curPos && distance(curPos.lat,curPos.lng,lr.startLat,lr.startLng)<170) return Promise.resolve({minutes:lr.bestSeconds/60, source:'line'});
@@ -4888,121 +5028,17 @@ function resolveEta(lat,lng){
 }
 function etaSourceLabel(src){ return src==='line' ? 'your usual line' : src==='osm' ? 'official estimate' : src==='assumed' ? 'estimate from campus' : '~rough estimate'; }
 
-const TM_CLOCK='<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.9" stroke-linecap="round" stroke-linejoin="round"><circle cx="12" cy="12" r="9"/><path d="M12 7 v5 l3.5 2"/></svg>';
-const TM_BLD='<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"><path d="M3 9 L12 5 L21 9"/><path d="M5 9 v8 M9.5 9 v8 M14.5 9 v8 M19 9 v8"/><path d="M3 19 h18"/></svg>';
-// One place decides what Home is saying right now.
-/* One intelligent surface: what's next, when to leave, what it's based on, how
-   much time is truly free, and what to do with it — a single editorial reading
-   order, never a stack of sibling cards. Typography carries the hierarchy. */
-function tmGoArrow(){ return `<span class="arrow"><svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round"><path d="M4 12 H20 M14 6 L20 12 L14 18"/></svg></span>`; }
-// giant hero clock: 7:51 with a small AM/PM — the page's one big statement
-function tmHeroTime(d){ let h=d.getHours(), m=d.getMinutes(); const ap=h>=12?'PM':'AM'; h=h%12||12; return h+':'+String(m).padStart(2,'0')+'<span class="unit">'+ap+'</span>'; }
-let tmLastEtaMin=null;   // last resolved walk minutes to the next class
-const TM_CAP='<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"><path d="M3 9.5 L12 5 l9 4.5 -9 4.5 z"/><path d="M7 12 v4.2 c0 1.6 10 1.6 10 0 V12"/><path d="M21 9.5 V14.5"/></svg>';
-const TM_SPARK='<svg viewBox="0 0 24 24" fill="currentColor" aria-hidden="true"><path d="M11 3 l1.7 5.1 L17.8 10 l-5.1 1.9 L11 17 l-1.7-5.1 L4.2 10 l5.1-1.9 Z"/><circle cx="18.4" cy="4.8" r="1.5"/><circle cx="19.6" cy="16.8" r="1.2"/></svg>';
-// free-time value for the stat column: "42 min" or "4h 05m"
-function tmFreeHTML(min){
-  min=Math.max(0,Math.round(min));
-  if(min>=120){ const h=Math.floor(min/60), m=min%60; return h+'<span class="unit">h</span> '+String(m).padStart(2,'0')+'<span class="unit">m</span>'; }
-  return min+'<span class="unit">min</span>';
+/* ---- HOME rendering lives in home.js (HomeModel / HomeView / HomeUI).
+   These two dispatchers keep the names the rest of this file already calls.
+   They are declared HERE, not in home.js, because boot() runs at the end of
+   app.js — before home.js has executed — so the guard is what makes the
+   load order safe. home.js paints the first real Home from its own tail. ---- */
+function renderTimeModule(){ if(typeof HomeUI!=='undefined') HomeUI.render(); }
+function renderFavs(){
+  if(typeof HomeUI==='undefined') return;
+  HomeUI.renderQuick(!(plan && plan.v===2 && Date.now()<plan.until));   // hidden while a plan owns the screen
 }
-function renderTimeModule(){
-  const box=$('timeModule'); if(!box) return;
-  document.getElementById('scr-home').classList.remove('cta-go');   // Walk tile shows unless the card's CTA is already a Go
-  renderHomeInsight();
-  if(dest){ box.innerHTML=''; return; }                       // manual destination owns the screen
-  // active plan — lifecycle card rendered by the planning engine (plan.js)
-  if(plan && Date.now()<plan.until){
-    box.innerHTML = (typeof planHomeCard==='function') ? planHomeCard() : '';
-    if(typeof planHomeWire==='function') planHomeWire();
-    if(box.innerHTML) return;
-  }
-  if(plan && Date.now()>=plan.until){ plan=null; savePlan(); }
-  // no schedule yet → one quiet, dismissible invitation (never a wall)
-  if(!classList.length){
-    if(lsGet(LS_TEASER)){ box.innerHTML=''; return; }
-    box.innerHTML=`<div class="tm-invite">
-      <button class="tm-teaser-x" id="tmTeaserX" aria-label="Dismiss"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round"><path d="M6 6 L18 18 M18 6 L6 18"/></svg></button>
-      <p class="tm-invite-p"><b>Know when to leave.</b> Add your classes and BeeLine can tell you exactly when to go.</p>
-      <button class="tm-fit" id="tmSetup">Add your classes<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M9 6 L15 12 L9 18"/></svg></button></div>`;
-    const st=$('tmSetup'); if(st) st.addEventListener('click',()=>show('schedule'));
-    const x=$('tmTeaserX'); if(x) x.addEventListener('click',()=>{ lsSet(LS_TEASER,'1'); renderTimeModule(); });
-    return;
-  }
-  const nx=scheduleNow(); if(!nx){ box.innerHTML=''; return; }
-  const cls=nx.c, dayDelta=(nx.di-new Date().getDay()+7)%7;
-  const bName=favLabel(cls.b);
-  // done for today → calm card + tomorrow's first leave-by preview
-  if(dayDelta>0 && !nx.ongoing){
-    const when = dayDelta===1 ? 'Tomorrow' : DOW_FULL[DOW_CODES[nx.di]];
-    box.innerHTML=`<div class="tm"><div class="tm-card">
-      <div class="tm-toprow"><span class="tm-eyebrow">Today</span><span class="tm-chip calm">${esc(when)}: ${esc(cls.course)}</span></div>
-      <div class="tm-who"><span class="tm-ic">${TM_CAP}</span><div><div class="tm-course">Nothing else today</div><div class="tm-sub" id="tmTomorrow">${esc(when)} · ${esc(cls.course)} at ${fmtTime(nx.s)}</div></div></div></div></div>`;
-    resolveEta(cls.lat,cls.lng).then(r=>{ const el=$('tmTomorrow'); if(!el) return;
-      const lb=new Date(); lb.setDate(lb.getDate()+dayDelta); lb.setHours(0,0,0,0); lb.setMinutes(nx.s - Math.round(r.minutes) - classBuffer());
-      el.innerHTML=esc(when)+' · '+esc(cls.course)+' at '+fmtTime(nx.s)+' — leave by <b class="tnum">'+fmtClockTime(lb)+'</b>'; });
-    return;
-  }
-  // ongoing class
-  if(nx.ongoing){
-    box.innerHTML=`<div class="tm"><div class="tm-card">
-      <div class="tm-toprow"><span class="tm-eyebrow">Now</span><span class="tm-chip calm">In class</span></div>
-      <div class="tm-who"><span class="tm-ic">${TM_CAP}</span><div><div class="tm-course">${esc(cls.course)}</div><div class="tm-sub">${esc(bName)}${cls.room?(' · '+esc(cls.room)):''} · ends ${fmtTime(nx.e)}</div></div></div></div></div>`;
-    return;
-  }
-  // upcoming today — the hero card: who → split stats → one state-aware CTA
-  box.innerHTML=`<div class="tm"><div class="tm-card">
-    <div class="tm-toprow"><span class="tm-eyebrow">Next up</span><span class="tm-chip" id="tmChip" style="display:none"></span></div>
-    <div class="tm-who"><span class="tm-ic">${TM_CAP}</span><div style="min-width:0"><div class="tm-course">${esc(cls.course)}</div><div class="tm-sub">${esc(bName)}${cls.room?(' · '+esc(cls.room)):''} · ${fmtTime(nx.s)}</div></div></div>
-    <div class="tm-stats">
-      <div class="tm-stat"><div class="tm-k" id="tmK1">Leave by</div><div class="tm-v honey" id="tmVerb"><span class="ldots"><i></i><i></i><i></i></span></div><div class="tm-basis" id="tmBasis"></div></div>
-      <div class="tm-stat" id="tmStat2" style="display:none"><div class="tm-k" id="tmK2"></div><div class="tm-v" id="tmV2"></div><div class="tm-basis" id="tmB2"></div></div>
-    </div>
-    <div id="tmActions"></div></div></div>`;
-  const seq=++tmEtaSeq;
-  resolveEta(cls.lat,cls.lng).then(r=>{
-    if(seq!==tmEtaSeq) return; const v=$('tmVerb'); if(!v) return;
-    const etaMin=Math.max(1,Math.round(r.minutes));
-    tmLastEtaMin=etaMin;
-    const leaveIn=nx.startDelta - etaMin - classBuffer();    // minutes until you must leave
-    const chip=$('tmChip'), k1=$('tmK1'), s2=$('tmStat2'), actions=$('tmActions');
-    $('tmBasis').textContent=etaMin+' min walk · '+etaSourceLabel(r.source);
-    const setChip=(t)=>{ chip.textContent=t; chip.style.display=''; };
-    const stat2=(k,vHTML,bTxt)=>{ s2.style.display=''; $('tmK2').textContent=k; $('tmV2').innerHTML=vHTML; $('tmB2').textContent=bTxt||''; };
-    const clsAt=fmtTime(nx.s).replace(/\s?([AP]M)$/i,'<span class="unit">$1</span>');
-    const goBtn=(label)=>{ document.getElementById('scr-home').classList.add('cta-go'); actions.innerHTML='<button class="tm-cta" id="tmGo">'+label+'</button>';
-      $('tmGo').addEventListener('click',()=>{ setDest(cls.lat,cls.lng,cls.b+(cls.room?(' · '+cls.room):'')); if(trackingOn) startWalk(); }); };
-    if(leaveIn>15){
-      v.innerHTML=tmHeroTime(new Date(Date.now()+leaveIn*6e4));
-      // the free time IS the What Fits entrance — one honey strip, same
-      // visual language as the What Fits banner (consistency, less text)
-      const freeTxt= leaveIn>=120 ? (Math.floor(leaveIn/60)+'h '+String(Math.round(leaveIn)%60).padStart(2,'0')+'m') : (Math.round(leaveIn)+' min');
-      actions.innerHTML='<button class="tm-gapstrip" id="tmFit"><b>'+freeTxt+' free</b><span>See what fits '+tmGoArrow()+'</span></button>';
-      $('tmFit').addEventListener('click', ()=>openFit(nx, etaMin));
-    } else if(leaveIn>1){
-      setChip('Leave soon');
-      k1.textContent='Leave in';
-      v.innerHTML=Math.round(leaveIn)+'<span class="unit">min</span>';
-      stat2('Class at', clsAt);
-      goBtn('Go — walk to class');
-    } else if(leaveIn>-2){
-      setChip('Leave now');
-      k1.textContent='Time to go';
-      v.innerHTML='Now';
-      stat2('Class at', clsAt);
-      goBtn('Go — walk to class');
-    } else {
-      const late=Math.round(-leaveIn);
-      setChip('Running late');
-      k1.textContent='If you leave now';
-      v.innerHTML='+'+late+'<span class="unit">min</span>';
-      const lr=learnedForDest({lat:cls.lat,lng:cls.lng});
-      $('tmBasis').textContent = (lr&&r.source!=='line') ? ('your fastest line: '+Math.round(lr.bestSeconds/60)+' min') : ('about '+late+' min late at your pace');
-      stat2('Class at', clsAt);
-      goBtn('Go now');
-    }
-  });
-}
+
 /* ---- learned-line insight — rendered only from real measured walks ---- */
 function renderHomeInsight(){
   const box=$('homeInsight'); if(!box) return;
@@ -6801,49 +6837,9 @@ function planTick(){
     plan.backMin=Math.round(back.min); savePlan();
   }
 }
-/* Home card for the active plan — one card, phase-aware */
-function planHomeCard(){
-  if(!plan) return '';
-  if(plan.v!==2){  // legacy plan object: minimal render
-    return `<div class="tm"><div class="tm-card"><div class="tm-toprow"><span class="tm-eyebrow">Plan</span></div>
-      <div class="tm-who"><div><div class="tm-course">${esc(plan.placeName)}</div><div class="tm-sub">Leave by <b>${fmtClockTime(new Date(plan.leaveThereBy))}</b></div></div></div>
-      <button class="tm-fit" id="tmPlanClear">Clear plan</button></div></div>`;
-  }
-  planTick();
-  if(!plan) return '';
-  const leftMin=Math.max(0,Math.round((plan.leaveThereBy-Date.now())/6e4));
-  const lv=fmtClockTime(new Date(plan.leaveThereBy));
-  const nextTxt=plan.course?esc(plan.course):'your next stop';
-  let chip, hero, sub, cta='';
-  if(plan.phase==='travel'){
-    chip='On plan'; hero=esc(plan.placeName);
-    sub='~'+plan.thereMin+' min away · then '+plan.usableMin+' min '+esc(plan.verb||plan.cat);
-    cta='<button class="tm-cta quiet" id="tmPlanNav">Directions to '+esc(shortName(plan.placeName))+'</button>';
-  } else if(plan.phase==='active'){
-    chip='At '+esc(plan.placeName); hero=leftMin+'<span class="unit">min</span>';
-    sub='Leave by <b>'+lv+'</b> for '+nextTxt;
-  } else if(plan.phase==='wrapup'){
-    chip='Wrap up'; hero=leftMin+'<span class="unit">min</span>';
-    sub='Leave by <b>'+lv+'</b> · '+(plan.backSrc==='route'?'':'~')+plan.backMin+' min to '+nextTxt;
-  } else {
-    chip='Leave now'; hero='Now';
-    sub=(plan.backSrc==='route'?'':'~')+plan.backMin+' min to '+nextTxt+(plan.buffer?(' · arrive ~'+plan.buffer+' min early'):'');
-    cta=`<button class="tm-cta" id="tmPlanGo">Go — walk to ${nextTxt}</button>`;
-  }
-  return `<div class="tm"><div class="tm-card${plan.phase==='leave'?' tm-now':''}">
-    <div class="tm-toprow"><span class="tm-eyebrow">Your plan</span><span class="tm-chip${plan.phase==='leave'?'':' calm'}">${chip}</span></div>
-    <div class="tm-stats"><div class="tm-stat"><div class="tm-k">${plan.phase==='travel'?'Heading to':(plan.phase==='leave'?'Time to go':'Time left here')}</div>
-      <div class="tm-v${plan.phase==='leave'?' honey':''}">${hero}</div>
-      <div class="tm-basis">${sub}</div></div></div>
-    ${cta}
-    <div class="tm-planrow"><button class="tm-fit" id="tmPlanChange">Change plan</button><button class="tm-fit" id="tmPlanClear">End plan</button></div></div></div>`;
-}
-function planHomeWire(){
-  const nv=$('tmPlanNav'); if(nv) nv.addEventListener('click',()=>setDest(plan.lat,plan.lng,plan.placeName));
-  const ch=$('tmPlanChange'); if(ch) ch.addEventListener('click',()=>{ if(typeof PlanUI!=='undefined') PlanUI.open(); });
-  const g=$('tmPlanGo'); if(g) g.addEventListener('click',()=>{ setDest(plan.classLat,plan.classLng,(plan.classB||plan.course||'Next stop')); if(typeof trackingOn!=='undefined'&&trackingOn) startWalk(); });
-  const c=$('tmPlanClear'); if(c) c.addEventListener('click', clearPlan);
-}
+/* The active plan's Home presentation belongs to Home: home.js renders states 3
+   (active plan) and 4 (time to go) from this same plan object, so there is one
+   plan card, not two. planTick() below stays here — it is engine, not view. */
 setInterval(()=>{ if(plan && plan.v===2){ const before=plan.phase+Math.round((plan.leaveThereBy||0)/9e4); planTick(); const after=plan?plan.phase+Math.round((plan.leaveThereBy||0)/9e4):''; if(before!==after && screens.home.classList.contains('active') && !document.hidden) renderTimeModule(); } }, 30000);
 
 /* ================================================================
@@ -6937,7 +6933,7 @@ const PlanUI={
         <div class="wfsh-leave">Leave ${esc(shortName(pl.place.n))} by <b>${lv}</b></div>
         ${pl.busOpt?`<div class="wf-bus">${pic('bus')} or the ${esc(pl.busOpt.abbr)} bus from ${esc(shortName(pl.busOpt.stop))} — saves ~${pl.busOpt.save} min <i>Scheduled</i></div>`:''}
         ${pl.nearMiss?`<div class="wfsh-miss">Below your usual ${esc(pl.prof.t.toLowerCase())} — your call.</div>`:''}
-        <button class="tm-cta" id="wfshChoose">Choose this plan</button>
+        <button class="hm-act honey" id="wfshChoose">Choose this plan</button>
         <button class="wf-nfm center" id="wfshNfm">Not for me</button>
       </div></div>`;
     document.body.appendChild(bg);
@@ -7092,6 +7088,728 @@ function planBusBackOption(pl){
   }catch(e){ return null; }
 }
 function shortName(n){ const s=String(n).replace(/\s*\([^)]*\)\s*/g,' ').trim(); return s.length>22?s.slice(0,21)+'…':s; }
+
+</script>
+
+<script>
+"use strict";
+/* ================================================================
+   BEELINE HOME — the state machine and its presentation.
+
+   Home answers two questions and nothing else:
+     (1) When do I need to leave?
+     (2) What can I realistically do before then?
+
+   Loads after app.js / bus.js / plan.js and reuses their engines rather
+   than recomputing anything:
+     app.js   scheduleNow · resolveEta · etaSourceLabel · classBuffer ·
+              setDest · startWalk · computeBusOption · placePhoto · favorites
+     plan.js  plan (active-plan object) · planTick · PlanUI · shortName
+
+   SEPARATION OF CONCERNS — the rule this file is organised around:
+     HomeModel  derives a typed state object from real data. No DOM.
+     HomeView   turns state + numbers into HTML. No data access, no math.
+     HomeUI     picks the state, composes the view, wires the actions.
+     HomeDev    dev-only mock adapter (localhost preview), fully separated.
+
+   HONESTY (project law): every time figure keeps its source. Measured
+   personal lines read plainly; router/pace estimates keep their "~" and
+   say what they are. We never claim a phone notification we cannot send.
+   ================================================================ */
+
+/* ---- when usable time becomes the hero (spec: ~20+ usable minutes) ---- */
+const HOME_USABLE_MIN = 20;
+/* ---- how far ahead the "leave soon" language starts ---- */
+const HOME_SOON_MIN = 15;
+
+/* ================================================================
+   HomeDev — DEV-ONLY ADAPTER. Never runs in the shipped app.
+   The production schedule store is empty until the user adds classes
+   (that is what makes State 5 reachable); for browser QA we inject a
+   realistic typed schedule in memory only — it is never persisted.
+   Active on http://localhost / 127.0.0.1 (build/serve.mjs preview) or
+   with ?dev=1. The shipped WebView runs on https://beeline.local/.
+   ================================================================ */
+const HomeDev={
+  on(){
+    try{
+      if(/(?:^|[?&])dev=1/.test(location.search)) return true;
+      return /^(localhost|127\.0\.0\.1)$/.test(location.hostname);
+    }catch(e){ return false; }
+  },
+  /* @type {{course,title,days,start,end,b,lat,lng,room}[]} — shape matches
+     the real classList entries produced by the Schedule editor. */
+  classes(){
+    const hodge=placeByName('Kelley School of Business (Hodge Hall)');
+    const lindley=placeByName('Lindley Hall');
+    if(!hodge||!lindley) return [];
+    const all=['Mo','Tu','We','Th','Fr'];
+    return [
+      {id:'dev1', course:'BUS-K 201', title:'The Computer in Business', days:all, start:'13:30', end:'14:45',
+       b:hodge.n, lat:hodge.lat, lng:hodge.lng, room:'HH 1055'},
+      {id:'dev2', course:'GER-E 141', title:'Amsterdam', days:all, start:'15:55', end:'17:10',
+       b:lindley.n, lat:lindley.lat, lng:lindley.lng, room:'LH 008'},
+    ];
+  },
+  /* one class positioned relative to right now, so a forced state shows the
+     timing language it would really show (12 min out vs 55 min out vs
+     mid-class), instead of whatever the fixed timetable happens to say. */
+  classIn(minsFromNow, durMin){
+    const hodge=placeByName('Kelley School of Business (Hodge Hall)');
+    if(!hodge) return [];
+    const s=new Date(Date.now()+minsFromNow*6e4), e=new Date(+s+(durMin||75)*6e4);
+    const p2=n=>String(n).padStart(2,'0');
+    return [{ id:'devrel', course:'BUS-K 201', title:'The Computer in Business',
+      days:[DOW_CODES[s.getDay()]], start:p2(s.getHours())+':'+p2(s.getMinutes()),
+      end:p2(e.getHours())+':'+p2(e.getMinutes()),
+      b:hodge.n, lat:hodge.lat, lng:hodge.lng, room:'HH 1055' }];
+  },
+  /* QA position: the preview browser has no GPS, so distance/transit rows would
+     never render. Park us at Wells Library — dev only, never in the WebView. */
+  standIn(){
+    if(typeof curPos!=='undefined' && curPos) return;
+    const w=placeByName('Herman B Wells Library'); if(!w) return;
+    curPos={lat:w.lat, lng:w.lng, acc:12, at:Date.now()};
+    tmEta=null;
+  },
+  /* forced state for QA — set by the dev bar, honoured by HomeUI */
+  force:null,
+  seed(){
+    if(!this.on()) return;
+    if(Array.isArray(classList) && classList.length) return;    // real data always wins
+    classList=this.classes();                                    // in memory only — never saveClasses()
+  },
+  /* a plan object identical in shape to planCommit()'s, for states 3/4 */
+  mockPlan(phase){
+    const srsc=placeByName('Student Rec Sports Center (SRSC)');
+    const nx=scheduleNow();
+    if(!srsc||!nx) return null;
+    const until=Date.now()+(nx.startDelta||60)*6e4;
+    const backMin=14, exit=5, buffer=classBuffer();
+    /* same arithmetic planCommit() uses, so the timeline is internally
+       consistent: leave-there = class start − walk back − buffer − exit */
+    const leaveThereBy=until-(backMin+buffer+exit)*6e4;
+    return { v:2, cat:'gym', placeName:srsc.n, lat:srsc.lat, lng:srsc.lng, strategy:'standard',
+      createdAt:Date.now(), phase:phase||'active', thereMin:8, usableMin:38, setup:6, exit:exit,
+      verb:'workout', leaveThereBy,
+      until, course:nx.c.course, classB:nx.c.b, classRoom:nx.c.room,
+      classLat:nx.c.lat, classLng:nx.c.lng, buffer:buffer, backMin:backMin, backSrc:'route' };
+  },
+  bar(){
+    if(!this.on()) return '';
+    const opts=[['','auto'],['usable','1 usable'],['approach','2 approach'],['plan','3 plan'],
+                ['leave','4 leave'],['noschedule','5 no sched'],['inclass','in class'],['later','done today']];
+    return `<div class="hm-dev"><b>DEV</b>`+
+      opts.map(o=>`<button data-devs="${o[0]}"${this.force===(o[0]||null)?' class="on"':''}>${esc(o[1])}</button>`).join('')+
+      `<span class="hm-dev-n">localhost only</span></div>`;
+  },
+  wire(){
+    document.querySelectorAll('[data-devs]').forEach(b=>b.addEventListener('click',()=>{
+      const f=HomeDev.force=b.dataset.devs||null;
+      HomeDev.standIn();
+      /* put the schedule where the requested state actually lives */
+      if(f==='noschedule')      classList=[];
+      else if(f==='usable')     classList=HomeDev.classIn(55);
+      else if(f==='approach')   classList=HomeDev.classIn(14);
+      else if(f==='inclass')    classList=HomeDev.classIn(-20);
+      else if(f==='later')      classList=HomeDev.classIn(20*60);
+      else if(!classList.length) classList=HomeDev.classes();
+      if(f==='plan'||f==='leave'){
+        /* 46 min out leaves 24 min at the gym after the 14+3+5 protected leg;
+           19 min out puts the leave-time a few minutes behind us (State 4). */
+        classList=HomeDev.classIn(f==='leave'?19:46);
+        plan=HomeDev.mockPlan(f==='leave'?'leave':'active');
+      } else if(f){ plan=null; }
+      tmEta=null;                    // the ETA cache is keyed to the old position/target
+      HomeUI.render();
+    }));
+  },
+};
+
+/* ================================================================
+   Small shared formatters — presentation only.
+   ================================================================ */
+function hmMin(n){ return Math.max(0, Math.round(n)); }
+/* "42 min" · "1h 20m" — used for durations, never for clock times */
+function hmDur(min){
+  min=hmMin(min);
+  if(min<60) return min+' min';
+  const h=Math.floor(min/60), m=min%60;
+  return m ? h+'h '+m+'m' : h+' hr';
+}
+/* clock time with the meridiem set small: 1:30<small>PM</small> */
+function hmClock(d){
+  const s=fmtClockTime(d);                       // "1:30 PM"
+  return s.replace(/\s([AP]M)$/,'<span class="u">$1</span>');
+}
+/* the ~ that marks an estimated (not measured) figure */
+function hmTilde(src){ return (src==='line'||src==='learned'||src==='route') ? '' : '~'; }
+function hmIcon(n){ return (typeof pic==='function') ? pic(n) : ''; }
+/* The short name a student actually says. Gazetteer entries carry the common
+   name in parentheses ("Kelley School of Business (Hodge Hall)" → "Hodge Hall",
+   "Indiana Memorial Union (IMU)" → "IMU"); use it when it is genuinely shorter,
+   otherwise fall back to the cleaned name. Keeps headers on one line. */
+function hmPlaceShort(name){
+  const raw=String(name||'');
+  const m=raw.match(/\(([^)]+)\)/);
+  const base=(typeof favLabel==='function') ? favLabel(raw) : raw.replace(/\s*\([^)]*\)\s*/g,' ').trim();
+  if(m){ const inner=m[1].trim(); if(inner.length<=12 && inner.length<base.length) return inner; }
+  return (typeof shortName==='function') ? shortName(base) : base;
+}
+/* ---- campus default thumbnail ----------------------------------------
+   When a place has no verified photo of its own, the thumbnail falls back to
+   Sample Gates — IU Bloomington's landmark, so the slot reads as "campus"
+   rather than as an empty grey box.
+
+   It comes from BEELINE_PHOTOS like every other photo (added by the Commons
+   generator, license-verified, evidence-gated — nothing hand-added here), so
+   if the photo table ever drops it the fallback simply disappears and the
+   plain category tile returns.
+
+   HONESTY: this is NOT a picture of the building it sits next to, so it is
+   never presented as one — it renders dimmed, as a backdrop behind the
+   category glyph that actually identifies the place, and is aria-hidden so a
+   screen reader is never told it is the destination. The credit rides along
+   in the tooltip because the photo is CC BY-SA. */
+const HOME_FALLBACK_PLACE='Sample Gates';
+let hmFallbackCache;
+function hmFallbackPhoto(){
+  if(hmFallbackCache!==undefined) return hmFallbackCache;
+  let p=null;
+  try{ p=placePhoto({n:HOME_FALLBACK_PLACE}); }catch(e){}
+  hmFallbackCache = (p && p.t)
+    ? { t:p.t, credit:HOME_FALLBACK_PLACE+' — '+(p.a||'Wikimedia Commons')+(p.l?(' · '+p.l):'') }
+    : null;
+  return hmFallbackCache;
+}
+/* the usable-time hero reads in hours once a gap stops being "a few minutes" */
+function hmUsableHero(mins){
+  if(mins>=120){ const h=Math.floor(mins/60), m=mins%60; return `You have <b>${h}h ${String(m).padStart(2,'0')}m</b> of usable time`; }
+  return `You have <b>${mins}</b> usable minute${mins===1?'':'s'}`;
+}
+
+/* ================================================================
+   HomeView — pure components. Every function takes plain values and
+   returns HTML. No globals are read here beyond the icon helper.
+   ================================================================ */
+const HomeView={
+  /* small-caps section eyebrow; honey when it carries urgency */
+  eyebrow(text, honey){
+    return `<div class="hm-eyebrow${honey?' honey':''}">${esc(text)}</div>`;
+  },
+  /* the big editorial statement — the one thing the page says */
+  hero(html, sub){
+    return `<h1 class="hm-hero">${html}</h1>`+(sub?`<p class="hm-herosub">${sub}</p>`:'');
+  },
+  /* supporting building image: small, straight-edged, ~28% of content width.
+     Falls back to a quiet paper tile with the category glyph. */
+  thumb(placeName){
+    let ph=null, cat=null;
+    try{ ph=placePhoto({n:placeName}); }catch(e){}
+    try{ const p=placeByName(placeName); cat=p&&p.c; }catch(e){}
+    const glyph=(typeof favIcon==='function'&&cat)?favIcon(cat):hmIcon('buildings');
+    /* the real thing: this place's own verified photo */
+    if(ph&&ph.t) return `<span class="hm-thumb"><img data-hmimg src="${esc(ph.t)}" alt="" loading="lazy"></span>`;
+    /* no photo for this place — campus default behind the category glyph */
+    const fb=hmFallbackPhoto();
+    if(fb) return `<span class="hm-thumb fallback" title="Campus image: ${esc(fb.credit)}">
+      <img data-hmimg src="${esc(fb.t)}" alt="" aria-hidden="true" loading="lazy">
+      <span class="hm-thumb-glyph">${glyph}</span></span>`;
+    /* photo table unavailable — the quiet paper tile we started from */
+    return `<span class="hm-thumb empty">${glyph}</span>`;
+  },
+  /* compact next-commitment block: honey rule, course, where/when, leave-by */
+  nextCompact(o){
+    return `<div class="hm-next">
+      <div class="hm-next-b">
+        <div class="hm-eyebrow honey">Next · ${esc(o.course)}</div>
+        <div class="hm-next-w">${esc(o.where)} · ${hmClock(o.start)}</div>
+        <div class="hm-next-l" data-hm="leaveby">${o.leaveBy?('Leave by '+hmClock(o.leaveBy)):'&nbsp;'}</div>
+      </div>
+      ${this.thumb(o.thumbName)}
+    </div>`;
+  },
+  /* one flat, full-width primary action. Honey is the only fill we use. */
+  action(id, label, icon, kind){
+    return `<button class="hm-act${kind?' '+kind:''}" id="${id}">${icon?`<span class="hm-act-ic">${icon}</span>`:''}<span>${esc(label)}</span></button>`;
+  },
+  /* quiet underlined secondary action */
+  link(id, label){ return `<button class="hm-link" id="${id}">${esc(label)}</button>`; },
+  /* icon + value meta rows (walk time, arrival, distance) */
+  metaRows(rows){
+    return `<div class="hm-meta">`+rows.filter(Boolean).map(r=>
+      `<div class="hm-meta-r"><span class="hm-meta-ic">${r.icon}</span><span class="hm-meta-t">${r.html}</span></div>`
+    ).join('')+`</div>`;
+  },
+  /* vertical timeline: nodes = [{time,title,sub,icon,on}] */
+  timeline(nodes){
+    return `<ol class="hm-tl">`+nodes.filter(Boolean).map(n=>
+      `<li class="hm-tl-i${n.on?' on':''}">
+        <span class="hm-tl-node">${n.icon}</span>
+        <div class="hm-tl-body">
+          <span class="hm-tl-time">${esc(n.time)}</span>
+          <span class="hm-tl-title">${esc(n.title)}</span>
+          ${n.sub?`<span class="hm-tl-sub">${esc(n.sub)}</span>`:''}
+        </div>
+      </li>`).join('')+`</ol>`;
+  },
+  /* confirmation strip (restrained green) / caution strip (honey) */
+  strip(kind, icon, html, sub){
+    return `<div class="hm-strip ${kind}"><span class="hm-strip-ic">${icon}</span>
+      <span class="hm-strip-t">${html}${sub?`<i>${sub}</i>`:''}</span></div>`;
+  },
+  divider(){ return `<div class="hm-rule"></div>`; },
+};
+
+/* ================================================================
+   HomeModel — derives the state. Pure: reads app state, returns data.
+   ================================================================ */
+const HomeModel={
+  /* Which state are we in? Everything that needs no network ETA. */
+  base(){
+    if(HomeDev.force==='noschedule') return {kind:'noschedule'};
+    /* An active plan outranks a chosen destination: committing a plan SETS the
+       destination (planCommit → setDest), so checking dest first would hide the
+       plan the moment it was made. The destination card still renders above —
+       it is the walk-there affordance — and the plan card drops its own
+       duplicate Directions button while the two point at the same place. */
+    const p=this.planState();
+    if(p) return p;
+    if(typeof dest!=='undefined' && dest) return {kind:'dest'};
+    if(!Array.isArray(classList) || !classList.length) return {kind:'noschedule'};
+    const nx=scheduleNow();
+    if(!nx) return {kind:'noschedule'};
+    const dayDelta=(nx.di-new Date().getDay()+7)%7;
+    if(nx.ongoing) return {kind:'inclass', nx, cls:nx.c};
+    if(dayDelta>0) return {kind:'later', nx, cls:nx.c, dayDelta};
+    return {kind:'pending', nx, cls:nx.c};      // usable vs approaching — needs the ETA
+  },
+  /* the active plan, advanced to now. Null when there isn't one. */
+  planState(){
+    if(typeof plan==='undefined' || !plan) return null;
+    if(plan.v!==2){ return null; }                      // legacy object — let it lapse
+    if(typeof planTick==='function') planTick();
+    if(!plan) return null;
+    if(Date.now()>=plan.until){ plan=null; savePlan(); return null; }
+    const leftMin=hmMin((plan.leaveThereBy-Date.now())/6e4);
+    /* departure is "now" once the leave time has passed, or the (possibly
+       snoozed) leave time while it is still ahead of us */
+    const depart=new Date(Math.max(Date.now(), plan.leaveThereBy));
+    const arrive=new Date(+depart + plan.backMin*6e4);
+    const marginMin=Math.round((plan.until-+arrive)/6e4);   // + early · − late
+    return {
+      kind: plan.phase==='leave' ? 'leave' : 'plan',
+      phase: plan.phase, leftMin, depart, arrive, marginMin,
+      leaveBy: new Date(plan.leaveThereBy),
+      nextStart: new Date(plan.until),
+    };
+  },
+  /* timing for the pending state once the ETA to class resolves.
+     leaveIn = minutes until you must walk out the door. */
+  timing(nx, etaMin, src){
+    const buffer=classBuffer();
+    const leaveInMin=nx.startDelta - etaMin - buffer;
+    return {
+      etaMin, src, buffer, leaveInMin,
+      leaveBy: new Date(Date.now()+leaveInMin*6e4),
+      start:   new Date(Date.now()+nx.startDelta*6e4),
+      arrive:  new Date(Date.now()+etaMin*6e4),
+      usable:  leaveInMin>=HOME_USABLE_MIN,
+    };
+  },
+};
+
+/* ================================================================
+   HomeUI — composes the state into the page and wires every action.
+   ================================================================ */
+let hmEtaSeq=0, hmBusSeq=0;
+const HomeUI={
+  /* ---------------------------------------------------------------- */
+  render(){
+    const box=$('homeBody'); if(!box) return;
+    /* Home re-renders on a 30s tick (and on visibility changes). Never do that
+       out from under someone typing in the no-schedule form — skip the repaint
+       while a Home field has focus, and carry the entered values across any
+       repaint that does happen. */
+    const ae=document.activeElement;
+    if(ae && box.contains(ae) && /^(INPUT|TEXTAREA|SELECT)$/.test(ae.tagName)) return;
+    const keep={ until:($('hmUntil')||{}).value, where:($('hmWhere')||{}).value };
+    if(typeof renderHomeInsight==='function') renderHomeInsight();
+    let st=HomeModel.base();
+    /* a real plan (committed from What Fits) always beats a forced QA branch */
+    if(HomeDev.force && HomeDev.force!=='noschedule' && st.kind!=='dest'
+       && st.kind!=='plan' && st.kind!=='leave'){
+      /* dev override: keep the real derivation but force the branch */
+      if(HomeDev.force==='usable' || HomeDev.force==='approach'){
+        const nx=scheduleNow(); if(nx) st={kind:'pending', nx, cls:nx.c};
+      } else if(HomeDev.force==='inclass' || HomeDev.force==='later'){
+        const nx=scheduleNow(); if(nx) st={kind:HomeDev.force, nx, cls:nx.c, dayDelta:1};
+      }
+    }
+    if(st.kind==='dest'){ box.innerHTML=''; this.renderQuick(true); this.devBar(); return; }
+
+    if(st.kind==='plan' || st.kind==='leave') box.innerHTML=this.viewPlan(st);
+    else if(st.kind==='noschedule')           box.innerHTML=this.viewNoSchedule();
+    else if(st.kind==='inclass')              box.innerHTML=this.viewInClass(st);
+    else if(st.kind==='later')                box.innerHTML=this.viewLater(st);
+    else                                      box.innerHTML=this.viewPending(st);
+
+    this.wireImages();
+    if(st.kind==='plan' || st.kind==='leave'){ this.wirePlan(st); this.renderQuick(false); }
+    else if(st.kind==='noschedule'){
+      if(keep.until && $('hmUntil')) $('hmUntil').value=keep.until;
+      if(keep.where && $('hmWhere')) $('hmWhere').value=keep.where;
+      this.wireNoSchedule(); this.renderQuick(true);
+    }
+    else if(st.kind==='inclass' || st.kind==='later'){ this.wireSimple(); this.renderQuick(true); }
+    else { this.fillPending(st); this.renderQuick(true); }
+    this.devBar();
+  },
+  devBar(){
+    const q=$('homeQuick'); if(!q) return;
+    const old=document.getElementById('hmDevBar'); if(old) old.remove();
+    const html=HomeDev.bar(); if(!html) return;
+    q.insertAdjacentHTML('afterend', '<div id="hmDevBar">'+html+'</div>');
+    HomeDev.wire();
+  },
+  wireImages(){
+    document.querySelectorAll('#homeBody [data-hmimg]').forEach(img=>{
+      if(img.complete && img.naturalWidth) img.classList.add('ld');
+      else{ img.addEventListener('load',()=>img.classList.add('ld'));
+            img.addEventListener('error',()=>{ const w=img.parentElement; if(w){ w.classList.add('empty'); img.remove(); } }); }
+    });
+  },
+
+  /* ---- STATES 1 & 2 — one commitment, two hierarchies -------------- */
+  viewPending(st){
+    const cls=st.cls;
+    /* skeleton: the parts that don't depend on the ETA render immediately,
+       the timing-dependent parts fill in when resolveEta() answers. */
+    return `<div class="hm-state" id="hmPending">
+      ${HomeView.nextCompact({course:cls.course, where:hmPlaceShort(cls.b), start:new Date(Date.now()+st.nx.startDelta*6e4), leaveBy:null, thumbName:cls.b})}
+      ${HomeView.divider()}
+      <div id="hmPendingBody"><div class="hm-skel"><span class="ldots"><i></i><i></i><i></i></span></div></div>
+    </div>`;
+  },
+  fillPending(st){
+    const seq=++hmEtaSeq, cls=st.cls;
+    resolveEta(cls.lat, cls.lng).then(r=>{
+      if(seq!==hmEtaSeq) return;
+      const body=$('hmPendingBody'); if(!body) return;
+      const etaMin=Math.max(1, Math.round(r.minutes));
+      const t=HomeModel.timing(st.nx, etaMin, r.source);
+      /* the compact block's leave-by is now known */
+      const lb=document.querySelector('#hmPending [data-hm="leaveby"]');
+      if(lb) lb.innerHTML='Leave by '+hmClock(t.leaveBy);
+      const forced=HomeDev.force;
+      const usable = forced==='usable' ? true : forced==='approach' ? false : t.usable;
+      body.innerHTML = usable ? this.bodyUsable(st,t) : this.bodyApproach(st,t);
+      this.wireImages();
+      if(usable){
+        const f=$('hmFit'); if(f) f.addEventListener('click',()=>{ if(typeof PlanUI!=='undefined') PlanUI.open(); });
+      } else {
+        const g=$('hmGo'); if(g) g.addEventListener('click',()=>this.walkTo(cls));
+        this.fillTransit(cls);
+      }
+    }).catch(()=>{
+      const body=$('hmPendingBody');
+      if(body) body.innerHTML=`<p class="hm-herosub">Couldn’t work out your walking time just now. Pull down to retry, or pick a destination above.</p>`;
+    });
+  },
+  /* STATE 1 — meaningful usable time. Usable time is the hero. */
+  bodyUsable(st,t){
+    const mins=hmMin(t.leaveInMin);
+    return `${HomeView.hero(hmUsableHero(mins), `Before you need to leave for ${esc(st.cls.course)}`)}
+      ${HomeView.action('hmFit','Fit something in', hmIcon('timer'), 'honey')}
+      <p class="hm-foot">That counts the ${hmTilde(t.src)}${t.etaMin} min walk to ${esc(hmPlaceShort(st.cls.b))} and a ${t.buffer} min buffer. Each plan then subtracts its own travel and setup.</p>`;
+  },
+  /* STATE 2 — commitment approaching. The commitment is the hero. */
+  bodyApproach(st,t){
+    const cls=st.cls, leaveIn=Math.round(t.leaveInMin);
+    const late=leaveIn<-1;
+    const eyebrow = late ? 'Running late' : leaveIn<=1 ? 'Time to go' : 'Leave in '+hmDur(leaveIn);
+    const distM = (typeof curPos!=='undefined'&&curPos) ? distance(curPos.lat,curPos.lng,cls.lat,cls.lng) : null;
+    const tilde=hmTilde(t.src);
+    const rows=[
+      {icon:hmIcon('person-simple-walk'), html:`<b>${tilde}${t.etaMin} min</b> walk`},
+      {icon:hmIcon('clock'),  html:`Arrive <b>${hmClock(t.arrive)}</b>${late?` · <span class="warn">${hmDur(-leaveIn)} late</span>`:''}`},
+      distM!=null ? {icon:hmIcon('ruler'), html:esc(fmtDist(distM))} : null,
+    ];
+    return `${HomeView.eyebrow(eyebrow, true)}
+      ${HomeView.hero(esc(cls.course), `${esc(hmPlaceShort(cls.b))}${cls.room?(' · '+esc(cls.room)):''} · class at <b>${hmClock(t.start)}</b>`)}
+      ${HomeView.metaRows(rows)}
+      <p class="hm-basis">Best route: walking · ${esc(etaSourceLabel(t.src))}</p>
+      <div id="hmTransit"></div>
+      ${HomeView.action('hmGo','Walk to class', hmIcon('navigation-arrow'), 'honey')}`;
+  },
+  /* the transit alternative, when the bus genuinely helps (State 2 only) */
+  fillTransit(cls){
+    const box=$('hmTransit'); if(!box) return;
+    if(typeof computeBusOption!=='function') return;
+    if(typeof curPos==='undefined' || !curPos || !trackingOn) return;
+    if(typeof navigator!=='undefined' && navigator.onLine===false) return;
+    const seq=++hmBusSeq;
+    computeBusOption({lat:cls.lat, lng:cls.lng}).then(opt=>{
+      if(seq!==hmBusSeq) return;
+      const b=$('hmTransit'); if(!b || !opt || opt.status==='no-route' || opt.status==='none-live') return;
+      const walkMin=estWalkMin(distance(curPos.lat,curPos.lng,cls.lat,cls.lng));
+      const saves=walkMin-opt.total;
+      if(saves<2) return;                       // only surface a bus that actually wins
+      b.innerHTML=`<div class="hm-alt"><span class="hm-alt-ic" style="color:${esc(opt.rt.color||'#FFC300')}">${hmIcon('bus')}</span>
+        <span class="hm-alt-t"><b>${esc(opt.rt.abbr)} bus</b> — ${hmDur(opt.total)} total, saves ${hmDur(saves)}
+        <i>${esc(opt.o.name)} in ${opt.wait} min · live</i></span></div>`;
+    }).catch(()=>{});
+  },
+
+  /* ---- STATES 3 & 4 — the active plan ----------------------------- */
+  viewPlan(st){
+    const p=plan, leaving=(st.kind==='leave');
+    const place=hmPlaceShort(p.placeName);
+    const nextWhere=p.classB?hmPlaceShort(p.classB):'your next stop';
+    const nextLine=`${esc(p.course||'Next up')} · ${esc(nextWhere)} · ${hmClock(st.nextStart)}`;
+
+    if(leaving) return this.viewLeave(st, place, nextWhere, nextLine);
+
+    /* still travelling to the activity — same state, honest hero */
+    if(st.phase==='travel'){
+      /* the destination card above already offers the walk to this exact place;
+         a second honey button for the same action would be noise */
+      const dup = typeof dest!=='undefined' && dest &&
+                  Math.abs(dest.lat-p.lat)<1e-5 && Math.abs(dest.lng-p.lng)<1e-5;
+      return `<div class="hm-state">
+        ${HomeView.eyebrow('Active plan', true)}
+        ${HomeView.hero(esc(place), `${hmTilde('est')}${p.thereMin} min away · then ${p.usableMin} min ${esc(p.verb||p.cat)}`)}
+        ${HomeView.metaRows([
+          {icon:hmIcon('clock'), html:`Leave ${esc(place)} by <b>${hmClock(st.leaveBy)}</b>`},
+          {icon:hmIcon('bus'),   html:`Then ${nextLine}`},
+        ])}
+        ${dup?'':HomeView.action('hmPlanNav','Directions to '+place, hmIcon('navigation-arrow'), 'honey')}
+        ${HomeView.link('hmPlanEnd','End plan')}
+        ${this.planAlertStrip()}
+      </div>`;
+    }
+
+    /* at the activity: the live time-safety screen */
+    const until=hmClock(st.leaveBy);
+    return `<div class="hm-state">
+      ${HomeView.eyebrow('Active plan', true)}
+      ${HomeView.hero(esc(place), `${esc(cap(p.verb||p.cat))} until <b>${until}</b>`)}
+      <div class="hm-big"><b>${st.leftMin}</b> min left here</div>
+      <p class="hm-herosub">Then ${nextLine}</p>
+      ${HomeView.timeline([
+        {time:'Now',                 title:'At '+place,        icon:hmIcon(planCatIcon(p.cat)), on:true},
+        {time:fmtClockTime(st.leaveBy), title:'Leave '+place,  icon:hmIcon('clock')},
+        {time:fmtClockTime(st.nextStart), title:p.course||'Next up', sub:p.classB?hmPlaceShort(p.classB):'', icon:hmIcon('bus')},
+      ])}
+      ${HomeView.action('hmPlanGo','Directions to class', hmIcon('navigation-arrow'), 'honey')}
+      ${HomeView.link('hmPlanEnd','End plan')}
+      ${this.planAlertStrip()}
+      ${HomeView.divider()}
+      <div class="hm-eyebrow">Next up</div>
+      <button class="hm-row" id="hmPlanNext">
+        <span class="hm-row-ic">${hmIcon('person-simple-walk')}</span>
+        <span class="hm-row-b"><b>Walk to ${esc(nextWhere)}</b>
+          <i>${hmTilde(p.backSrc)}${p.backMin} min walk · arrive ${fmtClockTime(st.arrive)}</i></span>
+        <span class="hm-row-ch">${hmIcon('caret-right')}</span>
+      </button>
+    </div>`;
+  },
+  /* STATE 4 — time to leave */
+  viewLeave(st, place, nextWhere, nextLine){
+    const p=plan;
+    const snoozed=+plan.snoozes||0;
+    const waiting=(plan.leaveThereBy-Date.now())>30e3;    // snoozed and still counting down
+    const margin=st.marginMin;
+    const marginTxt = margin>=1 ? `${hmDur(margin)} early` : margin<=-1 ? `${hmDur(-margin)} late` : 'right on time';
+    const marginCls = margin>=1 ? 'ok' : margin<=-1 ? 'warn' : '';
+    const room=p.classRoom?(' · Room '+p.classRoom):'';
+    return `<div class="hm-state">
+      ${HomeView.eyebrow('Time to go', true)}
+      ${HomeView.hero(waiting?`Leave ${esc(place)} in <b>${hmMin((plan.leaveThereBy-Date.now())/6e4)}</b> min`:`Leave ${esc(place)} now`,
+                      nextLine)}
+      ${HomeView.metaRows([
+        {icon:hmIcon('person-simple-walk'), html:`<b>${hmTilde(p.backSrc)}${p.backMin} min</b> walk`},
+        {icon:hmIcon('clock'), html:`Arrive <b>${hmClock(st.arrive)}</b> · <span class="${marginCls}">${marginTxt}</span>`},
+      ])}
+      ${HomeView.timeline([
+        {time:fmtClockTime(st.depart), title:'Exit '+place, icon:hmIcon('signpost'), on:true},
+        {time:'Walk',  title:hmTilde(p.backSrc)+p.backMin+' min', sub:'to '+nextWhere, icon:hmIcon('person-simple-walk')},
+        {time:fmtClockTime(st.arrive), title:(p.classB?hmPlaceShort(p.classB):nextWhere)+room, sub:'Arrive '+marginTxt, icon:hmIcon('buildings')},
+      ])}
+      ${HomeView.action('hmLeaveGo','Start walking', hmIcon('navigation-arrow'), 'honey')}
+      ${HomeView.link('hmSnooze','I need 5 more minutes')}
+      ${snoozed?HomeView.strip('warn', hmIcon('warning'),
+          `You’ll arrive around <b>${hmClock(st.arrive)}</b>`,
+          margin<0?`${hmDur(-margin)} after ${esc(p.course||'your next commitment')} starts`:`still ${hmDur(margin)} early`):''}
+      ${p.phase==='leave'&&p.usableMin?HomeView.strip('ok', hmIcon('check'),
+          `${esc(cap(p.verb||p.cat))} complete · ${p.usableMin} min`):''}
+      ${HomeView.link('hmPlanEnd','End plan')}
+    </div>`;
+  },
+  /* Honest version of the mockup's alert promise: BeeLine has no push
+     notifications (WebView), so we promise only what we can deliver —
+     and planWarn5() actually delivers it. */
+  planAlertStrip(){
+    return HomeView.strip('ok', hmIcon('check'),
+      `We’ll flag it <b>5 min</b> before it’s time to leave`,
+      `In the app — BeeLine can’t send phone notifications yet`);
+  },
+  wirePlan(st){
+    const nav=$('hmPlanNav'); if(nav) nav.addEventListener('click',()=>setDest(plan.lat,plan.lng,plan.placeName));
+    const go=$('hmPlanGo');  if(go)  go.addEventListener('click',()=>this.walkToClass());
+    const nxt=$('hmPlanNext'); if(nxt) nxt.addEventListener('click',()=>this.walkToClass());
+    const lg=$('hmLeaveGo'); if(lg) lg.addEventListener('click',()=>this.walkToClass());
+    const end=$('hmPlanEnd'); if(end) end.addEventListener('click',()=>{
+      confirmDialog({title:'End this plan?', msg:'Home goes back to your next commitment.', confirmText:'End plan',
+        onConfirm:()=>{ if(typeof clearPlan==='function') clearPlan(); else { plan=null; savePlan(); HomeUI.render(); } }});
+    });
+    const sn=$('hmSnooze'); if(sn) sn.addEventListener('click',()=>{
+      if(!plan) return;
+      plan.snoozes=(+plan.snoozes||0)+1;   // a count, not minutes: each press is five more from NOW
+      plan.leaveThereBy=Date.now()+5*6e4;          // five more minutes, from now
+      savePlan();
+      this.render();                                // consequence shows immediately
+      const arr=new Date(plan.leaveThereBy+plan.backMin*6e4);
+      const late=Math.round((plan.until-+arr)/6e4);
+      toast(late>=0 ? ('OK — you’d still arrive '+hmDur(late)+' early') : ('Heads up — that puts you '+hmDur(-late)+' late'), late>=0?'info':'warn');
+    });
+  },
+  walkTo(cls){ setDest(cls.lat, cls.lng, cls.b+(cls.room?(' · '+cls.room):'')); if(trackingOn) startWalk(); },
+  walkToClass(){
+    if(!plan) return;
+    setDest(plan.classLat, plan.classLng, (plan.classB||plan.course||'Next stop')+(plan.classRoom?(' · '+plan.classRoom):''));
+    if(typeof trackingOn!=='undefined' && trackingOn) startWalk();
+  },
+
+  /* ---- STATE 5 — no connected schedule ---------------------------- */
+  viewNoSchedule(){
+    const t=new Date(Date.now()+90*6e4);           // a sensible default: 90 min out
+    const hh=String(t.getHours()).padStart(2,'0'), mm=String(t.getMinutes()).padStart(2,'0');
+    const teaser=lsGet(LS_TEASER);
+    return `<div class="hm-state">
+      ${HomeView.hero('Got some time?','Tell BeeLine when you need to be free, and we’ll find plans that actually fit.')}
+      <div class="hm-panel">
+        <div class="hm-panel-h">${hmIcon('timer')}<span>Fit something in</span></div>
+        <label class="hm-field" for="hmUntil"><span>Until when?</span>
+          <input type="time" id="hmUntil" value="${hh}:${mm}"></label>
+        <div class="hm-field" id="hmWhereField"><span>Before I need to be at…</span>
+          <input type="text" id="hmWhere" placeholder="Choose a place" autocomplete="off">
+          <div class="hm-acl" id="hmWhereAc" style="display:none"></div></div>
+        <button class="hm-act ink" id="hmFindPlans"><span>Find something to do</span></button>
+      </div>
+      ${HomeView.divider()}
+      ${teaser?'':`<div class="hm-strip flat" id="hmConnect">
+        <span class="hm-strip-ic">${hmIcon('calendar-blank')}</span>
+        <span class="hm-strip-t">Connect your schedule for automatic usable-time plans</span>
+        <button class="hm-strip-cta" id="hmConnectGo">Set up</button>
+        <button class="hm-strip-x" id="hmConnectX" aria-label="Dismiss">${hmIcon('x')}</button></div>`}
+    </div>`;
+  },
+  wireNoSchedule(){
+    let picked=null;
+    const inp=$('hmWhere'), acl=$('hmWhereAc');
+    if(inp){
+      inp.addEventListener('input',()=>{
+        const q=inp.value.trim(); picked=null;
+        if(q.length<2){ acl.style.display='none'; return; }
+        const hits=(typeof localSearch==='function')?localSearch(q).slice(0,5):[];
+        if(!hits.length){ acl.style.display='none'; return; }
+        acl.innerHTML=hits.map((h,i)=>`<button class="hm-acl-i" data-i="${i}">${esc(h.name)}<i>${esc(h.sub||'')}</i></button>`).join('');
+        acl.style.display='';
+        acl.querySelectorAll('[data-i]').forEach(b=>b.addEventListener('click',()=>{
+          const h=hits[+b.dataset.i]; picked={n:h.name, lat:h.lat, lng:h.lng};
+          inp.value=h.name; acl.style.display='none';
+        }));
+      });
+    }
+    const go=$('hmFindPlans');
+    if(go) go.addEventListener('click',()=>{
+      const v=$('hmUntil').value;
+      if(!v){ toast('Pick a time first','warn'); return; }
+      const d=new Date(); d.setHours(+v.split(':')[0], +v.split(':')[1], 0, 0);
+      if(d<=new Date()) d.setDate(d.getDate()+1);
+      if(!picked && inp && inp.value.trim() && typeof localSearch==='function'){
+        const hits=localSearch(inp.value.trim());
+        if(hits.length) picked={n:hits[0].name, lat:hits[0].lat, lng:hits[0].lng};
+      }
+      if(typeof PlanUI==='undefined'){ toast('Planning engine unavailable','warn'); return; }
+      PlanUI.deadline={t:+d, place:picked};
+      PlanUI.open();
+    });
+    const cg=$('hmConnectGo'); if(cg) cg.addEventListener('click',()=>show('schedule'));
+    const cx=$('hmConnectX'); if(cx) cx.addEventListener('click',()=>{ lsSet(LS_TEASER,'1'); this.render(); });
+  },
+
+  /* ---- carried-over states: in class · done for today -------------- */
+  viewInClass(st){
+    const cls=st.cls;
+    return `<div class="hm-state">
+      ${HomeView.eyebrow('Now')}
+      ${HomeView.hero(esc(cls.course), `${esc(hmPlaceShort(cls.b))}${cls.room?(' · '+esc(cls.room)):''} · ends <b>${hmClock(new Date(Date.now()+(st.nx.e-(new Date().getHours()*60+new Date().getMinutes()))*6e4))}</b>`)}
+      <p class="hm-foot">When class ends, Home goes back to your next commitment.</p>
+    </div>`;
+  },
+  viewLater(st){
+    const cls=st.cls, when=st.dayDelta===1?'Tomorrow':DOW_FULL[DOW_CODES[st.nx.di]];
+    return `<div class="hm-state">
+      ${HomeView.eyebrow('Done for today')}
+      ${HomeView.hero('Nothing else today', `${esc(when)} · ${esc(cls.course)} at <b>${fmtTime(st.nx.s)}</b>`)}
+      ${HomeView.action('hmSched','Edit your schedule', hmIcon('calendar-blank'), 'quiet')}
+    </div>`;
+  },
+  wireSimple(){ const s=$('hmSched'); if(s) s.addEventListener('click',()=>show('schedule')); },
+
+  /* ---- QUICK PLACES — preset navigation tiles ---------------------- */
+  renderQuick(visible){
+    const box=$('homeQuick'); if(!box) return;
+    if(!visible || !Array.isArray(favorites) || !favorites.length){ box.innerHTML=''; return; }
+    const three=favorites.slice(0,3);
+    box.innerHTML=`${HomeView.divider()}
+      <div class="hm-qhead"><h2>Quick places</h2>
+        <button class="hm-qadd" id="hmQEdit" aria-label="Manage quick places" title="Manage quick places">${hmIcon('plus')}</button></div>
+      <div class="hm-tiles">${three.map((f,i)=>
+        `<button class="hm-tile" data-q="${i}"><span class="hm-tile-ic">${favIcon(f.c)}</span><span class="hm-tile-t">${esc(favShort(f))}</span></button>`
+      ).join('')}</div>`;
+    box.querySelectorAll('[data-q]').forEach(b=>b.addEventListener('click',()=>{
+      const f=favorites[+b.dataset.q]; if(!f) return;
+      setDest(f.lat, f.lng, f.name);
+      const sc=document.querySelector('#scr-home .scroll'); if(sc) sc.scrollTo({top:0, behavior:'smooth'});
+    }));
+    const e=$('hmQEdit'); if(e) e.addEventListener('click',()=>{ if(typeof openFavsSheet==='function') openFavsSheet(); });
+  },
+};
+
+/* small helpers used by the views */
+function cap(s){ s=String(s||'').replace(/^(for|to)\s+/,''); return s.charAt(0).toUpperCase()+s.slice(1); }
+function planCatIcon(cat){
+  return cat==='gym'?'barbell' : cat==='eat'?'fork-knife' : cat==='coffee'?'coffee'
+       : cat==='study'?'books' : cat==='home'?'house-line' : 'map-pin-simple';
+}
+
+/* ================================================================
+   Delivering the promise the plan strip makes: a one-shot in-app
+   heads-up the moment the plan enters its last 5 minutes.
+   ================================================================ */
+function planWarn5(){
+  if(typeof plan==='undefined' || !plan || plan.v!==2) return;
+  if(plan.phase!=='wrapup' || plan.warned5) return;
+  plan.warned5=1; savePlan();
+  toast('5 min left at '+shortName(plan.placeName)+' — head out at '+fmtClockTime(new Date(plan.leaveThereBy)), 'warn');
+}
+setInterval(()=>{
+  if(typeof plan==='undefined' || !plan) return;
+  if(typeof planTick==='function') planTick();
+  planWarn5();
+}, 20000);
+
+/* The bridges the rest of the app calls — renderTimeModule() / renderFavs() —
+   are declared in app.js and dispatch here, because boot() runs before this
+   file executes. This tail paints the first real Home once we are loaded.
+
+   Dev seed runs only on localhost; in production nothing is seeded, so a
+   fresh install lands on State 5 exactly as designed. */
+HomeDev.seed();
+if(screens && screens.home && screens.home.classList.contains('active')) HomeUI.render();
 
 </script>
 </body>
