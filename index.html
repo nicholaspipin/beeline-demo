@@ -494,7 +494,7 @@ input.inp:disabled{ background:var(--limestone-dk); color:var(--ink-soft); }
 .ichip-name{ font-family:var(--font-display); font-size:14px; font-weight:650; letter-spacing:-.01em; color:var(--ink); white-space:nowrap; }
 /* Home: selected destination card + Quick Destinations header */
 .dest-card{ position:relative; margin-top:18px; padding:16px; background:var(--paper); border-radius:var(--r); box-shadow:inset 0 0 0 1px var(--line); }
-.dc-clear{ position:absolute; top:12px; right:12px; width:30px; height:30px; flex:none; border:none; background:var(--limestone-dk); border-radius:50%; display:grid; place-items:center; color:var(--ink-soft); cursor:pointer; }
+.dc-clear{ position:absolute; top:10px; right:10px; z-index:3; width:30px; height:30px; flex:none; border:none; background:var(--paper); border-radius:50%; display:grid; place-items:center; color:var(--ink-soft); cursor:pointer; box-shadow:inset 0 0 0 1px var(--line), 0 1px 5px rgba(0,0,0,.14); }
 .dc-clear svg{ width:14px; height:14px; }
 .dc-top{ display:flex; gap:14px; align-items:flex-start; }
 .dc-info{ flex:1; min-width:0; }
@@ -1506,6 +1506,34 @@ input.inp:disabled{ background:var(--limestone-dk); color:var(--ink-soft); }
 .bts-m b.past{ opacity:.3; }
 .bts-foot{ padding:10px 18px 4px; font-size:11.5px; color:var(--ink-faint); border-top:1px solid var(--line); }
 
+/* ===== EXPLORE BROWSE (.xb-*) — photo-card shelves + utility links ===== */
+.xb-sec{ margin:4px 0 18px; }
+.xb-head{ display:flex; align-items:baseline; justify-content:space-between; margin:0 2px 10px; }
+.xb-head h3{ font-family:var(--font-display); font-size:17px; font-weight:720; letter-spacing:-.015em; color:var(--ink); margin:0; }
+.xb-all{ border:none; background:none; cursor:pointer; font-family:var(--font-display); font-size:13px; font-weight:660; color:var(--ink-soft); padding:2px 0; }
+.xb-row{ display:flex; gap:10px; overflow-x:auto; scrollbar-width:none; margin:0 -20px; padding:0 20px 6px; }
+.xb-row::-webkit-scrollbar{ display:none; }
+.xb-card{ flex:0 0 156px; border:none; background:var(--surface); border-radius:var(--r-md); box-shadow:inset 0 0 0 1px var(--line), 0 2px 12px rgba(20,19,15,.05); padding:0 0 11px; cursor:pointer; text-align:left; overflow:hidden; }
+.xb-card:active{ transform:scale(.975); }
+.xb-media{ position:relative; display:block; width:100%; height:96px; background:var(--paper-bg); }
+.xb-glyph{ position:absolute; inset:0; display:grid; place-items:center; color:#fff; }
+.xb-glyph svg{ width:30px; height:30px; opacity:.92; display:block; }
+.xb-media.none{ background:var(--paper-bg); }
+.xb-media.none .xb-glyph{ background:none !important; color:var(--ink-faint); }
+.xb-media img{ position:absolute; inset:0; width:100%; height:100%; object-fit:cover; opacity:0; transition:opacity .28s ease; }
+.xb-media img.ld{ opacity:1; }
+@media (prefers-reduced-motion:reduce){ .xb-media img{ transition:none; } }
+.xb-card b{ display:block; font-family:var(--font-display); font-size:14px; font-weight:680; letter-spacing:-.01em; color:var(--ink); line-height:1.25; margin:9px 12px 2px; display:-webkit-box; -webkit-line-clamp:2; -webkit-box-orient:vertical; overflow:hidden; }
+.xb-card span{ display:block; font-size:11.5px; color:var(--ink-faint); margin:0 12px; font-variant-numeric:tabular-nums; }
+.xb-util{ margin:2px 0 12px; background:var(--surface); border-radius:var(--r-lg); box-shadow:inset 0 0 0 1px var(--line); overflow:hidden; }
+.xb-ulink{ display:flex; align-items:center; gap:8px; width:100%; border:none; background:none; cursor:pointer; text-align:left; padding:14px 16px; }
+.xb-ulink + .xb-ulink{ border-top:1px solid var(--line); }
+.xb-ulink span{ font-family:var(--font-display); font-size:15px; font-weight:660; color:var(--ink); flex:1; }
+.xb-ulink i{ font-style:normal; font-family:var(--mono); font-size:12px; color:var(--ink-faint); }
+.xb-ulink .pi{ width:15px; height:15px; color:var(--ink-faint); display:inline-flex; }
+.xb-back{ display:inline-flex; align-items:center; gap:5px; border:none; background:none; cursor:pointer; font-family:var(--font-display); font-size:14px; font-weight:680; color:var(--ink); padding:2px 2px 12px; }
+.xb-back .pi{ width:14px; height:14px; display:inline-flex; }
+
 </style>
 </head>
 <body>
@@ -1745,6 +1773,7 @@ input.inp:disabled{ background:var(--limestone-dk); color:var(--ink-soft); }
 
       <!-- selected destination card: "When will I get there?" -->
       <div class="dest-card" id="destCard" style="display:none">
+        <button class="dc-clear" id="dcX" aria-label="Clear destination" title="Clear destination"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.4" stroke-linecap="round"><path d="M6 6 L18 18 M18 6 L6 18"/></svg></button>
         <div class="dp-head">
           <div style="min-width:0;flex:1"><div class="dp-name" id="dcName">Destination</div></div>
           <div class="dc-preview" id="dcPreview"></div>
@@ -1891,7 +1920,7 @@ input.inp:disabled{ background:var(--limestone-dk); color:var(--ink-soft); }
         <div class="prow" id="pUpdates"><span class="prow-ic"><span data-pi="arrows-clockwise"></span></span><b class="prow-label">What’s new<span class="upd-dot" id="updDot" style="display:none"></span></b><span class="prow-val" id="pUpdatesVal"></span><span class="prow-ch"><span data-pi="caret-right"></span></span></div>
       </div>
 
-      <div class="profile-version">BeeLine 1.0.0 · build 2026-09-01 09:23 · your data stays on this phone<br>Map data © OpenStreetMap contributors · © CARTO</div>
+      <div class="profile-version">BeeLine 1.0.0 · build 2026-09-01 09:48 · your data stays on this phone<br>Map data © OpenStreetMap contributors · © CARTO</div>
       <button class="prow" id="pAdd" style="display:none"></button>
     </div>
   </section>
@@ -3890,20 +3919,91 @@ function renderDetails(p){
   // lazily pull online facts for places we have nothing cached/baked for
   if(!e.hasBaked && !e.cached){ enrichFetch(p).then(extra=>{ if(extra && Object.keys(extra).length && psPlace===p){ renderDetails(p); } }); }
 }
-function renderXList(){
-  const list=$('xList'); const places=filteredPlaces().slice();
-  if(curPos) places.sort((a,b)=>distance(curPos.lat,curPos.lng,a.lat,a.lng)-distance(curPos.lat,curPos.lng,b.lat,b.lng));
-  if(!places.length){ list.innerHTML='<div class="x-empty">No places match.<br>Try another search or category.</div>'; return; }
-  list.innerHTML=places.map(p=>{ const meta=catMeta(p.c);
-    const dist=curPos?(()=>{ const d=distance(curPos.lat,curPos.lng,p.lat,p.lng); return fmtDist(d); })():'';
+/* Explore list = BROWSE, not a 181-row scroll. Sections match how a
+   freshman actually thinks ("where do I eat / study / work out"), each a
+   horizontal photo-card shelf; housing/greek/services are utility links.
+   The flat list only renders SCOPED (search or a chip). Every tap opens the
+   place sheet — details + photo + Start walking — never a surprise tab jump. */
+const X_SECTIONS=[
+  {t:'Campus landmarks', pick:p=>placeTier(p)===1},
+  {t:'Food & coffee',    pick:p=>p.c==='dining'},
+  {t:'Study spots',      pick:p=>p.c==='library'},
+  {t:'Gyms & recreation',pick:p=>p.c==='rec'},
+  {t:'Arts & museums',   pick:p=>p.c==='arts'},
+  {t:'Academic buildings',pick:p=>p.c==='academic', all:'academic'},
+];
+const X_UTIL=[
+  {t:'Dorms & housing', c:'residence'},
+  {t:'Greek houses',    c:'greek'},
+  {t:'Services',        c:'service'},
+  {t:'Off campus',      c:'offcampus'},
+];
+function xWalkLab(p){
+  if(!curPos) return catMeta(p.c).label;
+  const min=Math.max(1,Math.round((distance(curPos.lat,curPos.lng,p.lat,p.lng)*1.3)/paceSpeed()/60));
+  return '~'+min+' min walk';
+}
+function xCardHTML(p){
+  const ph=placePhoto(p), meta=catMeta(p.c);
+  const media= ph
+    ? '<span class="xb-media"><span class="xb-glyph" style="background:'+meta.color+'">'+(PIN_ICON[p.c]||PIN_ICON.offcampus)+'</span><img src="'+esc(ph.t)+'" alt="" loading="lazy" decoding="async"></span>'
+    : '<span class="xb-media none"><span class="xb-glyph" style="background:'+meta.color+'">'+(PIN_ICON[p.c]||PIN_ICON.offcampus)+'</span></span>';
+  return '<button class="xb-card" data-pn="'+esc(p.n)+'">'+media+'<b>'+esc(p.n)+'</b><span>'+esc(xWalkLab(p))+'</span></button>';
+}
+function xRowsHTML(places){
+  return places.map(p=>{ const meta=catMeta(p.c);
+    const dist=curPos?fmtDist(distance(curPos.lat,curPos.lng,p.lat,p.lng)):'';
     const ph=placePhoto(p);
     const tile= ph
-      ? `<span class="xrow-ph"><span class="xrow-ic in" style="background:${meta.color}">${PIN_ICON[p.c]||PIN_ICON.offcampus}</span><img src="${esc(ph.t)}" alt="" loading="lazy" decoding="async"></span>`
-      : `<span class="xrow-ph none"><span class="xrow-ic in" style="background:${meta.color}">${PIN_ICON[p.c]||PIN_ICON.offcampus}</span></span>`;
-    return `<div class="xrow" data-lat="${p.lat}" data-lng="${p.lng}" data-name="${esc(p.n)}">${tile}<div class="xrow-main"><b>${esc(p.n)}</b><span>${meta.label}</span></div><span class="xrow-dist">${dist}</span></div>`;
+      ? '<span class="xrow-ph"><span class="xrow-ic in" style="background:'+meta.color+'">'+(PIN_ICON[p.c]||PIN_ICON.offcampus)+'</span><img src="'+esc(ph.t)+'" alt="" loading="lazy" decoding="async"></span>'
+      : '<span class="xrow-ph none"><span class="xrow-ic in" style="background:'+meta.color+'">'+(PIN_ICON[p.c]||PIN_ICON.offcampus)+'</span></span>';
+    return '<div class="xrow" data-pn="'+esc(p.n)+'">'+tile+'<div class="xrow-main"><b>'+esc(p.n)+'</b><span>'+meta.label+'</span></div><span class="xrow-dist">'+dist+'</span></div>';
   }).join('');
-  list.querySelectorAll('.xrow-ph img').forEach(im=>{ if(im.complete&&im.naturalWidth>0) im.classList.add('ld'); else{ im.addEventListener('load',()=>im.classList.add('ld')); im.addEventListener('error',()=>im.remove()); } });
-  list.querySelectorAll('.xrow').forEach(el=>el.addEventListener('click',()=>{ goTab('home'); setDest(+el.dataset.lat,+el.dataset.lng,el.dataset.name); document.querySelector('#scr-home .scroll').scrollTo({top:0}); }));
+}
+function xWirePlaceTaps(root){
+  root.querySelectorAll('[data-pn]').forEach(el=>el.addEventListener('click',()=>{
+    const p=allPlaces().find(x=>x.n===el.dataset.pn); if(!p) return;
+    selectPlace(p);                                    // sheet: photo, details, Start walking
+  }));
+  root.querySelectorAll('.xrow-ph img, .xb-media img').forEach(im=>{
+    if(im.complete&&im.naturalWidth>0) im.classList.add('ld');
+    else{ im.addEventListener('load',()=>im.classList.add('ld')); im.addEventListener('error',()=>im.remove()); }
+  });
+}
+function renderXList(){
+  const list=$('xList');
+  const browsing = !xQuery.trim() && xCat==='all';
+  if(!browsing){
+    const places=filteredPlaces().slice();
+    if(curPos) places.sort((a,b)=>distance(curPos.lat,curPos.lng,a.lat,a.lng)-distance(curPos.lat,curPos.lng,b.lat,b.lng));
+    let html= xCat!=='all' ? '<button class="xb-back" id="xbBack">'+pic('caret-left')+' Browse all</button>' : '';
+    html+= places.length? xRowsHTML(places) : '<div class="x-empty">No places match.<br>Try another search or category.</div>';
+    list.innerHTML=html;
+    const bb=$('xbBack'); if(bb) bb.addEventListener('click',()=>{ xCat='all'; buildCats(); refreshExplore(); });
+    xWirePlaceTaps(list);
+    return;
+  }
+  // browse mode — shelves, each place shown once (landmarks claim first)
+  const used=new Set();
+  let html='';
+  X_SECTIONS.forEach(sec=>{
+    let ps=allPlaces().filter(p=>!used.has(p.n)&&sec.pick(p));
+    if(curPos) ps.sort((a,b)=>distance(curPos.lat,curPos.lng,a.lat,a.lng)-distance(curPos.lat,curPos.lng,b.lat,b.lng));
+    ps.sort((a,b)=>(placePhoto(b)?1:0)-(placePhoto(a)?1:0));   // photos first, stable within
+    const shown=ps.slice(0,10);
+    if(!shown.length) return;
+    shown.forEach(p=>used.add(p.n));
+    html+='<div class="xb-sec"><div class="xb-head"><h3>'+sec.t+'</h3>'
+      +(sec.all&&ps.length>shown.length?'<button class="xb-all" data-cat="'+sec.all+'">All '+ps.length+'</button>':'')
+      +'</div><div class="xb-row">'+shown.map(xCardHTML).join('')+'</div></div>';
+  });
+  html+='<div class="xb-util">'+X_UTIL.map(u=>{
+    const n=allPlaces().filter(p=>p.c===u.c).length;
+    return n?'<button class="xb-ulink" data-cat="'+u.c+'"><span>'+u.t+'</span><i>'+n+'</i>'+pic('caret-right')+'</button>':'';
+  }).join('')+'</div>';
+  list.innerHTML=html;
+  list.querySelectorAll('[data-cat]').forEach(b=>b.addEventListener('click',()=>{ xCat=b.dataset.cat; buildCats(); refreshExplore(); }));
+  xWirePlaceTaps(list);
 }
 function refreshExplore(){ if(xView==='map') refreshMarkers(); else renderXList(); }
 
@@ -4038,16 +4138,17 @@ function fitWalk(){ if(!mapReady||!curPos||!dest) return; const b=new maplibregl
 $('arriveBtn').addEventListener('click', openSave);
 $('cancelWalk').addEventListener('click', cancelWalk);
 $('walkBack').addEventListener('click', cancelWalk);
+$('dcX').addEventListener('click', clearDest);   // dismiss a picked destination → schedule card returns
 function stopSensors(){ if(active&&active.watchId!=null) navigator.geolocation.clearWatch(active.watchId); clearInterval(tickTimer); tickTimer=null; if(needleRAF!=null){ cancelAnimationFrame(needleRAF); needleRAF=null; } try{ window.removeEventListener('deviceorientation', onOrient, true); window.removeEventListener('deviceorientationabsolute', onOrient, true); }catch(e){} }
 function teardownMap(){ if(walkMap){ walkMap.remove(); walkMap=null; } mapReady=false; mapInited=false; destMarker=curMarker=null; const m=$('walkMap'); m.innerHTML=''; }
 function cancelWalk(){
-  const finish=()=>{ stopSensors(); teardownMap(); active=null; walkCtx=null; show('home'); };
+  const finish=()=>{ stopSensors(); teardownMap(); active=null; walkCtx=null; clearDest(); show('home'); };  // walk over → Home goes back to the schedule
   if(active && active.track.length>3 && !active.autoLogged){ confirmDialog({title:'Discard this walk?', msg:'Your path so far won\u2019t be saved.', confirmText:'Discard', onConfirm:finish}); return; }
   finish();
 }
 function openSave(){
   if(!active||!active.start){ toast('Still finding your start point — give it a sec'); return; }
-  if(active.autoLogged){ stopSensors(); teardownMap(); active=null; walkCtx=null; enterHome(); renderCorridors(); renderRecent(); return; }
+  if(active.autoLogged){ stopSensors(); teardownMap(); active=null; walkCtx=null; clearDest(); enterHome(); renderCorridors(); renderRecent(); return; }
   stopSensors(); const secs=(Date.now()-active.t0)/1000;
   $('saveName').value= dest.name.length>40?dest.name.slice(0,40):`→ ${dest.name}`;
   $('saveTime').value=fmtClock(secs); $('saveGoogle').value= pendingGoogle!=null?pendingGoogle:''; saveBaselineSource=pendingBaselineSource;
@@ -4057,11 +4158,11 @@ function openSave(){
   }
 }
 $('saveGoogle').addEventListener('input', ()=>{ saveBaselineSource='manual'; });
-$('discardWalk').addEventListener('click', ()=>{ $('saveSheetBg').classList.remove('show'); teardownMap(); active=null; show('home'); });
+$('discardWalk').addEventListener('click', ()=>{ $('saveSheetBg').classList.remove('show'); teardownMap(); active=null; walkCtx=null; clearDest(); show('home'); });
 $('confirmSave').addEventListener('click', ()=>{
   const secs=(Date.now()-active.t0)/1000, walkedMeters=trackLength(active.track), straightMeters=distance(active.start.lat,active.start.lng,dest.lat,dest.lng), g=parseFloat($('saveGoogle').value);
   const w={ id:'w'+Date.now(), name:$('saveName').value.trim()||dest.name, destLat:dest.lat,destLng:dest.lng, startLat:active.start.lat,startLng:active.start.lng, track:active.track, seconds:Math.round(secs), walkedMeters:Math.round(walkedMeters), straightMeters:Math.round(straightMeters), googleMinutes: isFinite(g)&&g>0?g:null, baselineSource:(isFinite(g)&&g>0)?(saveBaselineSource||'manual'):null, createdAt:Date.now() };
-  walks.unshift(w); saveWalks(); $('saveSheetBg').classList.remove('show'); teardownMap(); active=null; show('home'); renderCorridors(); renderRecent(); toast(ST.one+' saved','good');
+  walks.unshift(w); saveWalks(); $('saveSheetBg').classList.remove('show'); teardownMap(); active=null; walkCtx=null; clearDest(); show('home'); renderCorridors(); renderRecent(); toast(ST.one+' saved','good');
 });
 function trackLength(t){ let m=0; for(let i=1;i<t.length;i++) m+=distance(t[i-1].lat,t[i-1].lng,t[i].lat,t[i].lng); return m; }
 /* ===== v1 LEARNING ENGINE — group repeat walks -> averaged desire path ===== */
