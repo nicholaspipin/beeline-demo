@@ -1960,6 +1960,28 @@ input.inp:disabled{ background:var(--limestone-dk); color:var(--ink-soft); }
 .hm-scanrow-ch{ flex:none; display:flex; color:var(--ink-faint); }
 .hm-scanrow-ch .pi{ width:16px; height:16px; }
 
+/* custom time picker sheet */
+.pt-body{ padding-bottom:14px; }
+.pt-preview{ font-family:var(--font-display); font-weight:760; font-size:34px; letter-spacing:-.03em; color:var(--ink); text-align:center; margin:10px 0 4px; font-variant-numeric:tabular-nums; }
+.pt-lab{ font-family:var(--mono); font-size:10.5px; font-weight:700; letter-spacing:.14em; text-transform:uppercase; color:var(--ink-faint); margin:12px 2px 7px; }
+.pt-grid{ display:grid; grid-template-columns:repeat(6,1fr); gap:8px; }
+.pt-grid.mins, .pt-grid.ampm{ grid-template-columns:repeat(4,1fr); }
+.pt-grid.ampm{ grid-template-columns:1fr 1fr; margin-top:12px; }
+.pt-c{ border:none; cursor:pointer; font-family:var(--font-num); font-size:15px; font-weight:650; color:var(--ink); background:var(--paper-bg); border-radius:var(--r-sm); padding:11px 0; font-variant-numeric:tabular-nums; }
+.pt-c.on{ background:var(--honey); color:var(--on-honey); font-weight:740; }
+/* contained deadline ask card (mockup-7 language, zero native controls) */
+.wf-askcard{ margin:4px 20px; background:var(--honey); border-radius:var(--r-lg); padding:16px 16px 14px; overflow:hidden; }
+.wf-askcard-h{ display:flex; align-items:center; gap:8px; font-family:var(--font-display); font-size:17px; font-weight:740; color:var(--on-honey); margin-bottom:10px; }
+.wf-askcard-h .pi{ width:18px; height:18px; display:inline-flex; }
+.wf-askcard label{ display:block; font-size:13px; font-weight:650; color:var(--on-honey); opacity:.85; margin:10px 2px 6px; }
+.wf-askcard label i{ font-style:normal; font-weight:500; opacity:.75; }
+.wf-pick{ display:flex; align-items:center; justify-content:space-between; width:100%; border:none; cursor:pointer; background:var(--surface); border-radius:var(--r-md); padding:13px 15px; font-family:var(--font-display); font-size:16px; font-weight:680; color:var(--ink); }
+.wf-pick .pi{ width:15px; height:15px; display:inline-flex; color:var(--ink-soft); }
+.wf-askcard input{ width:100%; border:none; background:var(--surface); border-radius:var(--r-md); padding:13px 15px; font-family:var(--font-display); font-size:15px; font-weight:600; color:var(--ink); box-sizing:border-box; }
+.wf-askcard input::placeholder{ color:var(--ink-faint); }
+.wf-askcard input:focus{ outline:none; box-shadow:inset 0 0 0 2px var(--ink); }
+.wf-askgo{ display:block; width:100%; margin-top:14px; border:none; cursor:pointer; background:var(--ink); color:var(--paper); border-radius:var(--r-md); padding:15px; font-family:var(--font-display); font-size:16px; font-weight:700; }
+
 </style>
 </head>
 <body>
@@ -2343,7 +2365,7 @@ input.inp:disabled{ background:var(--limestone-dk); color:var(--ink-soft); }
         <div class="prow" id="pUpdates"><span class="prow-ic"><span data-pi="arrows-clockwise"></span></span><b class="prow-label">What’s new<span class="upd-dot" id="updDot" style="display:none"></span></b><span class="prow-val" id="pUpdatesVal"></span><span class="prow-ch"><span data-pi="caret-right"></span></span></div>
       </div>
 
-      <div class="profile-version">BeeLine 1.0.0 · build 2026-09-01 14:02 · your data stays on this phone<br>Map data © OpenStreetMap contributors · © CARTO</div>
+      <div class="profile-version">BeeLine 1.0.0 · build 2026-09-01 14:10 · your data stays on this phone<br>Map data © OpenStreetMap contributors · © CARTO</div>
       <button class="prow" id="pAdd" style="display:none"></button>
     </div>
   </section>
@@ -6657,6 +6679,51 @@ BusUI.wireSearch();
 </script>
 
 <script>
+/* ---- custom time picker sheet (house rule: never native pickers).
+   Hour chips + quarter-minute chips + AM/PM, one Done. Reusable:
+   planTimeSheet('14:30', hm => ...) — hm is 'HH:MM' 24h. ---- */
+function planTimeSheet(initial, cb){
+  let bg=document.getElementById('ptShBg'); if(bg) bg.remove();
+  let [h0,m0]=(initial||'14:00').split(':').map(Number);
+  let ap=h0>=12?'PM':'AM'; let h12=h0%12||12; let mm=[0,15,30,45].reduce((a,b)=>Math.abs(b-m0)<Math.abs(a-m0)?b:a,0);
+  bg=document.createElement('div'); bg.id='ptShBg'; bg.className='brxsh-bg';
+  const hours=[...Array(12)].map((_,i)=>i+1);
+  bg.innerHTML=`<div class="brxsh">
+    <div class="brxsh-head"><b>Until when?</b>
+      <button class="brxsh-x" aria-label="Close"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.4" stroke-linecap="round"><path d="M6 6 L18 18 M18 6 L6 18"/></svg></button></div>
+    <div class="brxsh-scroll pt-body">
+      <div class="pt-preview" id="ptPreview"></div>
+      <div class="pt-lab">Hour</div>
+      <div class="pt-grid">${hours.map(h=>`<button class="pt-c" data-h="${h}">${h}</button>`).join('')}</div>
+      <div class="pt-lab">Minutes</div>
+      <div class="pt-grid mins">${[0,15,30,45].map(m=>`<button class="pt-c" data-m="${m}">:${String(m).padStart(2,'0')}</button>`).join('')}</div>
+      <div class="pt-grid ampm"><button class="pt-c" data-ap="AM">AM</button><button class="pt-c" data-ap="PM">PM</button></div>
+      <button class="hm-act" id="ptDone">Done</button>
+    </div></div>`;
+  document.body.appendChild(bg);
+  const paint=()=>{
+    bg.querySelectorAll('[data-h]').forEach(b=>b.classList.toggle('on',+b.dataset.h===h12));
+    bg.querySelectorAll('[data-m]').forEach(b=>b.classList.toggle('on',+b.dataset.m===mm));
+    bg.querySelectorAll('[data-ap]').forEach(b=>b.classList.toggle('on',b.dataset.ap===ap));
+    bg.querySelector('#ptPreview').textContent=h12+':'+String(mm).padStart(2,'0')+' '+ap;
+  };
+  bg.addEventListener('click',e=>{
+    const t=e.target.closest('button'); if(!t) return;
+    if(t.dataset.h) h12=+t.dataset.h;
+    if(t.dataset.m!=null && t.dataset.m!=='') mm=+t.dataset.m;
+    if(t.dataset.ap) ap=t.dataset.ap;
+    paint();
+  });
+  const close=()=>{ bg.classList.remove('show'); setTimeout(()=>bg.remove(),240); };
+  bg.addEventListener('click',e=>{ if(e.target===bg) close(); });
+  bg.querySelector('.brxsh-x').addEventListener('click',close);
+  bg.querySelector('#ptDone').addEventListener('click',()=>{
+    const h24=(ap==='PM'?(h12%12)+12:h12%12);
+    close(); cb(String(h24).padStart(2,'0')+':'+String(mm).padStart(2,'0'));
+  });
+  paint();
+  requestAnimationFrame(()=>bg.classList.add('show'));
+}
 /* ================================================================
    BEELINE PLANNING ENGINE — "What fits?"
    Owns the physical time between commitments. The product unit is a
@@ -6991,17 +7058,28 @@ const PlanUI={
   },
   renderDeadlineAsk(){
     const body=$('fitBody');
-    body.innerHTML=`<div class="fit-head"><h1 class="fit-title">What fits?</h1>
-      <div class="fit-until">No upcoming class found. When do you need to be somewhere?</div></div>
-      <div class="wf-deadline">
-        <label>Be at</label><input type="text" id="wfDest" placeholder="Anywhere (optional) — e.g. Kelley" autocomplete="off">
-        <label>by</label><input type="time" id="wfTime">
-        <button class="btn" id="wfGo">See what fits</button></div>`;
+    const t=this._askTime||null;
+    const timeLabel= t? fmtClockTime((d=>{const x=new Date(); x.setHours(+d.split(':')[0],+d.split(':')[1],0,0); return x;})(t)) : 'Pick a time';
+    body.innerHTML=`<div class="fit-head"><h1 class="fit-title">Got some time?</h1>
+      <div class="fit-until">Tell BeeLine when you need to be free, and it finds plans that actually fit.</div></div>
+      <div class="wf-askcard">
+        <div class="wf-askcard-h">${pic('timer')||''}<b>Fit something in</b></div>
+        <label>Until when?</label>
+        <button class="wf-pick" id="wfTimeBtn"><span>${esc(timeLabel)}</span>${pic('caret-down')}</button>
+        <label>Before I need to be at… <i>(optional)</i></label>
+        <input type="text" id="wfDest" placeholder="Anywhere — e.g. Kelley" autocomplete="off" value="${esc(this._askDest||'')}">
+        <button class="wf-askgo" id="wfGo">Find something to do</button>
+      </div>`;
+    $('wfTimeBtn').addEventListener('click',()=>{
+      planTimeSheet(this._askTime||(d=>String(d.getHours()).padStart(2,'0')+':'+String(Math.ceil(d.getMinutes()/15)*15%60).padStart(2,'0'))(new Date(Date.now()+90*6e4)),
+        hm=>{ this._askTime=hm; const de=$('wfDest'); this._askDest=de?de.value:''; this.renderDeadlineAsk(); });
+    });
     $('wfGo').addEventListener('click',()=>{
-      const v=$('wfTime').value; if(!v){ toast('Pick a time','warn'); return; }
+      if(!this._askTime){ toast('Pick a time first','warn'); return; }
+      const v=this._askTime;
       const d=new Date(); d.setHours(+v.split(':')[0], +v.split(':')[1],0,0); if(d<=new Date()) d.setDate(d.getDate()+1);
       let place=null;
-      const q=$('wfDest').value.trim();
+      const q=$('wfDest').value.trim(); this._askDest=q;
       if(q){ const hits=localSearch(q); if(hits.length) place={n:hits[0].name,lat:hits[0].lat,lng:hits[0].lng}; }
       this.deadline={t:+d, place};
       this.ctx=PlanEngine.manualContext(+d, place);
@@ -8066,17 +8144,42 @@ const ScanParse={
 
   /* "MWF" · "TR" · "TuTh" · "MoWeFr" · "M W F" → ['Mo','We','Fr'].
      Two-letter tokens are consumed first so TuTh ≠ T,u,T,h and TR = Tu,Th. */
+  /* Named day forms, LONGEST FIRST — "thursday" must be consumed before "thu",
+     and "thu" before the bare "t", or Thursday silently becomes Tuesday.
+     Matched on exact word boundaries so "Monroe County" can't donate a Monday. */
+  DAY_NAMES:[
+    ['wednesday','We'],['thursday','Th'],['saturday','Sa'],['tuesday','Tu'],
+    ['thursdays','Th'],['monday','Mo'],['friday','Fr'],['sunday','Su'],
+    ['thurs','Th'],['tues','Tu'],['thur','Th'],
+    ['mon','Mo'],['tue','Tu'],['wed','We'],['thu','Th'],['fri','Fr'],['sat','Sa'],['sun','Su'],
+  ],
+
+  /* Accepts every shape One.IU actually prints:
+       "MWF" · "TR" · "TTh" · "M W F" · "MoWe"
+       "Mon and Wed" · "When: Tue and Thu" · "Monday/Wednesday" · "Mon, Wed, Fri"
+     Named forms are resolved first and removed; whatever letters remain are
+     read as a compact code. */
   days(raw){
-    const s=String(raw||'').toUpperCase().replace(/[^A-Z]/g,'');
-    if(!s) return [];
+    let t=String(raw||'').toLowerCase()
+      .replace(/\b(when|where|meets?|days?|time)\b\s*:?/g,' ')   // label words
+      .replace(/\b(and|&|thru|through|to)\b/g,' ')               // conjunctions
+      .replace(/[\/,;.\-–—:]+/g,' ');
+    const out=[];
+    const push=c=>{ if(out.indexOf(c)<0) out.push(c); };
+    for(const [name,code] of this.DAY_NAMES){
+      const re=new RegExp('\\b'+name+'\\b','g');
+      if(re.test(t)){ push(code); t=t.replace(new RegExp('\\b'+name+'\\b','g'),' '); }
+    }
+    /* leftovers are compact codes: MWF, TR, TuTh… */
+    const s=t.toUpperCase().replace(/[^A-Z]/g,'');
     const two={MO:'Mo',TU:'Tu',WE:'We',TH:'Th',FR:'Fr',SA:'Sa',SU:'Su'};
     const one={M:'Mo',T:'Tu',W:'We',R:'Th',F:'Fr',S:'Sa',U:'Su'};
-    const out=[]; let i=0;
+    let i=0;
     while(i<s.length){
       const p=s.slice(i,i+2);
-      if(two[p]){ if(out.indexOf(two[p])<0) out.push(two[p]); i+=2; continue; }
+      if(two[p]){ push(two[p]); i+=2; continue; }
       const c=s[i];
-      if(one[c]){ if(out.indexOf(one[c])<0) out.push(one[c]); i+=1; continue; }
+      if(one[c]){ push(one[c]); i+=1; continue; }
       i+=1;
     }
     return out.sort((a,b)=>this.DOW.indexOf(a)-this.DOW.indexOf(b));
@@ -8146,6 +8249,12 @@ const ScanParse={
      text; the longest cluster on the line wins, so a stray initial loses. */
   dayScan(line){
     const t=this.stripCourse(line);
+    /* verbose first — "When: Mon and Wed" never survives a compact-code scan */
+    const named=t.match(/\b(?:mon|tues?|tues|wed|thur?s?|fri|sat|sun)(?:day)?s?\b/ig);
+    if(named && named.length){
+      const d=this.days(named.join(' '));
+      if(d.length) return d;
+    }
     const re=/(?:^|[\s,;|])((?:(?:Mo|Tu|We|Th|Fr|Sa|Su|[MTWRFSU])[\s.,]{0,2}){1,7})(?=[\s|]|$)/g;
     let best=[], m;
     while((m=re.exec(t))){
@@ -8185,7 +8294,11 @@ const ScanParse={
       .replace(/\d{1,2}\s*[:.]\s*\d{2}\s*[APap]?\.?[Mm]?\.?/g,' ')
       .replace(/\b(?:room|rm)\.?\s*[A-Z]{0,4}\s?\d{2,4}[A-Z]?\b/ig,' ')
       .replace(/\b(?:MWF|TR|TTH|MW|WF|MTWRF|MoWeFr|TuTh)\b/ig,' ')
-      .replace(/\b(?:days?|times?|room|location|building|instructor|section|units?|credits?|status|enrolled)\b/ig,' ')
+      .replace(/\b(?:mon|tues|tue|wednes|wed|thurs|thur|thu|fri|satur|sat|sun)(?:day)?s?\b/ig,' ')
+      /* conjunctions too: "When: Mon and Wed" otherwise leaves the bare word
+         "and", which prefix-matched "Andy Mohr Field" and stole the building */
+      .replace(/\b(?:and|or|to|thru|through|at|in|on|from)\b/ig,' ')
+      .replace(/\b(?:when|where|meets?|days?|times?|room|location|building|instructor|section|units?|credits?|status|enrolled)\b/ig,' ')
       .replace(/[-–—|•·,;:()\[\]]+/g,' ')
       .replace(/\s{2,}/g,' ').trim();
   },
@@ -8234,13 +8347,20 @@ const ScanParse={
          lecture plus its lab/discussion are separate meetings of one course,
          and merging them silently loses the lab. An exam line (a calendar
          DATE rather than a weekly pattern) is not a meeting at all. */
+      /* One.IU's detail view puts the days and the time on SEPARATE lines
+         ("When: Mon and Wed" / "1:30PM - 2:45PM"), so a meeting whose own line
+         carries no days inherits the block's. A lab line that DOES carry its
+         own days still wins, which is what keeps subsections correct. */
+      let blockDays=[];
+      for(const line of b.lines){ const d=this.dayScan(line); if(d.length>blockDays.length) blockDays=d; }
       const meetings=[];
       for(const line of b.lines){
         const tr=this.timeRange(line);
         if(!tr) continue;
-        const isExam = this.EXAM_RE.test(line) || (this.DATE_RE.test(line) && !this.dayScan(line).length);
+        const own=this.dayScan(line);
+        const isExam = this.EXAM_RE.test(line) || (this.DATE_RE.test(line) && !own.length && !blockDays.length);
         if(isExam) continue;
-        meetings.push({ tr, days:this.dayScan(line), sub:(line.match(this.SUB_RE)||[])[0]||'', line });
+        meetings.push({ tr, days:own.length?own:blockDays, sub:(line.match(this.SUB_RE)||[])[0]||'', line });
       }
       if(!meetings.length){
         const tr=this.timeRange(joined);
@@ -8290,16 +8410,19 @@ const ScanParse={
      rewrite, and they never auto-drop a row the user hasn't seen. ---- */
   validate(rows){
     rows.forEach(r=>{
-      r.flags=r.flags||[];
+      /* Idempotent: merge() re-validates across pages, so drop the flags WE
+         added last pass (marked v:1) before re-deriving them. Parser-origin
+         flags — dropped, TBA, sub-section, OCR snap — carry no v and survive. */
+      r.flags=(r.flags||[]).filter(f=>!f.v);
       const s=this.toMin(r.start), e=this.toMin(r.end);
       if(s!=null && e!=null){
-        if(e<=s) r.flags.push({kind:'time', msg:'Ends before it starts — check AM/PM'});
-        else if(s<7*60 || e>23*60) r.flags.push({kind:'time', msg:'Outside 7am–11pm — check AM/PM'});
-        else if(e-s>4*60) r.flags.push({kind:'time', msg:'Over four hours long — check the end time'});
+        if(e<=s) r.flags.push({v:1, kind:'time', msg:'Ends before it starts — check AM/PM'});
+        else if(s<7*60 || e>23*60) r.flags.push({v:1, kind:'time', msg:'Outside 7am–11pm — check AM/PM'});
+        else if(e-s>4*60) r.flags.push({v:1, kind:'time', msg:'Over four hours long — check the end time'});
       }
       if(r.room && !/^[A-Z]{0,4} ?\d{2,4}[A-Z]?$/.test(r.room))
-        r.flags.push({kind:'room', msg:'That room code looks unusual'});
-      if(r.days.length>5) r.flags.push({kind:'days', msg:'Meets more than five days — check the day letters'});
+        r.flags.push({v:1, kind:'room', msg:'That room code looks unusual'});
+      if(r.days.length>5) r.flags.push({v:1, kind:'days', msg:'Meets more than five days — check the day letters'});
     });
     /* two meetings cannot occupy the same minute of the same day */
     for(let i=0;i<rows.length;i++) for(let j=i+1;j<rows.length;j++){
@@ -8309,8 +8432,8 @@ const ScanParse={
       const as=this.toMin(a.start), ae=this.toMin(a.end), bs=this.toMin(b.start), be=this.toMin(b.end);
       if([as,ae,bs,be].some(v=>v==null)) continue;
       if(as<be && bs<ae){
-        a.flags.push({kind:'overlap', msg:'Overlaps '+(b.course||'another class')});
-        b.flags.push({kind:'overlap', msg:'Overlaps '+(a.course||'another class')});
+        a.flags.push({v:1, kind:'overlap', msg:'Overlaps '+(b.course||'another class')});
+        b.flags.push({v:1, kind:'overlap', msg:'Overlaps '+(a.course||'another class')});
       }
     }
     return rows;
@@ -8336,8 +8459,8 @@ const ScanView={
   intro(){
     return `<div class="im-state">
       <h1 class="im-h">Add your schedule from a photo</h1>
-      <p class="im-p">Pick a screenshot of your class schedule — One.IU, Student Center, or any timetable — and BeeLine reads it here on your phone.</p>
-      <button class="hm-act honey" id="imPick"><span class="hm-act-ic">${pic('magnifying-glass')}</span><span>Choose a screenshot</span></button>
+      <p class="im-p">Pick one or more screenshots of your class schedule — One.IU, Student Center, or any timetable — and BeeLine reads them here on your phone.</p>
+      <button class="hm-act honey" id="imPick"><span class="hm-act-ic">${pic('magnifying-glass')}</span><span>Choose screenshots</span></button>
       <button class="hm-link" id="imManual">Type it in instead</button>
       <div class="hm-strip ok" style="margin-top:24px"><span class="hm-strip-ic">${pic('shield-check')}</span>
         <span class="hm-strip-t">Your photo never leaves this phone.<i>It is read on-device. Only the scanner software itself is downloaded, the first time you use it.</i></span></div>
@@ -8358,7 +8481,7 @@ const ScanView={
       <p class="im-p">${offline
         ? 'Downloading the scanner is the only part that needs the internet — after that it works offline. Try again on Wi‑Fi, or type your classes in.'
         : 'No classes could be read from that image. A sharper screenshot of the schedule table usually works better than a photo of a screen.'}</p>
-      <button class="hm-act" id="imRetry"><span>Try another photo</span></button>
+      <button class="hm-act" id="imRetry"><span>Try other photos</span></button>
       <button class="hm-link" id="imManual">Type it in instead</button>
     </div>`;
   },
@@ -8369,9 +8492,10 @@ const ScanView={
   review(rows){
     const ok=rows.filter(r=>!r.excluded && !ScanParse.missing(r).length).length;
     const look=rows.filter(r=>ScanParse.needsLook(r)).length;
+    const pages = this.pageCount>1 ? (' from '+this.pageCount+' photos') : '';
     const lede = look
-      ? `<b>${look} of ${rows.length}</b> need a look — they’re open below. The rest are collapsed; tap any to edit.`
-      : `All ${rows.length} read cleanly. Tap any class to check it. Nothing is saved until you tap save.`;
+      ? `<b>${look} of ${rows.length}</b> need a look${pages} — they’re open below. The rest are collapsed; tap any to edit.`
+      : `All ${rows.length}${pages} read cleanly. Tap any class to check it. Nothing is saved until you tap save.`;
     return `<div class="im-state">
       <h1 class="im-h">Here’s what we found</h1>
       <p class="im-p">${lede}</p>
@@ -8445,6 +8569,9 @@ const ScanUI={
   matchPlace(raw){
     const q=String(raw||'').replace(/\s+/g,' ').trim();
     if(q.length<3 || typeof localSearch!=='function') return null;
+    /* A building name has at least one substantial word. Without this, scraps
+       like "and" or "the" prefix-match a real place and silently win the slot. */
+    if(!/[A-Za-z]{4,}/.test(q)) return null;
     /* OCR flattens a table row into one line, so the building is usually
        buried mid-string ("Amsterdam Lindley Hall 008") — try every 2..4 word
        window, not just the start. Words containing digits are dropped so a
@@ -8539,35 +8666,63 @@ const ScanUI={
       this.lastErr='engine-unreachable'; this.state='failed'; this.render(); return;
     }
     const inp=document.createElement('input');
-    inp.type='file'; inp.accept='image/*';
+    inp.type='file'; inp.accept='image/*'; inp.multiple=true;   // a schedule is often several screenshots
     inp.style.cssText='position:fixed;left:-9999px;opacity:0';
     document.body.appendChild(inp);
     inp.addEventListener('change',()=>{
-      const f=inp.files && inp.files[0];
+      const files=Array.prototype.slice.call(inp.files||[]);
       setTimeout(()=>{ try{ inp.remove(); }catch(e){} }, 0);
-      if(f) this.run(f);
+      if(files.length) this.run(files);
     });
     inp.click();
   },
 
-  async run(file){
+  /* Each image is read and parsed WHOLE and on its own — pages are never
+     concatenated, because one page's trailing line must not glue onto the
+     next page's first course. The review list is then merged across pages and
+     deduped, so the same class photographed twice appears once. */
+  async run(input){
+    const files=Array.isArray(input)?input:[input];
     try{
       this.setBusy('Preparing the scanner…', 4);
-      let sawProgress=false;
-      const text=await ScanOCR.recognize(file, m=>{
-        sawProgress=true;
-        const p=Math.round((m.progress||0)*100);
-        const stage = /recogniz/i.test(m.status||'') ? 'Reading your schedule…' : 'Preparing the scanner…';
-        this.setBusy(stage, /recogniz/i.test(m.status||'') ? p : Math.max(4,Math.min(30,p)));
-      });
-      if(!sawProgress) this.setBusy('Reading your schedule…', 90);
-      const rows=ScanParse.parse(text, s=>this.matchPlace(s));
+      const pages=[];
+      for(let i=0;i<files.length;i++){
+        const label = files.length>1 ? ('Reading photo '+(i+1)+' of '+files.length+'…') : 'Reading your schedule…';
+        let sawProgress=false;
+        const text=await ScanOCR.recognize(files[i], m=>{
+          sawProgress=true;
+          const p=Math.round((m.progress||0)*100);
+          const reading=/recogniz/i.test(m.status||'');
+          const base=(i/files.length)*100, span=100/files.length;
+          this.setBusy(reading?label:'Preparing the scanner…', reading? base+(p*span/100) : Math.max(4,Math.min(30,p)));
+        });
+        if(!sawProgress) this.setBusy(label, ((i+1)/files.length)*100);
+        pages.push(ScanParse.parse(text, s=>this.matchPlace(s)).map(r=>Object.assign(r,{page:i+1})));
+      }
+      const rows=this.merge(pages);
       if(!rows.length){ this.lastErr='no-rows'; this.state='failed'; this.render(); return; }
+      this.pageCount=files.length;
       this.rows=rows; this.state='review'; this.render();
     }catch(e){
       this.lastErr=(e && e.message==='engine-unreachable') ? 'engine-unreachable' : 'ocr-failed';
       this.state='failed'; this.render();
     }
+  },
+
+  /* dedupe across pages on course + days + start; the first page to show a
+     class wins, and a later page only fills in blanks it left behind */
+  merge(pages){
+    const out=[], seen={};
+    pages.forEach(rows=>rows.forEach(r=>{
+      const key=(r.course||'?')+'|'+r.days.join('')+'|'+(r.start||'?');
+      const prev=seen[key];
+      if(prev==null){ seen[key]=out.length; out.push(r); return; }
+      const e=out[prev];
+      if(!e.place && r.place){ e.place=r.place; e.buildingRaw=r.buildingRaw; }
+      if(!e.room && r.room) e.room=r.room;
+      if(!e.title && r.title) e.title=r.title;
+    }));
+    return ScanParse.validate(out);
   },
 
   /* ---- the ONLY write path: the same store the Schedule editor uses ---- */
