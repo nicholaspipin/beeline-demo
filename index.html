@@ -998,7 +998,18 @@ input.inp:disabled{ background:var(--limestone-dk); color:var(--ink-soft); }
 /* ================= BUSES TAB (bz-*) + ROUTE DETAIL (br-*) =================
    Paper UI over a dark live map. Route colors carry identity ONLY; honey
    stays the action color. All text ≥12px; hit targets ≥44px. */
-.bz-top{ padding:10px 18px 0; }
+/* ---- Buses: full-screen takeover. The map runs edge to edge under the
+   floating controls AND the tabbar; everything else floats over it. ---- */
+#scr-buses{ position:relative; }
+.bz-top{ position:absolute; left:0; right:0; top:0; z-index:9; padding:calc(10px + env(safe-area-inset-top)) 16px 18px;
+  background:linear-gradient(to bottom, rgba(14,13,11,.78) 0%, rgba(14,13,11,.5) 55%, rgba(14,13,11,0) 100%); pointer-events:none; }
+.bz-top > *{ pointer-events:auto; }
+.bz-head{ display:flex; align-items:center; gap:10px; margin-bottom:10px; }
+.bz-head h1{ font-family:var(--font-display); font-size:22px; font-weight:770; letter-spacing:-.02em; color:#F4EBDC; margin:0; flex:1; text-shadow:0 1px 8px rgba(14,13,11,.6); }
+/* Routes mode covers the map with paper — the overlay flips to page chrome */
+#scr-buses[data-bview="routes"] .bz-top{ background:var(--paper); border-bottom:1px solid var(--line); padding-bottom:12px; }
+#scr-buses[data-bview="routes"] .bz-head h1{ color:var(--ink); text-shadow:none; }
+#scr-buses[data-bview="routes"] .bz-chips{ display:none; }
 .bz-search{ position:relative; }
 .bz-search input{ width:100%; height:50px; border:none; border-radius:var(--r-md); background:var(--paper); box-shadow:inset 0 0 0 1px var(--line2); padding:0 16px 0 44px; font-size:15.5px; color:var(--ink); font-family:var(--ui); outline:none; }
 .bz-search input:focus{ box-shadow:inset 0 0 0 2px var(--honey); }
@@ -1009,10 +1020,13 @@ input.inp:disabled{ background:var(--limestone-dk); color:var(--ink-soft); }
 .bz-ac-item b{ display:block; font-size:14px; }
 .bz-ac-item span{ display:block; font-size:11.5px; color:var(--ink-soft); }
 .bz-ac-ic{ font-size:15px; }
-.bz-seg{ display:flex; background:var(--surface-dim); border-radius:var(--r-sm); padding:3px; margin:10px 0 0; }
-.bz-seg button{ flex:1; height:38px; border:none; border-radius:var(--r-sm); background:none; font-family:var(--font-display); font-weight:650; font-size:14px; color:var(--ink-soft); cursor:pointer; }
-.bz-seg button.on{ background:var(--paper); color:var(--ink); box-shadow:var(--shadow-soft); }
-.bz-chips{ display:flex; gap:7px; overflow-x:auto; padding:10px 2px; scrollbar-width:none; }
+.bz-seg{ display:flex; flex:none; background:rgba(20,19,15,.55); border-radius:999px; padding:3px; box-shadow:inset 0 0 0 1px rgba(244,235,220,.22); }
+.bz-seg button{ height:32px; padding:0 15px; border:none; border-radius:999px; background:none; font-family:var(--font-display); font-weight:680; font-size:13px; color:rgba(244,235,220,.75); cursor:pointer; }
+.bz-seg button.on{ background:var(--honey); color:var(--on-honey); }
+#scr-buses[data-bview="routes"] .bz-seg{ background:var(--surface-dim); box-shadow:inset 0 0 0 1px var(--line); }
+#scr-buses[data-bview="routes"] .bz-seg button{ color:var(--ink-soft); }
+#scr-buses[data-bview="routes"] .bz-seg button.on{ background:var(--honey); color:var(--on-honey); }
+.bz-chips{ display:flex; gap:7px; overflow-x:auto; padding:10px 2px 0; scrollbar-width:none; }
 .bz-chips::-webkit-scrollbar{ display:none; }
 .bz-chip{ position:relative; flex:none; min-width:44px; height:34px; padding:0 13px; border-radius:999px; border:1.6px solid var(--line2); background:var(--paper); font-family:var(--font-display); font-weight:700; font-size:13.5px; color:var(--rc,var(--ink)); cursor:pointer; }
 .bz-chip.all{ color:var(--ink); }
@@ -1020,22 +1034,29 @@ input.inp:disabled{ background:var(--limestone-dk); color:var(--ink-soft); }
 .bz-chip.all.on{ background:var(--ink); border-color:var(--ink); }
 .bz-chip-live{ position:absolute; top:3px; right:5px; width:6px; height:6px; border-radius:50%; background:#2F7D53; }
 .bz-chip-alert{ position:absolute; top:3px; left:5px; width:6px; height:6px; border-radius:50%; background:var(--honey); }
-.bz-body{ flex:1; min-height:0; position:relative; }
-/* clear the overlaid tabbar (~78px + safe area) — the map, its bottom sheet,
-   and the routes list must all end ABOVE it, never behind it */
-.bz-livewrap{ position:absolute; inset:0 18px calc(84px + env(safe-area-inset-bottom)); border-radius:var(--r-lg); overflow:hidden; box-shadow:inset 0 0 0 1px var(--line2); background:var(--walk-bg); }
+.bz-body{ position:absolute; inset:0; }
+/* the map takes the WHOLE screen — it runs beneath the overlaid tabbar; only
+   interactive chrome (sheet, locate, attribution) stays above the bar */
+.bz-livewrap{ position:absolute; inset:0; background:var(--walk-bg); }
 #busMap{ position:absolute; inset:0; }
-.bz-updated{ position:absolute; top:10px; left:10px; z-index:6; background:rgba(20,19,15,.72); color:#F4EBDC; font-family:var(--mono); font-size:10.5px; padding:5px 10px; border-radius:999px; }
-.bz-livewrap .x-locate{ z-index:7; }
-/* live vehicle marker: cream-cased route-color bus; glow only when LIVE */
-.bz-veh{ position:relative; width:17px; height:34px; cursor:pointer; }
+#busMap .maplibregl-ctrl-bottom-left, #busMap .maplibregl-ctrl-bottom-right{ bottom:calc(80px + env(safe-area-inset-bottom)); }
+.bz-updated{ background:rgba(20,19,15,.6); color:#F4EBDC; font-family:var(--mono); font-size:10.5px; padding:5px 10px; border-radius:999px; box-shadow:inset 0 0 0 1px rgba(244,235,220,.16); }
+#scr-buses[data-bview="routes"] .bz-updated{ display:none !important; }
+.bz-livewrap .x-locate{ z-index:8; top:auto; bottom:calc(100px + env(safe-area-inset-bottom)); }
+/* live vehicle marker: cream-cased route-color bus; glow only when LIVE.
+   position MUST stay absolute: MapLibre's own .maplibregl-marker rule sets it,
+   and this class loads later at equal specificity — a `relative` here put every
+   marker back into layout flow, stacking each bus ~34px (one element height)
+   below the previous one before the map's transform even applied. That was
+   the "buses are nowhere near where they should be" bug. */
+.bz-veh{ position:absolute; width:17px; height:34px; cursor:pointer; }
 .bz-veh::after{ content:""; position:absolute; inset:-14px; }   /* big tap target */
 .bz-veh-body{ position:absolute; inset:0; }
 .bz-veh-body svg{ width:100%; height:100%; display:block; filter:drop-shadow(0 1px 3px rgba(0,0,0,.5)); }
 .bz-veh-glow{ position:absolute; inset:-5px; border-radius:var(--r-sm); background:var(--rc,#FFC300); opacity:0; filter:blur(7px); transition:opacity .5s ease; }
 .bz-veh.live .bz-veh-glow{ opacity:.32; }
-/* bottom sheet over the map */
-.bz-sheet{ position:absolute; left:10px; right:10px; bottom:10px; z-index:8; background:var(--paper); border-radius:var(--r-lg); box-shadow:var(--shadow-pop); padding:8px 16px 14px; max-height:62%; overflow-y:auto; }
+/* bottom sheet over the map — clears the overlaid tabbar */
+.bz-sheet{ position:absolute; left:10px; right:10px; bottom:calc(94px + env(safe-area-inset-bottom)); z-index:8; background:var(--paper); border-radius:var(--r-lg); box-shadow:var(--shadow-pop); padding:8px 16px 14px; max-height:56%; overflow-y:auto; }
 .bz-sh-grab{ width:40px; height:4px; border-radius:99px; background:var(--line2); margin:2px auto 10px; }
 .bz-sh-head{ display:flex; align-items:flex-start; justify-content:space-between; gap:10px; margin-bottom:6px; }
 .bz-sh-title{ font-family:var(--font-display); font-weight:700; font-size:19px; letter-spacing:-.02em; }
@@ -1090,7 +1111,7 @@ input.inp:disabled{ background:var(--limestone-dk); color:var(--ink-soft); }
 .bz-step{ display:flex; gap:12px; padding:10px 2px; border-top:1px solid var(--line); font-size:14px; line-height:1.45; align-items:flex-start; }
 .bz-step-ic{ flex:none; width:24px; text-align:center; }
 /* routes directory */
-.bz-routes{ position:absolute; inset:0; overflow-y:auto; -webkit-overflow-scrolling:touch; padding:4px 18px calc(100px + env(safe-area-inset-bottom)); }
+.bz-routes{ position:absolute; inset:0; overflow-y:auto; -webkit-overflow-scrolling:touch; background:var(--paper-bg); padding:calc(128px + env(safe-area-inset-top)) 18px calc(100px + env(safe-area-inset-bottom)); }
 .bz-sec{ font-family:var(--mono); font-size:10.5px; font-weight:700; letter-spacing:.08em; text-transform:uppercase; color:var(--ink-faint); margin:14px 2px 8px; }
 .bz-rrow{ display:flex; align-items:center; gap:13px; background:var(--paper); border-radius:var(--r-md); box-shadow:inset 0 0 0 1px var(--line); padding:13px 14px; margin-bottom:9px; cursor:pointer; min-height:56px; }
 .bz-rrow.dim{ opacity:.72; cursor:default; }
@@ -2581,7 +2602,7 @@ input.inp:disabled{ background:var(--limestone-dk); color:var(--ink-soft); }
         <div class="prow" id="pUpdates"><span class="prow-ic"><span data-pi="arrows-clockwise"></span></span><b class="prow-label">What’s new<span class="upd-dot" id="updDot" style="display:none"></span></b><span class="prow-val" id="pUpdatesVal"></span><span class="prow-ch"><span data-pi="caret-right"></span></span></div>
       </div>
 
-      <div class="profile-version">BeeLine 1.0.0 · build 2026-09-01 15:10 · your data stays on this phone<br>Map data © OpenStreetMap contributors · © CARTO</div>
+      <div class="profile-version">BeeLine 1.0.0 · build 2026-09-01 15:18 · your data stays on this phone<br>Map data © OpenStreetMap contributors · © CARTO</div>
       <button class="prow" id="pAdd" style="display:none"></button>
     </div>
   </section>
@@ -2610,26 +2631,26 @@ input.inp:disabled{ background:var(--limestone-dk); color:var(--ink-soft); }
 
   <!-- ============ TAB BAR ============ -->
   <!-- ============ BUSES ============ -->
+  <!-- Buses: the map IS the page — full-bleed, controls float over it -->
   <section class="screen" id="scr-buses" data-tab="buses" data-bview="live">
-    <header class="appbar" style="padding-bottom:0"><h1 class="page-h" style="margin:6px 0 0">Buses</h1><div class="spacer"></div></header>
+    <div class="bz-body">
+      <div class="bz-livewrap" id="bzLiveWrap">
+        <div id="busMap"></div>
+        <div class="map-veil dark" id="bzMapVeil"><span class="mv-dot"></span><span class="mv-txt">Loading live map…</span></div>
+        <button class="x-locate" id="bzLocate" title="Find me"><span data-pi="crosshair"></span></button>
+        <div class="bz-sheet" id="bzSheet" style="display:none"></div>
+      </div>
+      <div class="bz-routes" id="bzRoutes" style="display:none"></div>
+    </div>
     <div class="bz-top">
+      <div class="bz-head"><h1>Buses</h1><div class="bz-updated" id="bzUpdated" style="display:none"></div>
+        <div class="bz-seg" id="bzSeg"><button data-bv="live" class="on">Live</button><button data-bv="routes">Routes</button></div></div>
       <div class="bz-search ac">
         <span class="s-ic"><span data-pi="magnifying-glass"></span></span>
         <input type="text" id="bzSearch" placeholder="Where are you going?" autocomplete="off">
         <div class="bz-ac" id="bzAc" style="display:none"></div>
       </div>
-      <div class="bz-seg" id="bzSeg"><button data-bv="live" class="on">Live</button><button data-bv="routes">Routes</button></div>
       <div class="bz-chips" id="bzChips"></div>
-    </div>
-    <div class="bz-body">
-      <div class="bz-livewrap" id="bzLiveWrap">
-        <div id="busMap"></div>
-        <div class="map-veil dark" id="bzMapVeil"><span class="mv-dot"></span><span class="mv-txt">Loading live map…</span></div>
-        <div class="bz-updated" id="bzUpdated" style="display:none"></div>
-        <button class="x-locate" id="bzLocate" title="Find me"><span data-pi="crosshair"></span></button>
-        <div class="bz-sheet" id="bzSheet" style="display:none"></div>
-      </div>
-      <div class="bz-routes" id="bzRoutes" style="display:none"></div>
     </div>
   </section>
 
@@ -6213,7 +6234,15 @@ const BusMap={
         polishMap(this.map,'dark'); collapseAttrib($('busMap'));
         this.drawRoutes(); this.syncVehicles(); this.drawUser();
       });
-      this.map.on('dragstart', ()=>{ this.followEq=null; BusUI.syncFollowBtn(); });
+      /* ANY user gesture releases follow — not just drags. A pinch-zoom fires
+         zoomstart, never dragstart, and with follow still armed the animation
+         loop re-centered the camera EVERY FRAME mid-gesture: the map sheared
+         under your fingers and every bus looked scattered. originalEvent
+         distinguishes a finger from our own programmatic centering. */
+      const userMoved=e=>{ if(e && e.originalEvent && this.followEq){ this.followEq=null; BusUI.syncFollowBtn(); } };
+      this.map.on('movestart', userMoved);
+      this.map.on('zoomstart', userMoved);
+      this.map.on('rotatestart', userMoved);
       this.map.on('click', ()=>BusUI.closeSheet());
       setTimeout(()=>{ if(this.map) this.map.resize(); },200);
       setTimeout(()=>{ if(!this.loaded && $('bzMapVeil')){ $('bzMapVeil').querySelector('.mv-txt').textContent='Still loading… check your connection'; } }, 6000);
@@ -6320,7 +6349,9 @@ const BusMap={
       const h=(a.fH+dh*Math.min(1,k*2.2)+360)%360;      // heading settles faster than position
       a.curH=h;
       m.setLngLat([lng,lat]); m.setRotation(h);
-      if(this.followEq===id) this.map.setCenter([lng,lat]);
+      /* follow tracks the glide — but never while a camera animation (the
+         tap-to-center ease) is in flight, or setCenter cuts the zoom short */
+      if(this.followEq===id && !this.map.isMoving()) this.map.setCenter([lng,lat]);
       if(k<1) busy=true;
     }
     if(busy) this.animRAF=requestAnimationFrame(()=>this.animStep());
