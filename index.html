@@ -1145,6 +1145,19 @@ input.inp:disabled{ background:var(--limestone-dk); color:var(--ink-soft); }
 .bz-empty{ padding:40px 20px; text-align:center; font-size:14px; color:var(--ink-soft); }
 /* route detail (pushed) */
 .br-head{ display:flex; align-items:center; gap:14px; margin:8px 0 14px; }
+/* ---- route banner header: the route color IS the header ---- */
+.brh{ position:relative; margin:2px -20px 0; padding:18px 20px 54px; background:var(--rc); color:var(--tx); border-radius:0 0 26px 26px; overflow:hidden; }
+.brh-mark{ position:absolute; right:-12px; top:-34px; font-family:var(--font-display); font-weight:800; font-size:150px; line-height:1; letter-spacing:-.05em; opacity:.14; pointer-events:none; user-select:none; }
+.brh-body{ position:relative; }
+.brh-name{ font-family:var(--font-display); font-weight:760; font-size:27px; letter-spacing:-.025em; margin:0 0 7px; color:var(--tx); }
+.brh-row{ display:flex; align-items:center; gap:8px; flex-wrap:wrap; }
+.brh .bz-status{ background:color-mix(in srgb, var(--tx) 16%, transparent); color:var(--tx); border-radius:999px; padding:5px 12px; font-size:12.5px; font-weight:650; }
+.brh .bz-status i{ background:currentColor; }
+.brh .bz-detour-tag{ background:color-mix(in srgb, var(--tx) 16%, transparent); color:var(--tx); border-radius:999px; padding:5px 12px; }
+.brh.noseg{ padding-bottom:22px; }
+.brh-seg{ position:relative; z-index:2; margin:-24px 0 0; background:var(--surface); box-shadow:inset 0 0 0 1px var(--line), 0 6px 18px rgba(20,19,15,.10); }
+#brBody > .brh-seg + *, #brBody > .brh.noseg + *{ margin-top:16px; }
+
 .br-title{ font-family:var(--font-display); font-weight:700; font-size:24px; letter-spacing:-.02em; margin:0 0 3px; }
 .br-seg{ margin:0 0 14px; }
 .br-seg.sub{ margin:0 0 10px; }
@@ -1179,11 +1192,14 @@ input.inp:disabled{ background:var(--limestone-dk); color:var(--ink-soft); }
 .brx-dayhead b{ font-family:var(--font-display); font-size:16px; font-weight:720; letter-spacing:-.015em; color:var(--ink); }
 .brx-dayhead span{ font-size:12.5px; color:var(--ink-faint); }
 .brx-today{ margin-left:auto; font-style:normal; font-family:var(--font-display); font-size:11.5px; font-weight:680; color:var(--honey-deep); background:var(--honey-tint); border-radius:999px; padding:3px 10px; }
-.brx-track{ position:relative; height:14px; border-radius:7px; background:var(--paper-bg); overflow:visible; }
-.brx-segb{ position:absolute; top:0; height:100%; border-radius:7px; background:var(--rc); }
+.brx-track{ position:relative; height:20px; border-radius:10px; background:var(--paper-bg); overflow:visible; margin:20px 0 6px; }
+.brx-segb{ position:absolute; top:0; height:100%; border-radius:10px; background:var(--rc); }
+.brx-endlab{ position:absolute; top:-17px; font-family:var(--mono); font-size:10px; font-weight:650; color:var(--ink-faint); font-variant-numeric:tabular-nums; white-space:nowrap; }
+.brx-endlab.s{ transform:translateX(0); }
+.brx-endlab.e{ transform:translateX(-100%); }
 .brx-segb.hi{ opacity:.9; } .brx-segb.mid{ opacity:.55; } .brx-segb.lo{ opacity:.3; }
-.brx-tick{ position:absolute; top:2px; width:3px; height:10px; border-radius:2px; background:var(--rc); opacity:.75; }
-.brx-nowmark{ position:absolute; top:-4px; width:2.5px; height:22px; border-radius:2px; background:var(--ink); box-shadow:0 0 0 2px var(--surface); }
+.brx-tick{ position:absolute; top:3px; width:3.5px; height:14px; border-radius:2px; background:var(--rc); opacity:.75; }
+.brx-nowmark{ position:absolute; top:-5px; width:2.5px; height:30px; border-radius:2px; background:var(--ink); box-shadow:0 0 0 2px var(--surface); }
 .brx-capline{ font-size:12.5px; color:var(--ink-soft); margin-top:8px; line-height:1.5; font-variant-numeric:tabular-nums; }
 .brx-nosvc{ font-size:13px; color:var(--ink-faint); padding:2px 0 4px; }
 .brx-ruler{ position:relative; height:16px; margin-top:14px; }
@@ -1832,7 +1848,7 @@ input.inp:disabled{ background:var(--limestone-dk); color:var(--ink-soft); }
         <div class="prow" id="pUpdates"><span class="prow-ic"><span data-pi="arrows-clockwise"></span></span><b class="prow-label">What’s new<span class="upd-dot" id="updDot" style="display:none"></span></b><span class="prow-val" id="pUpdatesVal"></span><span class="prow-ch"><span data-pi="caret-right"></span></span></div>
       </div>
 
-      <div class="profile-version">BeeLine 1.0.0 · build 2026-09-01 09:02 · your data stays on this phone<br>Map data © OpenStreetMap contributors · © CARTO</div>
+      <div class="profile-version">BeeLine 1.0.0 · build 2026-09-01 09:16 · your data stays on this phone<br>Map data © OpenStreetMap contributors · © CARTO</div>
       <button class="prow" id="pAdd" style="display:none"></button>
     </div>
   </section>
@@ -5445,6 +5461,12 @@ const BusSchedule={
     return merged;
   }
 };
+// white or ink text on a route color, by YIQ luminance
+function bzTextOn(hex){
+  const m=/^#?([0-9a-f]{6})$/i.exec(hex||''); if(!m) return '#fff';
+  const n=parseInt(m[1],16), r=n>>16, g=(n>>8)&255, b=n&255;
+  return ((r*299+g*587+b*114)/1000) >= 158 ? '#14130F' : '#fff';
+}
 function bzNowSec(){ const d=new Date(); return d.getHours()*3600+d.getMinutes()*60+d.getSeconds(); }
 function bzFmtSec(s){ return fmtTime(Math.round(s/60)%1440); }
 
@@ -5974,13 +5996,19 @@ const BusRouteDetail={
     const liveN=vehicles.filter(v=>BusLive.state(v)==='LIVE').length;
     const status= p.schedOnly? `<span class="bz-status off"><i></i>Schedule-only route — no live tracking</span>` : liveN? `<span class="bz-status live"><i></i>Running now · ${liveN} bus${liveN>1?'es':''} live</span>` : `<span class="bz-status off"><i></i>Not running right now</span>`;
     const detour=BusUI.routeHasAlert(p)?'<span class="bz-detour-tag">Detour / alert active</span>':'';
-    let html=`<div class="br-head"><span class="bz-dot xl" style="background:${esc(p.color)}">${esc(p.abbr)}</span>
-      <div><h2 class="br-title">${esc(p.name)}</h2>${status} ${detour}</div></div>
-      <div class="bz-seg br-seg"><button data-m="live" class="${this.mode==='live'?'on':''}">Live</button><button data-m="sched" class="${this.mode==='sched'?'on':''}">Schedule</button></div>`;
+    const tx=bzTextOn(p.color);
+    let html=`<div class="brh${p.schedOnly?' noseg':''}" style="--rc:${esc(p.color)};--tx:${tx}">
+      <span class="brh-mark" aria-hidden="true">${esc(p.abbr)}</span>
+      <div class="brh-body">
+        <h2 class="brh-name">${esc(p.name)}</h2>
+        <div class="brh-row">${status} ${detour}</div>
+      </div>
+    </div>`;
+    if(!p.schedOnly) html+=`<div class="bz-seg brh-seg"><button data-m="live" class="${this.mode==='live'?'on':''}">Live</button><button data-m="sched" class="${this.mode==='sched'?'on':''}">Schedule</button></div>`;
     if(this.mode==='live') html+=this.liveHTML(p,vehicles);
     else html+=this.schedHTML(p);
     host.innerHTML=html;
-    host.querySelectorAll('.br-seg button').forEach(b=>b.addEventListener('click',()=>{ this.mode=b.dataset.m; this.render(); }));
+    host.querySelectorAll('.brh-seg button').forEach(b=>b.addEventListener('click',()=>{ this.mode=b.dataset.m; this.render(); }));
     host.querySelectorAll('.br-stop[data-sid]').forEach(el=>el.addEventListener('click',()=>{ show('buses'); BusUI.openStop(+el.dataset.sid); }));
     const vm=host.querySelector('#brViewMap'); if(vm) vm.addEventListener('click',()=>{ show('buses'); BusUI.setView('live'); BusMap.filter=new Set([p.id]); BusUI.renderChips(); BusMap.drawRoutes(); BusMap.syncVehicles(); });
   },
@@ -6093,6 +6121,9 @@ const BusRouteDetail={
           // sparse: a tick per departure
           x.secs.forEach(t=>{ html+='<span class="brx-tick" style="left:'+pctOf(t).toFixed(2)+'%"></span>'; });
         }
+        // endpoint labels: when service starts and ends, right at the bar
+        html+='<span class="brx-endlab s" style="left:'+pctOf(x.secs[0]).toFixed(2)+'%">'+bzFmtSec(x.secs[0])+'</span>';
+        html+='<span class="brx-endlab e" style="left:'+pctOf(x.secs[x.secs.length-1]).toFixed(2)+'%">'+bzFmtSec(x.secs[x.secs.length-1])+'</span>';
         // "you are here" marker on today's bar
         if(x.isNow && now>=sMin && now<=sMax) html+='<span class="brx-nowmark" style="left:'+pctOf(now).toFixed(2)+'%"></span>';
         html+='</div>';
