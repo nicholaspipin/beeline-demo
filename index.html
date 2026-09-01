@@ -1157,38 +1157,35 @@ input.inp:disabled{ background:var(--limestone-dk); color:var(--ink-soft); }
 .br-veh{ position:relative; display:flex; align-items:center; gap:9px; padding:4px 0 4px 30px; }
 .br-veh::before{ content:""; position:absolute; left:11px; top:0; bottom:0; width:3px; background:var(--rc); opacity:.28; }
 .br-veh-chip{ font-size:11.5px; font-weight:700; color:#fff; border-radius:999px; padding:4px 10px; box-shadow:0 2px 8px rgba(20,19,15,.25); }
-/* ===== ROUTE SCHEDULE (.brx-*) — freshman-first overhaul =====
-   Service patterns (Weekdays/Weekends), not dates; one stop at a time;
-   next departures big; frequency bands; hour-grouped full list on demand. */
-.brx-span{ font-size:12.5px; color:var(--ink-faint); margin:-4px 2px 12px; }
-.brx-exc{ margin:0 0 14px; padding:11px 14px; border-radius:var(--r-md); background:var(--honey-tint); font-size:13.5px; line-height:1.6; color:var(--ink); }
+/* ===== ROUTE SCHEDULE (.brx-*) — elegant pass =====
+   A sentence, one big time, the week as rhythm blocks, one footer line. */
+.brx-hero{ padding:4px 2px 18px; border-bottom:1px solid var(--line); margin-bottom:6px; }
+.brx-cap{ font-size:14px; color:var(--ink-soft); }
+.brx-stopwrap{ position:relative; display:inline-block; max-width:100%; }
+.brx-stopwrap::after{ content:''; position:absolute; right:6px; top:50%; width:7px; height:7px; border-right:2.2px solid var(--honey-deep); border-bottom:2.2px solid var(--honey-deep); transform:translateY(-70%) rotate(45deg); pointer-events:none; }
+.brx-stop{ appearance:none; -webkit-appearance:none; border:none; background:transparent; padding:2px 26px 2px 0; font-family:var(--font-display); font-size:19px; font-weight:700; letter-spacing:-.015em; color:var(--ink); max-width:100%; white-space:nowrap; overflow:hidden; text-overflow:ellipsis; }
+.brx-big{ font-family:var(--font-display); font-weight:760; font-size:46px; letter-spacing:-.035em; line-height:1.05; margin-top:10px; font-variant-numeric:tabular-nums; color:var(--honey-deep); }
+.brx-big.none{ color:var(--ink-soft); font-size:28px; }
+.brx-big .brx-when{ font-size:16px; font-weight:640; color:var(--ink-soft); margin-left:10px; letter-spacing:0; }
+.brx-then{ font-size:14.5px; color:var(--ink-soft); margin-top:5px; font-variant-numeric:tabular-nums; }
+.brx-exc{ margin:12px 0 2px; padding:11px 14px; border-radius:var(--r-md); background:var(--honey-tint); font-size:13.5px; line-height:1.6; color:var(--ink); }
 .brx-exc svg{ width:14px; height:14px; vertical-align:-2px; margin-right:4px; color:var(--honey-deep); }
-.brx-noexc{ font-size:12.5px; color:var(--ink-faint); margin:0 2px 14px; }
-.brx-stoplab{ display:block; font-family:var(--mono); font-size:10.5px; font-weight:700; letter-spacing:.14em; text-transform:uppercase; color:var(--ink-faint); margin:0 2px 6px; }
-.brx-stopsel-wrap{ position:relative; margin-bottom:14px; }
-.brx-stopsel-wrap::after{ content:''; position:absolute; right:16px; top:50%; width:8px; height:8px; border-right:2px solid var(--ink-soft); border-bottom:2px solid var(--ink-soft); transform:translateY(-70%) rotate(45deg); pointer-events:none; }
-.brx-stopsel{ width:100%; appearance:none; -webkit-appearance:none; border:none; background:var(--surface); box-shadow:inset 0 0 0 1px var(--line2); border-radius:var(--r-md); padding:13px 40px 13px 15px; font-family:var(--font-display); font-size:15.5px; font-weight:660; color:var(--ink); }
-.brx-next{ background:var(--surface); border-radius:var(--r-md); box-shadow:inset 0 0 0 1px var(--line); padding:14px 16px 12px; margin-bottom:12px; }
-.brx-next-k{ font-size:12.5px; color:var(--ink-soft); }
-.brx-next-v{ font-family:var(--font-display); font-weight:760; font-size:34px; letter-spacing:-.03em; margin-top:2px; font-variant-numeric:tabular-nums; color:var(--honey-deep); }
-.brx-next-v .brx-in{ font-size:15px; font-weight:650; color:var(--ink-soft); margin-left:9px; letter-spacing:0; }
-.brx-next-then{ font-size:13.5px; color:var(--ink-soft); margin-top:3px; font-variant-numeric:tabular-nums; }
-.brx-next-note{ font-size:11.5px; color:var(--ink-faint); margin-top:7px; }
-.brx-next.done .brx-next-k{ font-weight:650; color:var(--ink); }
-.brx-facts{ display:flex; gap:16px; font-size:13px; color:var(--ink-soft); margin:2px 2px 10px; font-variant-numeric:tabular-nums; }
-.brx-facts b{ color:var(--ink); font-weight:680; }
-.brx-bands{ margin-bottom:12px; }
-.brx-band{ display:flex; align-items:baseline; justify-content:space-between; padding:9px 2px; border-bottom:1px solid var(--line); font-variant-numeric:tabular-nums; }
-.brx-band-t{ font-size:14px; font-weight:640; color:var(--ink); font-family:var(--font-display); }
-.brx-band-h{ font-size:13px; color:var(--ink-soft); }
-.brx-all-btn{ display:block; width:100%; border:none; background:none; cursor:pointer; text-align:left; padding:10px 2px; font-family:var(--font-display); font-size:14.5px; font-weight:660; color:var(--ink); border-bottom:1px solid var(--line); }
+.brx-day{ padding:14px 2px 4px; }
+.brx-day-h{ font-family:var(--font-display); font-size:16.5px; font-weight:720; letter-spacing:-.015em; color:var(--ink); margin-bottom:2px; }
+.brx-day-h span{ font-size:13px; font-weight:500; letter-spacing:0; color:var(--ink-faint); margin-left:8px; }
+.brx-day-h.sm{ margin:16px 2px 2px; font-size:14.5px; }
+.brx-band{ display:flex; align-items:baseline; justify-content:space-between; gap:12px; padding:10px 0; border-bottom:1px solid var(--line); }
+.brx-band b{ font-family:var(--font-display); font-size:16.5px; font-weight:680; letter-spacing:-.01em; color:var(--ink); flex:none; }
+.brx-band span{ font-size:14px; color:var(--ink-soft); font-variant-numeric:tabular-nums; text-align:right; }
+.brx-none{ font-size:14px; color:var(--ink-faint); padding:6px 0 10px; }
+.brx-all-btn{ display:block; width:100%; border:none; background:none; cursor:pointer; text-align:left; padding:14px 2px; margin-top:4px; font-family:var(--font-display); font-size:15px; font-weight:680; color:var(--honey-deep); border-bottom:1px solid var(--line); }
 .brx-hours{ padding:4px 0 2px; }
 .brx-hour{ display:flex; align-items:baseline; gap:12px; padding:7px 2px; border-bottom:1px solid var(--line); }
 .brx-hh{ font-family:var(--mono); font-size:12px; font-weight:700; color:var(--ink-soft); width:48px; flex:none; text-align:right; }
 .brx-mins{ display:flex; flex-wrap:wrap; gap:6px; }
 .brx-mins i{ font-style:normal; font-family:var(--font-num); font-size:13px; font-weight:600; color:var(--ink); background:var(--paper-bg); border-radius:7px; padding:3px 7px; font-variant-numeric:tabular-nums; }
 .brx-mins i.past{ opacity:.35; }
-.brx-disc{ font-size:11.5px; color:var(--ink-faint); margin:12px 2px 4px; line-height:1.5; }
+.brx-disc{ font-size:12px; color:var(--ink-faint); margin:14px 2px 4px; line-height:1.5; }
 
 /* ===== SCHEDULE — today-anchored day board =====
    Week strip picks the day; the day renders in the departure-board recipe
@@ -1814,7 +1811,7 @@ input.inp:disabled{ background:var(--limestone-dk); color:var(--ink-soft); }
         <div class="prow" id="pUpdates"><span class="prow-ic"><span data-pi="arrows-clockwise"></span></span><b class="prow-label">What’s new<span class="upd-dot" id="updDot" style="display:none"></span></b><span class="prow-val" id="pUpdatesVal"></span><span class="prow-ch"><span data-pi="caret-right"></span></span></div>
       </div>
 
-      <div class="profile-version">BeeLine 1.0.0 · build 2026-09-01 08:36 · your data stays on this phone<br>Map data © OpenStreetMap contributors · © CARTO</div>
+      <div class="profile-version">BeeLine 1.0.0 · build 2026-09-01 08:40 · your data stays on this phone<br>Map data © OpenStreetMap contributors · © CARTO</div>
       <button class="prow" id="pAdd" style="display:none"></button>
     </div>
   </section>
@@ -5982,25 +5979,16 @@ const BusRouteDetail={
     if(!vehicles.length) html+='<div class="bz-mut" style="margin-top:10px">No buses on this route right now — check the Schedule tab for when service runs.</div>';
     return html;
   },
-  /* Schedule, freshman-first. A route doesn't have 365 schedules — it has
-     service PATTERNS (Weekdays / Weekends) plus dated exceptions. So: pattern
-     toggle (auto-set to today), one stop at a time (nearest first), the next
-     few departures big, the day as frequency bands, hour-grouped full list
-     behind one tap, exceptions named. All labeled scheduled — never live. */
+  /* Schedule, elegant pass. One screen tells the whole story with zero
+     toggles: "Next bus from [your stop]" as a sentence, then the entire week
+     as frequency blocks (Weekdays / Weekends) — a route is a rhythm, not a
+     table. Full hour-grouped timetable behind one link. One footer line. */
   schedHTML(p){
     const pats=BusSchedule.servicePatterns();
     if(!pats.length) return '<div class="bz-mut">No schedule data available.</div>';
     const today=new Date(), now=bzNowSec();
-    if(this.patKey==null){
-      const i=pats.findIndex(pt=>pt.days[today.getDay()]===1);
-      this.patKey=i>=0?i:0;
-    }
-    const pat=pats[Math.min(this.patKey,pats.length-1)];
-    const date=BusSchedule.nextDateForPattern(pat)||today;
-    const isToday=date.toDateString()===today.toDateString();
-    // only offer stops GTFS actually has times for — the live feed knows a few
-    // stops (garage-adjacent renumbers) that the schedule doesn't; a freshman
-    // should never pick a stop and see an empty page (review find: E stops 64/66)
+    // only offer stops GTFS actually has times for (review find: live feed
+    // knows garage-adjacent renumbers the schedule doesn't)
     const known=new Set();
     (p.gtfsIds||[]).forEach(g=>{ const R=BEELINE_GTFS.trips[g]; if(R) R.patterns.forEach(pt=>pt.stops.forEach(x=>known.add(String(x)))); });
     let stops=p.stops.map(id=>BusModel.stop(id)).filter(Boolean);
@@ -6012,73 +6000,82 @@ const BusRouteDetail={
       this.stopId=pick.id;
     }
     const stop=stops.find(s=>s.id===this.stopId);
-    const all=BusSchedule.departures(p, stop.ext, date, 0, 500);
-    const secs=all.map(x=>x.sec);
+
+    // next departure — searches forward across the week so there is never a
+    // dead end ("7:49 AM · Monday" beats "done for today")
+    let nextDep=null;
+    for(let i=0;i<8 && !nextDep;i++){
+      const d=new Date(); d.setDate(d.getDate()+i);
+      const deps=BusSchedule.departures(p, stop.ext, d, i===0?now:0, 1);
+      if(deps.length) nextDep={sec:deps[0].sec, off:i, date:d};
+    }
 
     let html='';
-    // pattern toggle — "today" tagged so a freshman lands on the right one
-    html+='<div class="bz-seg br-seg sub">'+pats.map((pt,i)=>
-      '<button data-pk="'+i+'" class="'+(i===this.patKey?'on':'')+'">'+esc(pt.label)+(pt.days[today.getDay()]?' · today':'')+'</button>').join('')+'</div>';
-    html+='<div class="brx-span">'+esc(pat.span)+' — same times every '+(pat.label==='Weekdays'?'weekday':(pat.label==='Weekends'?'weekend day':'day it runs'))+'</div>';
-    // exceptions (real calendar_dates) — the only reason future dates differ
+    html+='<div class="brx-hero"><div class="brx-cap">Next bus from</div>'
+      +'<div class="brx-stopwrap"><select class="brx-stop" id="brxStop">'
+      +stops.map(s=>'<option value="'+s.id+'"'+(s.id===this.stopId?' selected':'')+'>'+esc(s.name)+'</option>').join('')
+      +'</select></div>';
+    if(nextDep){
+      let when;
+      if(nextDep.off===0){ const m=Math.max(0,Math.round((nextDep.sec-now)/60));
+        when= m<1?'now' : m<60?('in '+m+' min') : ('in '+Math.floor(m/60)+'h'+(m%60?' '+m%60+'m':'')); }
+      else if(nextDep.off===1) when='tomorrow';
+      else when=nextDep.date.toLocaleDateString('en-US',{weekday:'long'});
+      html+='<div class="brx-big">'+bzFmtSec(nextDep.sec)+'<span class="brx-when">'+esc(when)+'</span></div>';
+      const more=BusSchedule.departures(p, stop.ext, nextDep.date, nextDep.sec+1, 2);
+      if(more.length) html+='<div class="brx-then">then '+more.map(x=>bzFmtSec(x.sec)).join(' · ')+'</div>';
+    } else {
+      html+='<div class="brx-big none">No service</div><div class="brx-then">No scheduled buses at this stop in the next week.</div>';
+    }
+    html+='</div>';
+
+    // real calendar exceptions — only when they exist; silence is the default
     const exc=BusSchedule.exceptions(35);
     if(exc.length){
       const fmtD=d=>d.toLocaleDateString('en-US',{weekday:'short',month:'short',day:'numeric'});
       html+='<div class="brx-exc">'+exc.slice(0,3).map(e=>
-        '<div>'+pic('warning')+' '+(e.kind==='noService'?'No buses ':'Different schedule ')+esc(fmtD(e.date))+'</div>').join('')
+        '<div>'+pic('warning')+' '+(e.kind==='noService'?'No buses ':'Different times ')+esc(fmtD(e.date))+'</div>').join('')
         +(exc.length>3?'<div class="bz-mut2">+'+(exc.length-3)+' more dates</div>':'')+'</div>';
-    } else {
-      html+='<div class="brx-noexc">No holiday changes in the next 5 weeks</div>';
     }
-    // stop picker — one stop at a time; nearest is the default
-    html+='<label class="brx-stoplab">Times at</label><div class="brx-stopsel-wrap"><select class="brx-stopsel" id="brxStop">'+
-      stops.map(s=>'<option value="'+s.id+'"'+(s.id===this.stopId?' selected':'')+'>'+esc(s.name)+'</option>').join('')+'</select></div>';
-    if(!secs.length){
-      html+='<div class="bz-mut" style="margin-top:10px">No '+esc(pat.label.toLowerCase())+' service at this stop.</div>';
-      html+='<div class="brx-disc">Times are the official schedule — live tracking is on the Live tab when buses run.</div>';
-      return html;
-    }
-    // NEXT — only meaningful when the selected pattern is happening right now
-    if(isToday && pat.days[today.getDay()]){
-      const next=secs.filter(t=>t>=now).slice(0,3);
-      if(next.length){
-        const mins=Math.max(0,Math.round((next[0]-now)/60));
-        const inTxt= mins<1?'now' : mins<60?('in '+mins+' min') : ('in '+Math.floor(mins/60)+'h '+(mins%60?mins%60+'m':''));
-        html+='<div class="brx-next"><div class="brx-next-k">Next from this stop</div>'+
-          '<div class="brx-next-v">'+bzFmtSec(next[0])+'<span class="brx-in">'+inTxt.trim()+'</span></div>'+
-          (next.length>1?'<div class="brx-next-then">then '+next.slice(1).map(t=>bzFmtSec(t)).join(' · ')+'</div>':'')+
-          '<div class="brx-next-note">Scheduled times — check Live for the real bus</div></div>';
+
+    // the whole week, no toggle — one rhythm block per service pattern
+    pats.forEach(pt=>{
+      const d=BusSchedule.nextDateForPattern(pt);
+      const secs= d? BusSchedule.departures(p, stop.ext, d, 0, 500).map(x=>x.sec) : [];
+      const isNow= pt.days[today.getDay()]===1;
+      html+='<div class="brx-day"><div class="brx-day-h">'+esc(pt.label)+'<span>'+esc(pt.span)+(isNow?' · today':'')+'</span></div>';
+      if(!secs.length){ html+='<div class="brx-none">No '+(pt.label==='Weekends'?'weekend':'weekday')+' service at this stop</div></div>'; return; }
+      const bands=BusSchedule.bands(secs);
+      if(bands && bands.length && bands.length<=5){
+        bands.forEach(b=>{ html+='<div class="brx-band"><b>Every ~'+b.head+' min</b><span>'+bzFmtSec(b.from)+' – '+bzFmtSec(b.to)+'</span></div>'; });
       } else {
-        html+='<div class="brx-next done"><div class="brx-next-k">Done for today</div><div class="brx-next-then">Last bus left at '+bzFmtSec(secs[secs.length-1])+'</div></div>';
+        html+='<div class="brx-band"><b>Runs at</b><span>'+secs.slice(0,8).map(t=>bzFmtSec(t)).join(', ')+(secs.length>8?' …':'')+'</span></div>';
       }
-    }
-    // the day at a glance: first / last / rhythm
-    html+='<div class="brx-facts"><span>First <b>'+bzFmtSec(secs[0])+'</b></span><span>Last <b>'+bzFmtSec(secs[secs.length-1])+'</b></span><span><b>'+secs.length+'</b> trips</span></div>';
-    const bands=BusSchedule.bands(secs);
-    if(bands && bands.length && bands.length<=6){
-      html+='<div class="brx-bands">'+bands.map(b=>
-        '<div class="brx-band"><span class="brx-band-t">'+bzFmtSec(b.from)+' – '+bzFmtSec(b.to)+'</span><span class="brx-band-h">every ~'+b.head+' min</span></div>').join('')+'</div>';
-    }
-    // full list, hour-grouped, one tap away — the escape hatch, not the default
-    html+='<button class="brx-all-btn" id="brxAll">'+(this.showAll?'Hide':'Show')+' all '+secs.length+' times</button>';
+      html+='</div>';
+    });
+
+    html+='<button class="brx-all-btn" id="brxAll">'+(this.showAll?'Hide the full timetable':'See the full timetable')+'</button>';
     if(this.showAll){
-      // minutes rounded the same way bzFmtSec rounds — the headline and the
-      // list must never disagree by one minute
-      const byHour={};
-      secs.forEach(t=>{ const t2=Math.round(t/60); const h=Math.floor(t2/60)%24; (byHour[h]=byHour[h]||[]).push({mm:t2%60, t}); });
-      html+='<div class="brx-hours">'+Object.keys(byHour).map(Number).sort((a,b)=>a-b).map(h=>{
-        const lab=(h%12||12)+(h<12?' AM':' PM');
-        return '<div class="brx-hour" data-h="'+h+'"><span class="brx-hh">'+lab+'</span><span class="brx-mins">'+
-          byHour[h].map(x=>'<i class="'+(isToday&&x.t<now?'past':'')+'">:'+String(x.mm).padStart(2,'0')+'</i>').join('')+'</span></div>';
-      }).join('')+'</div>';
+      pats.forEach(pt=>{
+        const d=BusSchedule.nextDateForPattern(pt);
+        const secs= d? BusSchedule.departures(p, stop.ext, d, 0, 500).map(x=>x.sec) : [];
+        if(!secs.length) return;
+        const isNow=pt.days[today.getDay()]===1;
+        html+='<div class="brx-day-h sm">'+esc(pt.label)+'</div>';
+        const byHour={};
+        secs.forEach(t=>{ const t2=Math.round(t/60); const h=Math.floor(t2/60)%24; (byHour[h]=byHour[h]||[]).push({mm:t2%60, t}); });
+        html+='<div class="brx-hours">'+Object.keys(byHour).map(Number).sort((a,b)=>a-b).map(h=>{
+          const lab=(h%12||12)+(h<12?' AM':' PM');
+          return '<div class="brx-hour" data-h="'+(isNow?h:'x')+'"><span class="brx-hh">'+lab+'</span><span class="brx-mins">'+
+            byHour[h].map(x=>'<i class="'+(isNow&&x.t<now?'past':'')+'">:'+String(x.mm).padStart(2,'0')+'</i>').join('')+'</span></div>';
+        }).join('')+'</div>';
+      });
     }
-    html+='<div class="brx-disc">Times are the official schedule — live tracking is on the Live tab when buses run.</div>';
+    html+='<div class="brx-disc">Official schedule — for buses right now, use the Live tab.</div>';
     setTimeout(()=>{
-      document.querySelectorAll('.br-seg.sub button[data-pk]').forEach(b=>b.onclick=()=>{ this.patKey=+b.dataset.pk; this.showAll=false; this.render(); });
-      const sel=document.getElementById('brxStop'); if(sel) sel.onchange=()=>{ this.stopId=+sel.value; this.showAll=false; this.render(); };
+      const sel=document.getElementById('brxStop'); if(sel) sel.onchange=()=>{ this.stopId=+sel.value; this.render(); };
       const ab=document.getElementById('brxAll'); if(ab) ab.onclick=()=>{ this.showAll=!this.showAll; this.render(); };
-      // planning "around now": opening the full list lands on the current hour
-      if(this.showAll && isToday){ const cur=document.querySelector('.brx-hour[data-h="'+new Date().getHours()+'"]'); if(cur) cur.scrollIntoView({block:'center'}); }
+      if(this.showAll){ const cur=document.querySelector('.brx-hour[data-h="'+new Date().getHours()+'"]'); if(cur) cur.scrollIntoView({block:'center'}); }
     },0);
     return html;
   }
