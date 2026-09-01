@@ -1916,6 +1916,50 @@ input.inp:disabled{ background:var(--limestone-dk); color:var(--ink-soft); }
   .im-state{ padding-inline:16px; }
 }
 
+/* collapsed review row — the default once a class reads cleanly */
+.im-collapsed{ display:flex; align-items:center; gap:12px; width:100%; padding:14px 0; border:none;
+  background:none; cursor:pointer; text-align:left; border-top:1px solid var(--line2); }
+.im-rows .im-collapsed:first-child{ border-top:none; }
+.im-c-main{ flex:1; min-width:0; }
+.im-c-main b{ display:block; font-family:var(--font-display); font-size:15.5px; font-weight:700;
+  letter-spacing:-.015em; color:var(--ink); }
+.im-c-main i{ display:block; font-style:normal; font-size:12.5px; color:var(--ink-soft); margin-top:3px;
+  font-variant-numeric:tabular-nums; overflow:hidden; text-overflow:ellipsis; white-space:nowrap; }
+.im-c-ch{ flex:none; display:flex; color:var(--ink-faint); }
+.im-c-ch .pi{ width:16px; height:16px; }
+.im-collapsed:active{ background:var(--surface-dim); }
+
+/* validator flags — deterministic checks, shown not silently applied */
+.im-flags{ margin-bottom:10px; }
+.im-flag{ display:flex; align-items:flex-start; gap:8px; padding:9px 11px; margin-top:6px;
+  border-radius:var(--r-xs); background:var(--honey-tint); font-size:12.5px; line-height:1.4; color:var(--ink); }
+.im-flag .pi{ width:15px; height:15px; flex:none; margin-top:1px; color:var(--honey-deep); }
+
+/* a row the reader thinks was dropped / wait-listed: never auto-imported */
+.im-row.skip, .im-collapsed.skip{ opacity:.62; }
+.im-row.skip .im-course{ text-decoration:line-through; }
+
+.im-not{ display:block; width:100%; min-height:44px; margin-top:12px; border:none; background:none;
+  cursor:pointer; font-family:var(--font-display); font-size:13.5px; font-weight:660;
+  color:var(--ink-soft); text-decoration:underline; text-underline-offset:3px; }
+.im-not:active{ color:var(--ink); }
+
+/* Home's way into the schedule scanner for users who already have classes
+   (State 5's honey panel is the other door, and they never see it). Quiet on
+   purpose: this is a once-a-semester action sitting under Quick Places. */
+.hm-scanrow{ display:flex; align-items:center; gap:12px; width:100%; margin-top:14px; padding:13px 14px;
+  border:none; cursor:pointer; text-align:left; border-radius:var(--r-sm);
+  background:var(--surface); color:var(--ink); box-shadow:inset 0 0 0 1px var(--line2); }
+.hm-scanrow:active{ background:var(--surface-dim); }
+.hm-scanrow-ic{ flex:none; display:grid; place-items:center; width:34px; height:34px; border-radius:50%;
+  background:var(--paper-bg); color:var(--ink); }
+.hm-scanrow-ic .pi{ width:17px; height:17px; }
+.hm-scanrow-t{ flex:1; min-width:0; }
+.hm-scanrow-t b{ display:block; font-family:var(--font-display); font-size:14.5px; font-weight:700; letter-spacing:-.01em; }
+.hm-scanrow-t i{ display:block; font-style:normal; font-size:12.5px; color:var(--ink-soft); margin-top:2px; }
+.hm-scanrow-ch{ flex:none; display:flex; color:var(--ink-faint); }
+.hm-scanrow-ch .pi{ width:16px; height:16px; }
+
 </style>
 </head>
 <body>
@@ -2299,7 +2343,7 @@ input.inp:disabled{ background:var(--limestone-dk); color:var(--ink-soft); }
         <div class="prow" id="pUpdates"><span class="prow-ic"><span data-pi="arrows-clockwise"></span></span><b class="prow-label">What’s new<span class="upd-dot" id="updDot" style="display:none"></span></b><span class="prow-val" id="pUpdatesVal"></span><span class="prow-ch"><span data-pi="caret-right"></span></span></div>
       </div>
 
-      <div class="profile-version">BeeLine 1.0.0 · build 2026-09-01 13:54 · your data stays on this phone<br>Map data © OpenStreetMap contributors · © CARTO</div>
+      <div class="profile-version">BeeLine 1.0.0 · build 2026-09-01 14:02 · your data stays on this phone<br>Map data © OpenStreetMap contributors · © CARTO</div>
       <button class="prow" id="pAdd" style="display:none"></button>
     </div>
   </section>
@@ -4955,8 +4999,9 @@ function renderSchedule(){
   if(screens.schedule.classList.contains('active') && !document.hidden)
     schedTick=setTimeout(()=>{ if(screens.schedule.classList.contains('active') && !document.hidden) renderSchedule(); }, 60000);
   if(!classList.length){
-    body.innerHTML=`<div class="sched-empty"><div class="sched-empty-t">No classes yet</div><div class="sched-empty-b">Add your classes and BeeLine will walk you to each one.</div><button class="btn" id="schedAdd0">Add a class</button></div>`;
+    body.innerHTML=`<div class="sched-empty"><div class="sched-empty-t">No classes yet</div><div class="sched-empty-b">Add your classes and BeeLine will walk you to each one.</div><button class="btn" id="schedAdd0">Add a class</button><button class="btn ghost" id="schedScan0">Scan your schedule</button></div>`;
     const a=$('schedAdd0'); if(a) a.addEventListener('click',()=>openClassEditor());
+    const s0=$('schedScan0'); if(s0) s0.addEventListener('click',()=>{ if(typeof ScanUI!=='undefined') ScanUI.open(); });
     $('schedSub').textContent='Add your classes to get walking directions.';
     return;
   }
@@ -5003,7 +5048,7 @@ function renderSchedule(){
     });
     if(isToday && nowIdx<0 && nextIdx<0) html+=`<div class="sdb-free">Done for today — ${rows.length>1?'all '+rows.length+' classes':'your class'} behind you.</div>`;
   }
-  html+=`</div><button class="sched-add" id="schedAdd">${pic('plus')}<span>Add a class</span></button>`;
+  html+=`</div><button class="sched-add" id="schedAdd">${pic('plus')}<span>Add a class</span></button><button class="sched-add" id="schedScan">${pic('magnifying-glass')}<span>Scan a photo of your schedule</span></button>`;
   body.innerHTML=html;
   // wiring
   body.querySelectorAll('.wk-day').forEach(b=>b.addEventListener('click',()=>{ schedSelDay=b.dataset.d; renderSchedule(); }));
@@ -5012,7 +5057,13 @@ function renderSchedule(){
   body.querySelectorAll('[data-walk]').forEach(w=>w.addEventListener('click',e=>{ e.stopPropagation(); const c=classList.find(x=>x.id===w.dataset.walk); if(c) goToClass(c); }));
   body.querySelectorAll('[data-edit]').forEach(ed=>ed.addEventListener('click',e=>{ e.stopPropagation(); const c=classList.find(x=>x.id===ed.dataset.edit); if(c) openClassEditor(c); }));
   const add=$('schedAdd'); if(add) add.addEventListener('click',()=>openClassEditor());
+  const sc=$('schedScan'); if(sc) sc.addEventListener('click',()=>{ if(typeof ScanUI!=='undefined') ScanUI.open(); });
 }
+// scanned imports land in classList via saveClasses(); refresh whatever is showing
+document.addEventListener('beeline:classes-changed', ()=>{
+  if(screens.schedule.classList.contains('active')) renderSchedule();
+  if(screens.home.classList.contains('active')) renderTimeModule();
+});
 // set a class's building as the destination and drop the user on Home to review + Go
 function goToClass(c){ setDest(c.lat,c.lng, c.b+(c.room?(' · '+c.room):'')); goTab('home'); const sc=document.querySelector('#scr-home .scroll'); if(sc) sc.scrollTo({top:0}); }
 // walk to the up-next class right now (needs location on)
@@ -7848,6 +7899,19 @@ const HomeUI={
   wireSimple(){ const s=$('hmSched'); if(s) s.addEventListener('click',()=>show('schedule')); },
 
   /* ---- QUICK PLACES — preset navigation tiles ---------------------- */
+  /* The scanner's only other door is State 5's "Set up" — which a student who
+     ALREADY has classes never sees. This quiet row is the way in for everyone
+     else. It lives here, in Home's own lane; the Schedule screen will grow its
+     own affordance in the lane that owns it. Hidden in State 5, where the
+     honey panel is already offering the same thing. */
+  scanRow(){
+    if(typeof openScheduleScan!=='function') return '';
+    if(!Array.isArray(classList) || !classList.length) return '';
+    return `<button class="hm-scanrow" id="hmScanRow">
+      <span class="hm-scanrow-ic">${hmIcon('calendar-blank')}</span>
+      <span class="hm-scanrow-t"><b>Scan your schedule</b><i>Read your classes from a screenshot</i></span>
+      <span class="hm-scanrow-ch">${hmIcon('caret-right')}</span></button>`;
+  },
   renderQuick(visible){
     const box=$('homeQuick'); if(!box) return;
     if(!visible || !Array.isArray(favorites) || !favorites.length){ box.innerHTML=''; return; }
@@ -7857,13 +7921,18 @@ const HomeUI={
         <button class="hm-qadd" id="hmQEdit" aria-label="Manage quick places" title="Manage quick places">${hmIcon('plus')}</button></div>
       <div class="hm-tiles">${three.map((f,i)=>
         `<button class="hm-tile" data-q="${i}"><span class="hm-tile-ic">${favIcon(f.c)}</span><span class="hm-tile-t">${esc(favShort(f))}</span></button>`
-      ).join('')}</div>`;
+      ).join('')}</div>
+      ${this.scanRow()}`;
     box.querySelectorAll('[data-q]').forEach(b=>b.addEventListener('click',()=>{
       const f=favorites[+b.dataset.q]; if(!f) return;
       setDest(f.lat, f.lng, f.name);
       const sc=document.querySelector('#scr-home .scroll'); if(sc) sc.scrollTo({top:0, behavior:'smooth'});
     }));
     const e=$('hmQEdit'); if(e) e.addEventListener('click',()=>{ if(typeof openFavsSheet==='function') openFavsSheet(); });
+    const sr=$('hmScanRow'); if(sr) sr.addEventListener('click',()=>{
+      if(typeof openScheduleScan==='function') openScheduleScan({ onDone:()=>{ goTab('home'); HomeUI.render(); } });
+      else show('schedule');
+    });
   },
 };
 
@@ -8130,6 +8199,17 @@ const ScanParse={
 
   /* text → rows. matchPlace is injected (ScanUI supplies the gazetteer),
      so this stays pure and testable. */
+  /* ---- named failure modes, borrowed from the Guys-and-Dollies truck-sheet
+     reader: the rows that must NEVER import silently. ---- */
+  DROP_RE:/\b(dropped|withdrawn|wait\s?-?\s?list(ed)?)\b/i,
+  EXAM_RE:/\b(final\s+exam|midterm|exam)\b/i,
+  DATE_RE:/\b(jan|feb|mar|apr|may|jun|jul|aug|sep|oct|nov|dec)[a-z]*\.?\s+\d{1,2}\b|\b\d{1,2}\/\d{1,2}(?:\/\d{2,4})?\b/i,
+  TBA_RE:/\b(tba|tbd|to\s+be\s+(?:announced|determined))\b/i,
+  SUB_RE:/\b(lab|laboratory|discussion|dis|quiz|recitation|lecture|lec)\b/i,
+  /* an OCR "snap" was applied somewhere in this text (letter sitting inside a
+     number). We surface it rather than trusting it silently. */
+  hadSnap(t){ return /\d[OoQlI|SsBbZz]|[OoQlI|SsBbZz]\d/.test(String(t||'')); },
+
   parse(text, matchPlace){
     const lines=String(text||'').split(/\r?\n/).map(l=>l.replace(/\s+/g,' ').trim()).filter(l=>l && !this.noise(l));
     /* a new class starts at each course code; everything until the next one
@@ -8148,16 +8228,32 @@ const ScanParse={
     const rows=[];
     for(const b of blocks){
       const joined=b.lines.join(' ');
-      let days=[], tr=null, room=null;
+      const dropped=this.DROP_RE.test(joined);
+
+      /* Collect EVERY distinct meeting in the block, not just the first: a
+         lecture plus its lab/discussion are separate meetings of one course,
+         and merging them silently loses the lab. An exam line (a calendar
+         DATE rather than a weekly pattern) is not a meeting at all. */
+      const meetings=[];
       for(const line of b.lines){
-        if(!tr) tr=this.timeRange(line);
-        if(!room) room=this.room(line);
-        const d=this.dayScan(line);      // longest day cluster in the block wins
-        if(d.length>days.length) days=d;
+        const tr=this.timeRange(line);
+        if(!tr) continue;
+        const isExam = this.EXAM_RE.test(line) || (this.DATE_RE.test(line) && !this.dayScan(line).length);
+        if(isExam) continue;
+        meetings.push({ tr, days:this.dayScan(line), sub:(line.match(this.SUB_RE)||[])[0]||'', line });
       }
-      if(!tr) tr=this.timeRange(joined);
-      if(!days.length) days=this.dayScan(joined);
-      /* title = the wordiest leftover that isn't the building line */
+      if(!meetings.length){
+        const tr=this.timeRange(joined);
+        if(tr) meetings.push({ tr, days:this.dayScan(joined), sub:'', line:joined });
+      }
+      if(!meetings.length) meetings.push({ tr:null, days:this.dayScan(joined), sub:'', line:joined });
+
+      /* room + building are block-level facts, shared by every meeting */
+      let room=null, roomTBA=false;
+      for(const line of b.lines){
+        if(this.TBA_RE.test(line) && /\b(room|location|bldg|building)\b/i.test(line)){ roomTBA=true; }
+        if(!room) room=this.room(line);
+      }
       const spare=b.lines.map(l=>this.leftover(l)).filter(Boolean);
       let place=null, buildingRaw='';
       for(const s of spare){ const hit=matchPlace?matchPlace(s):null; if(hit){ place=hit; buildingRaw=s; break; } }
@@ -8167,19 +8263,62 @@ const ScanParse={
       }
       let title=spare.filter(s=>s!==buildingRaw).sort((a,c)=>c.length-a.length)[0]||'';
       if(title.length>60) title=title.slice(0,60).trim();
-      rows.push({
-        id:'s'+rows.length+'_'+b.course.replace(/\W/g,''),
-        course:b.course, title,
-        days, start:tr?tr.startStr:'', end:tr?tr.endStr:'',
-        room:room||'',
-        buildingRaw, place,
-        source:b.lines.slice(0,4),
+
+      meetings.forEach((mt,k)=>{
+        const flags=[];
+        if(dropped) flags.push({kind:'dropped', msg:'This looks dropped or wait-listed — it will not be imported unless you say so'});
+        if(roomTBA) flags.push({kind:'room', msg:'Room listed as TBA — left blank rather than guessed'});
+        if(this.hadSnap(mt.line)) flags.push({kind:'read', msg:'Some digits were unclear — double-check the time'});
+        if(k>0 && mt.sub) flags.push({kind:'sub', msg:'Read as the '+mt.sub.toLowerCase()+' section of this course'});
+        rows.push({
+          id:'s'+rows.length+'_'+(b.course||'x').replace(/\W/g,''),
+          course:b.course, title:k===0?title:'',
+          days:mt.days, start:mt.tr?mt.tr.startStr:'', end:mt.tr?mt.tr.endStr:'',
+          room:roomTBA?'':(room||''), buildingRaw, place,
+          excluded:dropped, flags, source:b.lines.slice(0,4),
+        });
       });
+    }
+    return this.validate(rows);
+  },
+
+  toMin(hhmm){ const m=/^(\d{1,2}):(\d{2})$/.exec(hhmm||''); return m?(+m[1]*60 + +m[2]):null; },
+
+  /* ---- DETERMINISTIC VALIDATORS. Confidence is the reader's opinion; a
+     checksum is arithmetic, and arithmetic wins. These run after parsing and
+     overrule anything OCR "thought" it saw. They FLAG — they never silently
+     rewrite, and they never auto-drop a row the user hasn't seen. ---- */
+  validate(rows){
+    rows.forEach(r=>{
+      r.flags=r.flags||[];
+      const s=this.toMin(r.start), e=this.toMin(r.end);
+      if(s!=null && e!=null){
+        if(e<=s) r.flags.push({kind:'time', msg:'Ends before it starts — check AM/PM'});
+        else if(s<7*60 || e>23*60) r.flags.push({kind:'time', msg:'Outside 7am–11pm — check AM/PM'});
+        else if(e-s>4*60) r.flags.push({kind:'time', msg:'Over four hours long — check the end time'});
+      }
+      if(r.room && !/^[A-Z]{0,4} ?\d{2,4}[A-Z]?$/.test(r.room))
+        r.flags.push({kind:'room', msg:'That room code looks unusual'});
+      if(r.days.length>5) r.flags.push({kind:'days', msg:'Meets more than five days — check the day letters'});
+    });
+    /* two meetings cannot occupy the same minute of the same day */
+    for(let i=0;i<rows.length;i++) for(let j=i+1;j<rows.length;j++){
+      const a=rows[i], b=rows[j];
+      if(a.excluded||b.excluded) continue;
+      if(!a.days.some(d=>b.days.indexOf(d)>=0)) continue;
+      const as=this.toMin(a.start), ae=this.toMin(a.end), bs=this.toMin(b.start), be=this.toMin(b.end);
+      if([as,ae,bs,be].some(v=>v==null)) continue;
+      if(as<be && bs<ae){
+        a.flags.push({kind:'overlap', msg:'Overlaps '+(b.course||'another class')});
+        b.flags.push({kind:'overlap', msg:'Overlaps '+(a.course||'another class')});
+      }
     }
     return rows;
   },
 
-  /* what still has to be true before a row can be saved */
+  /* a row needs a look if anything is missing OR a validator flagged it */
+  needsLook(r){ return this.missing(r).length>0 || (r.flags&&r.flags.length>0); },
+
   missing(r){
     const m=[];
     if(!r.course.trim()) m.push('course');
@@ -8224,24 +8363,44 @@ const ScanView={
     </div>`;
   },
   /* the confirm/edit screen — every field editable, nothing saved unseen */
+  /* Rows collapse to one line each; only the ones a validator flagged (or that
+     are missing something) open automatically. On a seven-class schedule the
+     screen then shows you exactly what needs a human. */
   review(rows){
-    const ok=rows.filter(r=>!ScanParse.missing(r).length).length;
+    const ok=rows.filter(r=>!r.excluded && !ScanParse.missing(r).length).length;
+    const look=rows.filter(r=>ScanParse.needsLook(r)).length;
+    const lede = look
+      ? `<b>${look} of ${rows.length}</b> need a look — they’re open below. The rest are collapsed; tap any to edit.`
+      : `All ${rows.length} read cleanly. Tap any class to check it. Nothing is saved until you tap save.`;
     return `<div class="im-state">
       <h1 class="im-h">Here’s what we found</h1>
-      <p class="im-p">Fix anything that looks wrong — scans aren’t perfect. Nothing is saved until you tap save.</p>
+      <p class="im-p">${lede}</p>
       <div class="im-rows">${rows.map((r,i)=>this.row(r,i)).join('')}</div>
       <button class="im-add" id="imAdd">${pic('plus')}<span>Add a class we missed</span></button>
       <button class="hm-act honey" id="imSave"${ok?'':' disabled'}><span>${ok?('Save '+ok+' class'+(ok===1?'':'es')):'Fill in the missing bits'}</span></button>
       <button class="hm-link" id="imCancel">Cancel</button>
     </div>`;
   },
+  /* one-line summary shown when a row is collapsed */
+  summary(r){
+    const d=r.days.length?r.days.map(x=>({Mo:'M',Tu:'T',We:'W',Th:'R',Fr:'F',Sa:'S',Su:'U'}[x])).join(''):'—';
+    const t=(r.start&&r.end)?(r.start+'–'+r.end):'no time';
+    const where=r.place?shortName(r.place.n):(r.buildingRaw?r.buildingRaw.slice(0,18):'no building');
+    return `${d} · ${t} · ${esc(where)}`;
+  },
   row(r,i){
     const miss=ScanParse.missing(r);
+    const flags=r.flags||[];
+    const open=(r.open!=null) ? r.open : ScanParse.needsLook(r);
     const day=(code,label)=>`<button type="button" class="im-day${r.days.indexOf(code)>=0?' on':''}" data-day="${i}:${code}">${label}</button>`;
-    return `<div class="im-row${miss.length?' warn':''}" data-row="${i}">
+    if(!open) return `<button class="im-collapsed${r.excluded?' skip':''}" data-open="${i}">
+      <span class="im-c-main"><b>${esc(r.course||'Untitled class')}</b><i>${this.summary(r)}</i></span>
+      <span class="im-c-ch">${pic('caret-right')}</span></button>`;
+    return `<div class="im-row${(miss.length||flags.length)?' warn':''}${r.excluded?' skip':''}" data-row="${i}">
+      ${flags.length?`<div class="im-flags">${flags.map(f=>`<div class="im-flag">${pic('warning')}<span>${esc(f.msg)}</span></div>`).join('')}</div>`:''}
       <div class="im-row-top">
         <input class="im-in im-course" data-f="${i}:course" value="${esc(r.course)}" placeholder="Course e.g. BUS-K 201" autocomplete="off">
-        <button class="im-del" data-del="${i}" aria-label="Remove this class">${pic('trash-simple')}</button>
+        <button class="im-del" data-del="${i}" aria-label="Not on my schedule" title="Not on my schedule">${pic('trash-simple')}</button>
       </div>
       <input class="im-in" data-f="${i}:title" value="${esc(r.title)}" placeholder="Class name (optional)" autocomplete="off">
       <div class="im-days">${day('Mo','M')}${day('Tu','T')}${day('We','W')}${day('Th','R')}${day('Fr','F')}${day('Sa','S')}${day('Su','U')}</div>
@@ -8256,6 +8415,7 @@ const ScanView={
       </div>
       <input class="im-in im-room" data-f="${i}:room" value="${esc(r.room)}" placeholder="Room (optional)" autocomplete="off">
       ${miss.length?`<div class="im-miss">${pic('warning')}<span>Still needs: ${esc(miss.join(' · '))}</span></div>`:''}
+      <button class="im-not" data-del="${i}">Not on my schedule</button>
     </div>`;
   },
 };
@@ -8327,6 +8487,9 @@ const ScanUI={
       this.rows.push({id:'s'+Date.now(), course:'', title:'', days:[], start:'', end:'', room:'', buildingRaw:'', place:null, source:[]});
       this.render();
     });
+    document.querySelectorAll('#scanBody [data-open]').forEach(b=>b.addEventListener('click',()=>{
+      const r=this.rows[+b.dataset.open]; if(r){ r.open=true; this.render(); }
+    }));
     document.querySelectorAll('#scanBody [data-del]').forEach(b=>b.addEventListener('click',()=>{
       this.rows.splice(+b.dataset.del,1); this.render();
     }));
@@ -8365,7 +8528,7 @@ const ScanUI={
   },
   refreshSave(){
     const btn=$('imSave'); if(!btn) return;
-    const ok=this.rows.filter(r=>!ScanParse.missing(r).length).length;
+    const ok=this.rows.filter(r=>!r.excluded && !ScanParse.missing(r).length).length;
     btn.disabled=!ok;
     btn.querySelector('span').textContent = ok ? ('Save '+ok+' class'+(ok===1?'':'es')) : 'Fill in the missing bits';
   },
@@ -8409,7 +8572,9 @@ const ScanUI={
 
   /* ---- the ONLY write path: the same store the Schedule editor uses ---- */
   save(){
-    const ready=this.rows.filter(r=>!ScanParse.missing(r).length);
+    /* a row the reader believes was dropped/wait-listed never imports unless
+       the user cleared the flag by editing it — silence is not consent */
+    const ready=this.rows.filter(r=>!r.excluded && !ScanParse.missing(r).length);
     if(!ready.length) return;
     let added=0;
     ready.forEach(r=>{
