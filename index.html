@@ -1308,7 +1308,12 @@ input.inp:disabled{ background:var(--limestone-dk); color:var(--ink-soft); }
    (resurrected from Home v2, owned here as .sdb-*): mono time rail, 2px ink
    rule, past dimmed, NOW/next in scarce honey, free gaps between classes. */
 .wk-strip{ display:flex; gap:6px; margin:6px 0 22px; }
-.wk-day{ flex:1; min-width:0; display:flex; flex-direction:column; align-items:center; gap:4px; padding:9px 0 7px; border:none; background:none; border-radius:var(--r-sm); cursor:pointer; }
+.wk-day{ flex:1; min-width:0; display:flex; flex-direction:column; align-items:center; gap:3px; padding:7px 0 6px; border:none; background:none; border-radius:var(--r-sm); cursor:pointer; }
+/* the date number, so picking a day is picking a DATE and not a weekday you have
+   to count out. Ink, never --honey-deep: at 17px/600 this is small text by WCAG
+   and honey-deep only reaches 3.87 on paper. Today is marked with a honey rule
+   under the number instead — decoration, so it carries no contrast burden. */
+.wk-day b{ font-family:var(--font-num); font-weight:600; font-size:17px; line-height:1; color:var(--ink); font-variant-numeric:tabular-nums; }
 /* day letters are navigation, not decoration — --ink-faint put them at 2.82:1
    on paper, and this app gets read outdoors in sunlight. --ink-soft clears AA
    and still sits clearly below the today/selected states. */
@@ -1316,8 +1321,13 @@ input.inp:disabled{ background:var(--limestone-dk); color:var(--ink-soft); }
 .wk-day i{ width:5px; height:5px; border-radius:50%; background:var(--ink-soft); opacity:.7; }
 .wk-day i.none{ opacity:0; }
 .wk-day.today span{ color:var(--honey-deep); }
+.wk-day.today b{ box-shadow:0 2px 0 var(--honey); }
 .wk-day.on{ background:var(--ink); }
 .wk-day.on span{ color:var(--paper); }
+.wk-day.on b{ color:var(--paper); }
+/* the filled tile already says "this is the day you're looking at", so today's
+   honey rule would only compete with the honey dot inside it */
+.wk-day.on.today b{ box-shadow:none; }
 .wk-day.on i{ background:var(--honey); opacity:1; }
 .sdb{ margin-top:2px; }
 .sdb-head{ display:flex; align-items:baseline; justify-content:space-between; padding-bottom:9px; border-bottom:2px solid var(--ink); }
@@ -2689,7 +2699,7 @@ input.inp:disabled{ background:var(--limestone-dk); color:var(--ink-soft); }
         <div class="prow" id="pUpdates"><span class="prow-ic"><span data-pi="arrows-clockwise"></span></span><b class="prow-label">What’s new<span class="upd-dot" id="updDot" style="display:none"></span></b><span class="prow-val" id="pUpdatesVal"></span><span class="prow-ch"><span data-pi="caret-right"></span></span></div>
       </div>
 
-      <div class="profile-version">BeeLine 1.0.0 · build 2026-09-02 11:31 · your data stays on this phone<br>Map data © OpenStreetMap contributors · © CARTO</div>
+      <div class="profile-version">BeeLine 1.0.0 · build 2026-09-02 11:45 · your data stays on this phone<br>Map data © OpenStreetMap contributors · © CARTO</div>
       <button class="prow" id="pAdd" style="display:none"></button>
     </div>
   </section>
@@ -5548,20 +5558,26 @@ function renderSchedule(){
      matches the US calendar convention this campus uses. */
   const WEEK=['Su','Mo','Tu','We','Th','Fr','Sa'];
   const dOf=d=>d.getFullYear()+'-'+String(d.getMonth()+1).padStart(2,'0')+'-'+String(d.getDate()).padStart(2,'0');
-  // date of the selected day within this Monday-started week
+  // date of the selected day within this Sunday-started week
   const monIdx=c=>WEEK.indexOf(c);
   const selDate=new Date(now); selDate.setDate(now.getDate()+(monIdx(sel)-monIdx(todayCode)));
   // ---- week strip ----
   let html=`<div class="wk-strip">`+WEEK.map(d=>{
     const dDate=new Date(now); dDate.setDate(now.getDate()+(monIdx(d)-monIdx(todayCode)));
     const has=classList.some(x=>x.date?(x.date===dOf(dDate)):(x.days||[]).includes(d));
-    return `<button class="wk-day${d===sel?' on':''}${d===todayCode?' today':''}" data-d="${d}"><span>${DOW_SHORT[d].slice(0,2)}</span>${has?'<i></i>':'<i class="none"></i>'}</button>`;
+    return `<button class="wk-day${d===sel?' on':''}${d===todayCode?' today':''}" data-d="${d}"><span>${DOW_SHORT[d].slice(0,2)}</span><b>${dDate.getDate()}</b>${has?'<i></i>':'<i class="none"></i>'}</button>`;
   }).join('')+`</div>`;
   // ---- day board ----
   const dkOf=d=>d.getFullYear()+'-'+String(d.getMonth()+1).padStart(2,'0')+'-'+String(d.getDate()).padStart(2,'0');
   const onDay=(c,code,date)=> c.date ? (c.date===dkOf(date)) : (c.days||[]).includes(code);
   const rows=classList.filter(c=>onDay(c,sel,selDate)).sort((a,b)=>hm(a.start)-hm(b.start));
-  const headLabel=(isToday?'Today · ':'')+DOW_FULL[sel]+', '+SCHED_MONTHS[selDate.getMonth()]+' '+selDate.getDate();
+  /* the strip now carries the date under each day code, so repeating it here was
+     saying the same thing twice on consecutive lines. The month comes back only
+     when the selected day has crossed out of the current one, where a bare "3"
+     in the strip would genuinely be ambiguous. */
+  const headLabel = isToday ? 'Today'
+    : DOW_FULL[sel] + (selDate.getMonth()===now.getMonth() ? ''
+        : ', '+SCHED_MONTHS[selDate.getMonth()]+' '+selDate.getDate());
   html+=`<div class="sdb"><div class="sdb-head"><h2>${esc(headLabel)}</h2><span class="sdb-count">${rows.length?(rows.every(r=>(r.kind||'class')==='class')?rows.length+(rows.length>1?' classes':' class'):rows.length+' scheduled'):'free day'}</span></div>`;
   if(!rows.length){
     html+=`<div class="sdb-free">Nothing scheduled — your ${DOW_FULL[sel]} is wide open.</div>`;
@@ -10081,6 +10097,27 @@ const PlanDayModel={
     return Math.max(0, Math.round((g.endMs-g.startMs)/6e4 - walk.min - classBuffer()));
   },
 
+  /* a planned item's ANCHOR is the commitment it promises to get you back to.
+     Snapshots go stale: delete the class, move it, or scan a corrected
+     timetable, and the promise would be to a class that no longer exists —
+     Home counting down to nothing. An item whose anchor no longer resolves is
+     DROPPED (never silently re-priced: the user agreed to specific numbers),
+     and the drop is announced. Manual-deadline items have no class anchor and
+     are exempt. */
+  anchorAlive(p){
+    if(p.manual || p.nextName==='your deadline') return true;
+    const d=new Date(p.dateKey+'T12:00:00');
+    if(isNaN(+d)) return true;                              // unparseable: keep, never eat data on a guess
+    return this.commitments(d).some(c=>Math.abs(c.startMs-p.nextStartMs)<60e3 && c.label===p.nextName);
+  },
+  pruneOrphans(){
+    const dead=this.planned.filter(p=>!this.anchorAlive(p));
+    if(dead.length){
+      this.planned=this.planned.filter(p=>this.anchorAlive(p));
+      this.save();
+    }
+    return dead;
+  },
   plannedFor(date){ const k=this.dayKey(date); return this.planned.filter(p=>p.dateKey===k); },
   plannedInGap(g,date){ return this.plannedFor(date).find(p=>p.arriveMs<g.endMs+6e4 && p.leaveThereBy>g.startMs); },
 
@@ -10147,7 +10184,8 @@ const PlanDayModel={
       usableMin:ev.usableMin, gapStartMs:ev.gap.startMs, arriveMs:ev.arriveMs,
       leaveThereBy:ev.leaveThereBy, nextStartMs:ev.gap.endMs,
       nextName:ev.gap.next.course, nextB:ev.gap.next.b||null, nextRoom:ev.gap.next.room||'',
-      nextLat:ev.gap.next.lat, nextLng:ev.gap.next.lng, buffer:ev.ctx.buffer };
+      nextLat:ev.gap.next.lat, nextLng:ev.gap.next.lng, buffer:ev.ctx.buffer,
+      manual:!!ev.gap.manual };
     this.planned.push(item); this.save();
     return item;
   },
@@ -10163,6 +10201,9 @@ const PlanDayModel={
       if(p.dateKey<today || (p.dateKey===today && now>p.leaveThereBy)){ changed=true; return false; }  // lapsed
       return true;
     });
+    /* never promote a plan whose class is gone (deleted/moved/re-scanned) */
+    const orphans=this.pruneOrphans();
+    if(orphans.length) changed=true;
     const due=this.planned.find(p=>p.dateKey===today && now >= p.gapStartMs-60e3 && now < p.leaveThereBy);
     if(due){
       plan={ v:2, cat:due.cat, placeName:due.placeName, lat:due.lat, lng:due.lng,
@@ -10703,9 +10744,20 @@ const PlanDayUI={
   },
 };
 
-/* schedule edits (scanner, editor, custom events) refresh an open Plan tab */
+/* schedule edits (scanner, editor, custom events): planned items anchored to a
+   class that changed are dropped AND announced — never a silent countdown to a
+   class that no longer exists. Then refresh an open Plan tab. */
 document.addEventListener('beeline:classes-changed', ()=>{
-  try{ if(screens.plan && screens.plan.classList.contains('active')) PlanDayUI.render(); }catch(e){}
+  try{
+    const dead=PlanDayModel.pruneOrphans();
+    if(dead.length){
+      const first=favLabel(dead[0].placeName);
+      toast(dead.length===1
+        ? first+' un-planned — the class around it changed'
+        : first+' and '+(dead.length-1)+' more un-planned — the schedule changed', 'warn');
+    }
+    if(screens.plan && screens.plan.classList.contains('active')) PlanDayUI.render();
+  }catch(e){}
 });
 
 /* promotion heartbeat: planned → live plan when its departure arrives */
