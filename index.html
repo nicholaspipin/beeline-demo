@@ -1497,9 +1497,24 @@ input.inp:disabled{ background:var(--limestone-dk); color:var(--ink-soft); }
 #scr-walk .ro .rv{ color:var(--walk-ink); }
 #scr-walk .ro .ru{ color:var(--walk-soft); }
 #scr-walk .ro#roDriftBox.alert .rv{ color:var(--honey); }
-#scr-walk .seg-mini{ background:rgba(255,255,255,.06); }
-#scr-walk .seg-mini button{ color:var(--walk-soft); }
-#scr-walk .seg-mini button.on{ background:var(--walk-card); color:var(--walk-ink); box-shadow:none; }
+/* The Compass/Map switch, which had no dark override at all: .seg resolves
+   --limestone-dk to #EFEADD and .seg-b.on resolves --paper to #FFFFFF, so on a
+   phone in light mode a full-width white-on-cream bar sat under the header of a
+   screen that is #1A1815 unconditionally — the brightest thing on a display meant
+   for outdoors and at night. Every neighbouring control (.statusPill, .circ,
+   .mapPill, .btn.ghost, .ro) already had one; this one was skipped.
+
+   Translucent rather than fixed colours so it survives a --walk-bg retune, and
+   the selected pill is LIGHTER than its track, which is how a raised chip reads
+   on dark — the reverse would have looked pressed-in.
+
+   Replaces three DEAD #scr-walk .seg-mini rules that lived here: .seg-mini only
+   ever renders inside the sheets (addModeSeg, prefPace, prefBuffer), never inside
+   #scr-walk. They are plausibly why the real toggle went unnoticed — the file
+   looked like it already handled segmented controls on this screen. */
+#scr-walk .seg{ background:rgba(255,255,255,.05); }
+#scr-walk .seg-b{ color:var(--walk-soft); }
+#scr-walk .seg-b.on{ background:rgba(255,255,255,.16); color:var(--walk-ink); box-shadow:none; }
 #scr-walk .circ{ background:var(--walk-card); color:var(--walk-soft); box-shadow:none; }
 #scr-walk .readouts{ border-top:1px solid rgba(255,255,255,.09); }
 #scr-walk .ro + .ro{ border-left:1px solid rgba(255,255,255,.09); }
@@ -2740,7 +2755,7 @@ input.inp:disabled{ background:var(--limestone-dk); color:var(--ink-soft); }
         <div class="prow" id="pUpdates"><span class="prow-ic"><span data-pi="arrows-clockwise"></span></span><b class="prow-label">What’s new<span class="upd-dot" id="updDot" style="display:none"></span></b><span class="prow-val" id="pUpdatesVal"></span><span class="prow-ch"><span data-pi="caret-right"></span></span></div>
       </div>
 
-      <div class="profile-version">BeeLine 1.0.0 · build 2026-09-02 12:13 · your data stays on this phone<br>Map data © OpenStreetMap contributors · © CARTO</div>
+      <div class="profile-version">BeeLine 1.0.0 · build 2026-09-02 12:18 · your data stays on this phone<br>Map data © OpenStreetMap contributors · © CARTO</div>
       <button class="prow" id="pAdd" style="display:none"></button>
     </div>
   </section>
@@ -4673,8 +4688,14 @@ function selectPlace(p){
   $('psPreview').innerHTML=previewMini(p);
   /* open/closed belongs next to the walk time, not behind a details tap — it is
      half of 'should I walk there'. Unknown hours render nothing, never a guess. */
+  /* placeHours(), the same resolver the details pane uses — the face read only
+     enrich.hours and so skipped the researched HOURS table, hiding a status it
+     already knew for places whose hours came from research rather than OSM. A
+     cookie shop at 11pm showed nothing here and a red badge one tap deeper.
+     Contract is unchanged: null hours still render nothing, never a guess. */
   { const nEl=$('psOpen'); if(nEl){ const e=(typeof enrichNow==='function')?enrichNow(p):null;
-      const st=(e&&e.fields&&e.fields.hours)?openStatus(e.fields.hours):null;
+      const H=placeHours(p, (e&&e.fields)||{});
+      const st=(H&&H.hours)?openStatus(H.hours):null;
       nEl.textContent=st||''; nEl.className='ps-open'+(st==='Open now'?' yes':(st==='Closed now'?' no':''));
       nEl.style.display=st?'':'none'; } }
   setPlaceMetrics(p);
@@ -6138,6 +6159,51 @@ function wireDragDismiss(sheet, opts){
    display:none, so the corner X was the ONLY way out. Same gesture, no scrim. */
 wireDragDismiss($('xCard'), { onClose:closePlaceSheet, headPx:44 });
 
+/* Edge-swipe back. These screens push over the tabs and the only way out of each
+   was a caret at the extreme top-left — the hardest point on a big phone to reach
+   one-handed. There's no history wiring in the app and an Expo WebView gives no
+   native edge-back, so the most reflexive iOS gesture did nothing here.
+
+   The swipe CLICKS EACH SCREEN'S OWN BACK BUTTON rather than calling show(). That
+   matters for Free time, whose back walks the flow (plans/search -> intent) before
+   leaving, and it means any future change to a back handler is picked up for free
+   instead of drifting out of sync with a copy.
+
+   scr-map is deliberately absent: its left edge belongs to maplibre's pan. */
+(function wireEdgeBack(){
+  const BACK={ 'scr-schedule':'schedBack', 'scr-saved':'savedBack', 'scr-shortcut':'shBack',
+               'scr-updates':'updBack', 'scr-busroute':'brBack', 'scr-fit':'fitBack', 'scr-scan':'scanBack' };
+  Object.keys(BACK).forEach(sid=>{
+    const scr=document.getElementById(sid); if(!scr) return;
+    let x0=null, y0=0, dir=null;
+    scr.addEventListener('touchstart', e=>{
+      x0=null;
+      if(e.touches.length>1) return;
+      const t=e.touches[0];
+      if(t.clientX>20) return;                       // edge zone only — the schedule
+                                                     // day-swipe declines clientX<24, so
+                                                     // the two never contend
+      /* scan's review state holds hand-typed corrections; losing those to a stray
+         drag is worse than the reach problem this fixes, so it keeps its button */
+      if(sid==='scr-scan' && typeof ScanUI!=='undefined' && ScanUI.state==='review') return;
+      x0=t.clientX; y0=t.clientY; dir=null;
+    }, {passive:true});
+    scr.addEventListener('touchmove', e=>{
+      if(x0==null || e.touches.length>1) return;
+      const t=e.touches[0], dx=t.clientX-x0, dy=t.clientY-y0;
+      if(!dir && (Math.abs(dx)>8 || Math.abs(dy)>8)) dir = Math.abs(dx)>Math.abs(dy)*1.4 ? 'x' : 'y';
+      if(dir==='x') e.preventDefault();              // claim only once clearly horizontal
+    }, {passive:false});
+    scr.addEventListener('touchend', e=>{
+      const started=x0!=null, wasX=dir==='x';
+      const dx=(e.changedTouches&&x0!=null) ? (e.changedTouches[0].clientX-x0) : 0;
+      x0=null; dir=null;
+      if(!started || !wasX || dx<48) return;         // rightward, and far enough to mean it
+      const b=document.getElementById(BACK[sid]); if(b) b.click();
+    }, {passive:true});
+  });
+})();
+
 /* ================================================================
    IU CAMPUS BUS — live data from the ETA SPOT instance behind IU Mobile
    (https://iucbs.etaspot.net, CORS-open JSON API; same feed students see).
@@ -7178,12 +7244,21 @@ const BusUI={
     else this.renderRoutes();
   },
   /* ---- nearest-stop peek (first-open answer: what can I catch from here?) ---- */
-  async renderPeek(){
+  async renderPeek(force){
     if(this.sheet) return;               // a selection owns the sheet area
     const el=$('bzSheet');
-    if(!curPos || !trackingOn){ el.style.display='none'; return; }
-    const near=BusModel.nearestStops(curPos.lat,curPos.lng,520,1);
-    if(!near.length){ el.style.display='none'; return; }
+    /* force = the user explicitly tapped Find me: their fresh fix outranks the
+       ambient trackingOn flag, and the search widens — a 15-min-walk stop with
+       an honest number beats silence. Ambient peeks stay conservative. */
+    if(!curPos || (!trackingOn && !force)){ el.style.display='none'; return; }
+    const near=BusModel.nearestStops(curPos.lat,curPos.lng, force?1600:520, 1);
+    if(!near.length){
+      if(force){
+        el.style.display='block'; el.className='bz-sheet peek';
+        el.innerHTML='<div class="bz-peek"><div class="bz-peek-head"><span class="bz-peek-k">Nearest stop</span><b>None within about a 20-minute walk</b></div></div>';
+      } else el.style.display='none';
+      return;
+    }
     const {s,d}=near[0];
     el.style.display='block'; el.className='bz-sheet peek';
     /* compact: two quiet lines, the whole card is the tap target */
@@ -7285,7 +7360,10 @@ const BusUI={
       html+=`<div class="bz-arr sched"><span class="bz-dot lg" style="background:${esc(p.color)};--tx:${bzTextOn(p.color)}">${esc(p.abbr)}</span><span class="bz-times">${deps.map(x=>`<i>${bzFmtSec(x.sec)}</i>`).join('')}</span></div>`;
     });
     if(!any) html+='<div class="bz-mut" style="padding:8px 2px">No scheduled service at this stop tomorrow.</div>';
+    /* not a one-way door: the road back to live times restarts the refresh */
+    html+='<button class="bz-tomorrow" id="bzBackLive">Back to live times</button>';
     host.innerHTML=html; clearTimeout(this.etaTimer);
+    const bk=document.getElementById('bzBackLive'); if(bk) bk.addEventListener('click',()=>this.refreshStopRows());
   },
   /* ---- bus sheet ---- */
   openBus(eq){ BusMap.followEq=eq; const _v=BusLive.vehicles[eq]; if(_v&&BusMap.map) BusMap.map.easeTo({center:[_v.lng,_v.lat], zoom:Math.max(BusMap.map.getZoom(),15.8), duration:500});
@@ -7743,7 +7821,7 @@ document.querySelectorAll('#bzSeg button').forEach(b=>b.addEventListener('click'
 $('bzLocate').addEventListener('click',()=>{
   if(!secureOK()){ toast(geoErrMsg(),'warn'); return; }
   toast('Finding you…');
-  getPos().then(pos=>{ curPos={lat:pos.coords.latitude,lng:pos.coords.longitude,acc:pos.coords.accuracy}; BusMap.drawUser(); if(BusMap.map) BusMap.map.easeTo({center:[curPos.lng,curPos.lat],zoom:15.6}); BusUI.renderPeek(); })
+  getPos().then(pos=>{ curPos={lat:pos.coords.latitude,lng:pos.coords.longitude,acc:pos.coords.accuracy}; BusMap.drawUser(); if(BusMap.map) BusMap.map.easeTo({center:[curPos.lng,curPos.lat],zoom:15.6}); BusUI.renderPeek(true); })
     .catch(e=>toast(geoErrMsg(e),'warn'));
 });
 BusUI.wireSearch();
