@@ -368,7 +368,9 @@ body{ font-family:var(--ui); color:var(--ink); background:var(--limestone);
 .sheet-bg{ position:fixed; inset:0; background:rgba(20,18,26,.42); z-index:60; display:none; align-items:flex-end; justify-content:center; }
 .sheet-bg.show{ display:flex; animation:bgIn .2s ease; }
 @keyframes bgIn{ from{ background:rgba(20,18,26,0); } to{ background:rgba(20,18,26,.42); } }
-.sheet{ width:100%; max-width:460px; background:var(--paper); border-radius:var(--r-lg) 26px 0 0;
+/* the two top corners were 20px and 26px — a visible asymmetry on all seven
+   sheets, and the last unfinished step of the radius-token migration */
+.sheet{ width:100%; max-width:460px; background:var(--paper); border-radius:var(--r-lg) var(--r-lg) 0 0;
   padding:14px 22px calc(24px + env(safe-area-inset-bottom)); box-shadow:0 -14px 50px -18px rgba(20,18,26,.4); animation:rise .3s cubic-bezier(.22,1,.36,1); }
 /* opacity, not transform: a transformed sheet becomes its own offset/containing
    block (and some engines freeze the entrance frame), which mis-anchored it */
@@ -1324,7 +1326,7 @@ input.inp:disabled{ background:var(--limestone-dk); color:var(--ink-soft); }
 /* ===== ROUTE SCHEDULE (.brx-*) — v4: the day, drawn =====
    Hero card + week card with route-colored service-density bars on a
    shared hour scale. Density = opacity tier; today gets a now-marker. */
-.brx-card{ background:var(--surface); border-radius:var(--r-lg); box-shadow:inset 0 0 0 1px var(--line), 0 2px 14px rgba(20,19,15,.055); padding:18px 20px 17px; margin-bottom:14px; }
+.brx-card{ background:var(--surface); border-radius:var(--r-lg); box-shadow:inset 0 0 0 1px var(--line); padding:18px 20px 17px; margin-bottom:14px; }
 .brx-eyeline{ font-size:13px; color:var(--ink-soft); }
 .brx-stopbtn{ display:flex; align-items:center; gap:7px; max-width:100%; border:none; background:none; cursor:pointer; padding:2px 0; margin-top:1px; }
 .brx-stopbtn span{ font-family:var(--font-display); font-size:19px; font-weight:700; letter-spacing:-.015em; color:var(--ink); white-space:nowrap; overflow:hidden; text-overflow:ellipsis; }
@@ -1356,7 +1358,7 @@ input.inp:disabled{ background:var(--limestone-dk); color:var(--ink-soft); }
 .brx-ruler{ position:relative; height:16px; margin-top:14px; }
 .brx-ruler span{ position:absolute; transform:translateX(-50%); font-family:var(--mono); font-size:10px; font-weight:600; color:var(--ink-faint); font-variant-numeric:tabular-nums; }
 .brx-all-btn{ display:flex; align-items:center; justify-content:space-between; width:100%; border:none; cursor:pointer; padding:15px 20px; margin-bottom:14px;
-  background:var(--surface); border-radius:var(--r-lg); box-shadow:inset 0 0 0 1px var(--line), 0 2px 14px rgba(20,19,15,.055);
+  background:var(--surface); border-radius:var(--r-lg); box-shadow:inset 0 0 0 1px var(--line);
   font-family:var(--font-display); font-size:15.5px; font-weight:690; color:var(--ink); }
 .brx-all-btn svg{ width:17px; height:17px; color:var(--ink-faint); }
 .brx-disc{ font-size:12px; color:var(--ink-faint); margin:14px 2px 4px; line-height:1.5; }
@@ -1622,7 +1624,7 @@ input.inp:disabled{ background:var(--limestone-dk); color:var(--ink-soft); }
 /* ===== BOTTOM SHEETS for route schedule (.brxsh-*) + timetable grid (.bts-*) ===== */
 .brxsh-bg{ position:fixed; inset:0; z-index:230; background:rgba(20,19,15,.42); opacity:0; transition:opacity .22s ease; display:flex; align-items:flex-end; }
 .brxsh-bg.show{ opacity:1; }
-.brxsh{ width:100%; max-height:80vh; display:flex; flex-direction:column; background:var(--surface); border-radius:22px 22px 0 0;
+.brxsh{ width:100%; max-height:80vh; display:flex; flex-direction:column; background:var(--surface); border-radius:var(--r-lg) var(--r-lg) 0 0;
   box-shadow:0 -8px 40px rgba(20,19,15,.18); transform:translateY(24px); transition:transform .24s cubic-bezier(.22,1,.36,1); padding:6px 0 max(10px, env(safe-area-inset-bottom)); }
 .brxsh-bg.show .brxsh{ transform:none; }
 @media (prefers-reduced-motion:reduce){ .brxsh, .brxsh-bg{ transition:none; } .brxsh{ transform:none; } }
@@ -1664,7 +1666,7 @@ input.inp:disabled{ background:var(--limestone-dk); color:var(--ink-soft); }
 .xb-all{ border:none; background:none; cursor:pointer; font-family:var(--font-display); font-size:13px; font-weight:660; color:var(--ink-soft); padding:2px 0; }
 .xb-row{ display:flex; gap:10px; overflow-x:auto; scrollbar-width:none; margin:0 -20px; padding:0 20px 6px; }
 .xb-row::-webkit-scrollbar{ display:none; }
-.xb-card{ flex:0 0 156px; border:none; background:var(--surface); border-radius:var(--r-md); box-shadow:inset 0 0 0 1px var(--line), 0 2px 12px rgba(20,19,15,.05); padding:0 0 11px; cursor:pointer; text-align:left; overflow:hidden; }
+.xb-card{ flex:0 0 156px; border:none; background:var(--surface); border-radius:var(--r-md); box-shadow:inset 0 0 0 1px var(--line); padding:0 0 11px; cursor:pointer; text-align:left; overflow:hidden; }
 .xb-card:active{ transform:scale(.975); }
 .xb-media{ position:relative; display:block; width:100%; height:96px; background:var(--paper-bg); }
 .xb-glyph{ position:absolute; inset:0; display:grid; place-items:center; color:#fff; }
@@ -2782,7 +2784,7 @@ input.inp:disabled{ background:var(--limestone-dk); color:var(--ink-soft); }
         <div class="prow" id="pUpdates"><span class="prow-ic"><span data-pi="arrows-clockwise"></span></span><b class="prow-label">What’s new<span class="upd-dot" id="updDot" style="display:none"></span></b><span class="prow-val" id="pUpdatesVal"></span><span class="prow-ch"><span data-pi="caret-right"></span></span></div>
       </div>
 
-      <div class="profile-version">BeeLine 1.0.0 · build 2026-09-02 12:40 · your data stays on this phone<br>Map data © OpenStreetMap contributors · © CARTO</div>
+      <div class="profile-version">BeeLine 1.0.0 · build 2026-09-02 12:44 · your data stays on this phone<br>Map data © OpenStreetMap contributors · © CARTO</div>
       <button class="prow" id="pAdd" style="display:none"></button>
     </div>
   </section>
