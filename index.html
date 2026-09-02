@@ -2755,7 +2755,7 @@ input.inp:disabled{ background:var(--limestone-dk); color:var(--ink-soft); }
         <div class="prow" id="pUpdates"><span class="prow-ic"><span data-pi="arrows-clockwise"></span></span><b class="prow-label">What’s new<span class="upd-dot" id="updDot" style="display:none"></span></b><span class="prow-val" id="pUpdatesVal"></span><span class="prow-ch"><span data-pi="caret-right"></span></span></div>
       </div>
 
-      <div class="profile-version">BeeLine 1.0.0 · build 2026-09-02 12:18 · your data stays on this phone<br>Map data © OpenStreetMap contributors · © CARTO</div>
+      <div class="profile-version">BeeLine 1.0.0 · build 2026-09-02 12:24 · your data stays on this phone<br>Map data © OpenStreetMap contributors · © CARTO</div>
       <button class="prow" id="pAdd" style="display:none"></button>
     </div>
   </section>
@@ -4582,7 +4582,8 @@ function visiblePlaces(){
   return all.filter(p=>placeTier(p)<=band);
 }
 function buildMarkers(){
-  if($('xCount')) $('xCount').textContent=filteredPlaces().length+' places';
+  { const n=filteredPlaces().length;                         // searching to one match said "1 places"
+    if($('xCount')) $('xCount').textContent = n+(n===1?' place':' places'); }
   if(!exploreMap || !(exMapLoaded || exploreMap.loaded())) return;
   clearMarkers();
   visiblePlaces().forEach(p=>{
@@ -4702,6 +4703,19 @@ function selectPlace(p){
   syncSaveBtn(p);
   // collapse details each time a place is selected
   const db=$('psDetailBody'); db.classList.remove('show'); db.innerHTML=''; setDetailsBtn(false);
+  /* Hide the button when there is genuinely nothing behind it. Measured: 80 of
+     181 places have no photo, address, hours, description, access, phone, website
+     or amenities — for those, "View details" expanded to "Address — Not
+     available", "Hours — Not available" and a report button. The four rows deleted
+     above had been padding that empty pane into looking full, so removing them
+     without this gate would have traded one problem for a worse one.
+     "Not available" stays for places with PARTIAL data — that is the honesty rule
+     working, and it only reads as broken when it is the whole payload. */
+  { const btn=$('psDetailsBtn');
+    if(btn){ const ef=((typeof enrichNow==='function'?enrichNow(p):null)||{}).fields||{};
+      const anything = (placePhotos(p)||[]).length || ef.address || placeHours(p,ef) || ef.description ||
+                       ef.access || ef.phone || ef.website || (ef.amenities&&ef.amenities.length) || p.custom;
+      btn.style.display = anything ? '' : 'none'; } }
   $('xCard').classList.add('show');
 }
 function closePlaceSheet(){ $('xCard').classList.remove('show'); exploreSel=null; psPlace=null; relabelMarkers(); }
@@ -4880,8 +4894,10 @@ function renderDetails(p){
   const drow=(k,v)=>`<div class="ps-drow"><span class="ps-dk">${esc(k)}</span><span class="ps-dv">${esc(v)}</span></div>`;
   let html='';
   html+=photoSlotHTML(p);
-  html+=drow('Category', catMeta(p.c).label);
-  const area=campusArea(p.lat,p.lng); if(area) html+=drow('Campus area', area);
+  /* Category and Campus area are the sheet's own subtitle, two elements above;
+     Distance is already a metric pill; and "Saved as quick destination" restated
+     the Save button's state under a name shown nowhere else in the app. Four rows
+     of what the user just read, pushing the actually-new facts below the fold. */
   html+=drow('Address', f.address || 'Not available');
   const H=placeHours(p, f);
   if(H){ const st=openStatus(H.hours);
@@ -4892,8 +4908,6 @@ function renderDetails(p){
   else html+=drow('Hours', 'Not available');
   if(f.description) html+=drow('About', f.description);
   if(f.access) html+=drow('Accessibility', f.access);
-  if(curPos) html+=drow('Distance', fmtDist(distance(curPos.lat,curPos.lng,p.lat,p.lng))+' away');
-  html+=drow('Saved as quick destination', isFav(p)?'Yes':'No');
   if(f.phone) html+=drow('Phone', f.phone);
   if(f.website){ const safe=esc(f.website), label=esc(f.website.replace(/^https?:\/\//,'').replace(/\/+$/,'')); html+=`<div class="ps-drow"><span class="ps-dk">Website</span><span class="ps-dv"><a href="${safe}" target="_blank" rel="noopener noreferrer">${label}</a></span></div>`; }
   if(f.amenities && f.amenities.length) html+=`<div class="ps-amen"><span class="ps-dk">Amenities</span><div class="ps-amen-chips">${f.amenities.map(a=>'<span class="ps-amen-chip">'+esc(a)+'</span>').join('')}</div></div>`;
@@ -5014,9 +5028,44 @@ function renderXList(){
   list.querySelectorAll('[data-cat]').forEach(b=>b.addEventListener('click',()=>{ xCat=b.dataset.cat; buildCats(); refreshExplore(); }));
   xWirePlaceTaps(list);
 }
-function refreshExplore(){ if(xView==='map') refreshMarkers(); else renderXList(); }
+/* Searching in Map view filtered the dots and never moved the camera, so a match
+   off the current viewport made the map look like it had emptied out — the one
+   thing this screen exists for, silently doing nothing in its default view.
 
-$('xSearch').addEventListener('input', ()=>{ xQuery=$('xSearch').value; refreshExplore(); });
+   Camera only. It deliberately does NOT select the match: selectPlace() opens the
+   full sheet over the map, and typing "Wells" passes through transient
+   single-match states, so auto-selecting would pop and re-render the sheet
+   mid-word. Typing a name isn't choosing it; tapping the dot is — and at maxZoom
+   16.4 a lone match is past the labelling threshold, so it arrives named. */
+let xPreSearchCam=null, xSearchT=null;
+function fitExploreToQuery(){
+  if(xView!=='map' || !exploreMap || !exMapLoaded) return;   // offline/list paths untouched
+  const q=xQuery.trim();
+  if(!q){
+    // back to where they had deliberately panned, not to the campus default
+    if(xPreSearchCam){ exploreMap.easeTo({center:xPreSearchCam.center, zoom:xPreSearchCam.zoom, duration:300}); xPreSearchCam=null; }
+    return;
+  }
+  if(!xPreSearchCam) xPreSearchCam={center:exploreMap.getCenter(), zoom:exploreMap.getZoom()};
+  const ps=visiblePlaces().filter(p=>p.lat!=null && p.lng!=null);
+  if(!ps.length) return;                                     // no matches: leave the view alone
+  let w=Infinity,e=-Infinity,s=Infinity,n=-Infinity;
+  ps.forEach(p=>{ w=Math.min(w,p.lng); e=Math.max(e,p.lng); s=Math.min(s,p.lat); n=Math.max(n,p.lat); });
+  const MIN=0.0024;                                          // a single match has no box; give it one
+  if(e-w<MIN){ const c=(e+w)/2; w=c-MIN/2; e=c+MIN/2; }
+  if(n-s<MIN){ const c=(n+s)/2; s=c-MIN/2; n=c+MIN/2; }
+  exploreMap.fitBounds([[w,s],[e,n]], {padding:60, maxZoom:16.4, duration:300});
+}
+function refreshExplore(){ if(xView==='map'){ refreshMarkers(); fitExploreToQuery(); } else renderXList(); }
+
+/* dots re-filter on every keystroke; only the CAMERA is debounced, so the map
+   never queues overlapping 300ms flights while someone is still typing */
+$('xSearch').addEventListener('input', ()=>{
+  xQuery=$('xSearch').value;
+  if(xView!=='map'){ refreshExplore(); return; }
+  refreshMarkers();
+  clearTimeout(xSearchT); xSearchT=setTimeout(fitExploreToQuery, 180);
+});
 document.querySelectorAll('#xToggle button').forEach(b=>b.addEventListener('click',()=>setXView(b.dataset.xv)));
 $('xCardGo').addEventListener('click', ()=>{ if(!exploreSel) return; const p=exploreSel; if(!trackingOn){ toast('Turn on location to get directions','warn'); return; } $('xCard').classList.remove('show'); setDest(p.lat,p.lng,p.n); startWalk(); });
 $('psClose').addEventListener('click', closePlaceSheet);
