@@ -838,8 +838,11 @@ input.inp:disabled{ background:var(--limestone-dk); color:var(--ink-soft); }
 .ocard{ display:flex; align-items:center; gap:15px; width:100%; padding:15px; border-radius:var(--r-lg); background:var(--paper); border:none; box-shadow:var(--shadow-soft), inset 0 0 0 1px var(--line); cursor:pointer; text-align:left; font-family:var(--ui); transition:transform .1s, box-shadow .14s; }
 .ocard:active{ transform:scale(.99); }
 .ocard:hover{ box-shadow:var(--shadow), inset 0 0 0 1.5px var(--crimson); }
-.ocard-ic{ width:54px; height:54px; flex:none; border-radius:var(--r-md); display:grid; place-items:center; background:var(--crimson-tint); color:var(--crimson); }
-.ocard-ic svg{ width:24px; height:24px; }
+/* Was a 54px tinted square, sized to balance two lines of copy that no longer
+   exist. Same call as the You rows: the tinted disc/square carries no per-row
+   information, so the glyph stands on its own at --ink-soft. */
+.ocard-ic{ width:24px; height:24px; flex:none; display:grid; place-items:center; color:var(--ink-soft); }
+.ocard-ic svg{ width:22px; height:22px; }
 .ocard-ic.teal{ background:var(--river-tint); color:var(--river); }
 /* ---- .ofact — informational rows, deliberately NOT cards ----
    These state what the app does; they are facts, not controls. They used to be
@@ -900,10 +903,11 @@ input.inp:disabled{ background:var(--limestone-dk); color:var(--ink-soft); }
 .onb-fit .onb-lede{ font-size:14px; line-height:1.36; margin:0; }
 .onb-fit .ocards{ margin-top:10px; gap:8px; }
 .onb-fit .ocard{ padding:11px; }
-.onb-fit .ocard-ic{ width:44px; height:44px; border-radius:var(--r-sm); }
+/* this override outranked the base rule and kept the icon at square proportions
+   after the square was removed — sized to the glyph now, like the base */
+.onb-fit .ocard-ic{ width:24px; height:24px; border-radius:0; }
 .onb-fit .ocard-ic svg{ width:21px; height:21px; }
 .onb-fit .ocard-main b{ font-size:15px; }
-.onb-fit .ocard-main span{ font-size:12.5px; line-height:1.32; }
 .onb-fit .onb-foot{ padding-top:12px; gap:0; }
 .onb-fit .onb-foot .linkbtn{ padding:8px; }
 
@@ -974,8 +978,9 @@ input.inp:disabled{ background:var(--limestone-dk); color:var(--ink-soft); }
 .sc-card{ background:var(--paper); border-radius:var(--r); box-shadow:inset 0 0 0 1px var(--line); padding:16px 16px 14px; position:relative; }
 .sc-card + .sc-card{ margin-top:12px; }
 .sc-head{ display:flex; align-items:flex-start; gap:12px; position:relative; }
-.sc-ic{ width:40px; height:40px; flex:none; border-radius:var(--r-sm); background:var(--crimson); color:#fff; display:grid; place-items:center; }
-.sc-ic svg{ width:21px; height:21px; }
+/* .sc-ic removed: a 40px solid slab showing the same glyph on every card, which
+   told the user nothing about which line they were looking at and occupied the
+   width the Walk action needed once it moved into the head. */
 .sc-title{ flex:1; min-width:0; font-weight:700; font-size:16px; letter-spacing:-.02em; line-height:1.25; padding-top:1px; word-break:break-word; }
 .sc-arrow{ color:var(--crimson); font-weight:700; padding:0 1px; }
 .sc-more{ flex:none; width:34px; height:34px; margin:-4px -6px 0 0; border:none; background:none; border-radius:var(--r-xs); color:var(--ink-faint); cursor:pointer; display:grid; place-items:center; transition:background .14s, color .14s; }
@@ -995,10 +1000,15 @@ input.inp:disabled{ background:var(--limestone-dk); color:var(--ink-soft); }
 .sc-trend span{ color:var(--ink-soft); font-weight:560; }
 .sc-foot{ display:flex; align-items:center; gap:8px; margin-top:8px; color:#0e9463; background:var(--good-tint); border-radius:var(--r-sm); padding:9px 12px; font-size:13px; font-weight:650; }
 .sc-foot svg{ width:16px; height:16px; flex:none; }
-.sc-walk{ margin-top:14px; height:48px; font-size:15.5px; }
-.sc-cardacts{ display:flex; gap:10px; margin-top:14px; }
-.sc-cardacts .btn{ flex:1; min-width:0; height:48px; font-size:15px; }
-.sc-cardacts .sc-detail{ flex:0 0 38%; }
+/* Walk is now a head action shaped like .sdb-walk on the Schedule board, not a
+   48px half of a two-button bar. Ten saved lines used to mean twenty full-width
+   buttons; giving every list item its own action bar is the card-stack habit at
+   its worst. The card body carries Details instead. */
+.sc-walk{ flex:none; align-self:flex-start; display:inline-flex; align-items:center; gap:2px; border:none; background:none; cursor:pointer;
+  font-family:var(--font-display); font-weight:680; font-size:14px; color:var(--honey-text); padding:6px 2px 6px 10px; margin-top:-2px; }
+.sc-walk svg{ width:15px; height:15px; }
+.sc-card{ cursor:pointer; }
+.sc-card:focus-visible{ outline:2px solid var(--honey); outline-offset:2px; }
 /* ---- Shortcut detail page (sd-) ---- */
 #scr-shortcut .appbar{ position:relative; }
 #shMenu{ position:absolute; top:52px; right:18px; }
@@ -2565,9 +2575,13 @@ input.inp:disabled{ background:var(--limestone-dk); color:var(--ink-soft); }
           <h2 class="onb-h" style="text-align:center; margin-top:6px">You're <span style="color:var(--crimson)">all set.</span></h2>
           <p class="onb-lede" style="text-align:center; align-self:center; margin:6px auto 0">Let's get you where you need to go.</p>
           <div class="ocards">
-            <button class="ocard" id="osSearch"><span class="ocard-ic"><span data-pi="magnifying-glass"></span></span><div class="ocard-main"><b>Search any IU building</b><span>Find Wells, Kelley, IMU, Luddy, SRSC, and more.</span></div><span class="ocard-ch"><span data-pi="caret-right"></span></span></button>
-            <button class="ocard" id="osWalk"><span class="ocard-ic"><span data-pi="person-simple-walk"></span></span><div class="ocard-main"><b>Walk the fastest path</b><span>BeeLine gives you the most direct campus route.</span></div><span class="ocard-ch"><span data-pi="caret-right"></span></span></button>
-            <button class="ocard" id="osSaved"><span class="ocard-ic"><span data-pi="bookmark-simple"></span></span><div class="ocard-main"><b>Build saved corridors</b><span>Your most-walked routes become one-tap shortcuts.</span></div><span class="ocard-ch"><span data-pi="caret-right"></span></span></button>
+            <!-- Two shortcuts, not three feature blurbs. #osWalk went because its
+                 handler was finishOnboarding — byte-for-byte what the CTA below
+                 does — so it was a card-shaped duplicate of the primary button.
+                 The second lines went because these are destinations, not
+                 features: a label and a chevron is what navigation looks like. -->
+            <button class="ocard" id="osSearch"><span class="ocard-ic"><span data-pi="magnifying-glass"></span></span><div class="ocard-main"><b>Search any building</b></div><span class="ocard-ch"><span data-pi="caret-right"></span></span></button>
+            <button class="ocard" id="osSaved"><span class="ocard-ic"><span data-pi="bookmark-simple"></span></span><div class="ocard-main"><b>Your saved routes</b></div><span class="ocard-ch"><span data-pi="caret-right"></span></span></button>
           </div>
         </div>
         <div class="onb-foot"><button class="btn big-go" id="onbFinish"><span>Start using BeeLine</span><span class="arrow"><span data-pi="arrow-right"></span></span></button><button class="linkbtn" id="onbExploreMap">Explore the map</button></div>
@@ -2755,7 +2769,7 @@ input.inp:disabled{ background:var(--limestone-dk); color:var(--ink-soft); }
         <div class="prow" id="pUpdates"><span class="prow-ic"><span data-pi="arrows-clockwise"></span></span><b class="prow-label">What’s new<span class="upd-dot" id="updDot" style="display:none"></span></b><span class="prow-val" id="pUpdatesVal"></span><span class="prow-ch"><span data-pi="caret-right"></span></span></div>
       </div>
 
-      <div class="profile-version">BeeLine 1.0.0 · build 2026-09-02 12:24 · your data stays on this phone<br>Map data © OpenStreetMap contributors · © CARTO</div>
+      <div class="profile-version">BeeLine 1.0.0 · build 2026-09-02 12:30 · your data stays on this phone<br>Map data © OpenStreetMap contributors · © CARTO</div>
       <button class="prow" id="pAdd" style="display:none"></button>
     </div>
   </section>
@@ -3253,7 +3267,8 @@ $('permLater').addEventListener('click', ()=>{ trackingOn=false; onbGo(onbIdx+1)
 $('onbFinish').addEventListener('click', finishOnboarding);
 $('onbExploreMap') && $('onbExploreMap').addEventListener('click', ()=>{ finishOnboarding(); goTab('map'); });
 $('osSearch') && $('osSearch').addEventListener('click', ()=>{ finishOnboarding(); setTimeout(()=>{ try{ destInput.focus(); }catch(e){} }, 200); });
-$('osWalk') && $('osWalk').addEventListener('click', finishOnboarding);
+/* #osWalk removed with its card — the handler was bare finishOnboarding, making
+   it an exact duplicate of #onbFinish directly below it */
 $('osSaved') && $('osSaved').addEventListener('click', ()=>{ finishOnboarding(); goTab('saved'); });
 function finishOnboarding(){
   consent={granted:true, at:Date.now()};
@@ -3361,10 +3376,14 @@ function corridorCardHTML(c){
   const faster=(c.baselineMinutes!=null) ? (c.baselineMinutes - c.bestSeconds/60) : null;
   const fasterRow=(faster!=null && faster>=0.5)
     ? `<div class="sc-foot">${SC_ICONS.bolt}<span>Usually ${faster>=10?Math.round(faster):faster.toFixed(1)} min faster</span></div>` : '';
-  return `<div class="sc-card${c.pinned?' pinned':''}">
+  /* The card itself is the tap target for Details, so the 48px action bar is gone
+     and Walk sits in the head as a text action. .sc-ic went with it: the same
+     solid slab and the same glyph on every single card, carrying no per-row
+     information, and it was occupying the width Walk needed. */
+  return `<div class="sc-card${c.pinned?' pinned':''}" role="button" tabindex="0">
     <div class="sc-head">
-      <span class="sc-ic">${SC_ICONS.shortcut}</span>
       <div class="sc-title">${esc(c.originName)} <span class="sc-arrow">→</span> ${esc(c.destName)}${c.pinned?(' <span class="sc-pin">'+SC_ICONS.pin+'</span>'):''}</div>
+      <button class="sc-walk">Walk ${SCHED_CHEV}</button>
       <button class="sc-more" aria-label="More options">${SC_ICONS.dots}</button>
       <div class="sc-menu"><button class="sc-pinbtn">${c.pinned?'Unpin':'Pin'}</button><button class="sc-ren">Rename</button><button class="sc-del">Delete</button></div>
     </div>
@@ -3375,7 +3394,6 @@ function corridorCardHTML(c){
     </div>
     <div class="sc-trend"><span>Last used ${esc(relDate(c.lastUsed))}</span></div>
     ${fasterRow}
-    <div class="sc-cardacts"><button class="btn ghost sc-detail">Details</button><button class="btn sc-walk">Walk again →</button></div>
   </div>`;
 }
 function savedEmptyHTML(){
@@ -3423,12 +3441,17 @@ function renderSaved(){
   list.querySelectorAll('.sc-card').forEach((card,i)=>{
     const c=cors[i]; if(!c) return;
     const menu=card.querySelector('.sc-menu');
-    card.querySelector('.sc-walk').addEventListener('click',()=>walkCorridor(c));
-    card.querySelector('.sc-detail').addEventListener('click',()=>openShortcutDetail(c));
+    /* EVERY control inside the card must stop propagation now that the card
+       itself opens Details — these three took no event argument at all, so
+       without this Details would open behind every Pin/Rename/Delete tap. */
+    card.querySelector('.sc-walk').addEventListener('click',e=>{ e.stopPropagation(); walkCorridor(c); });
     card.querySelector('.sc-more').addEventListener('click',e=>{ e.stopPropagation(); const open=menu.classList.contains('show'); closeCardMenus(); menu.classList.toggle('show', !open); });
-    card.querySelector('.sc-pinbtn').addEventListener('click',()=>{ menu.classList.remove('show'); togglePinSC(c.id); renderSaved(); });
-    card.querySelector('.sc-ren').addEventListener('click',()=>{ menu.classList.remove('show'); renameDialog(c.destName, nm=>renameCorridor(c,nm)); });
-    card.querySelector('.sc-del').addEventListener('click',()=>{ menu.classList.remove('show'); confirmDialog({title:'Delete '+ST.oneLower+'?', msg:'This removes every saved walk for “'+c.destName+'”.', confirmText:'Delete', onConfirm:()=>deleteCorridor(c)}); });
+    card.querySelector('.sc-pinbtn').addEventListener('click',e=>{ e.stopPropagation(); menu.classList.remove('show'); togglePinSC(c.id); renderSaved(); });
+    card.querySelector('.sc-ren').addEventListener('click',e=>{ e.stopPropagation(); menu.classList.remove('show'); renameDialog(c.destName, nm=>renameCorridor(c,nm)); });
+    card.querySelector('.sc-del').addEventListener('click',e=>{ e.stopPropagation(); menu.classList.remove('show'); confirmDialog({title:'Delete '+ST.oneLower+'?', msg:'This removes every saved walk for “'+c.destName+'”.', confirmText:'Delete', onConfirm:()=>deleteCorridor(c)}); });
+    // the row is the primary target; Walk stays explicit so a stray tap never starts one
+    card.addEventListener('click', ()=>openShortcutDetail(c));
+    card.addEventListener('keydown', e=>{ if(e.key==='Enter'||e.key===' '){ e.preventDefault(); openShortcutDetail(c); } });
   });
   const add=$('scAddNew'); if(add) add.addEventListener('click', openAdd);
 }
