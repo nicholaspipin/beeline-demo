@@ -1040,10 +1040,14 @@ input.inp:disabled{ background:var(--limestone-dk); color:var(--ink-soft); }
 .sd-ep-v{ font-weight:620; font-size:15px; white-space:nowrap; overflow:hidden; text-overflow:ellipsis; }
 .sd-ep-edit{ width:34px; height:34px; flex:none; border:none; background:var(--limestone-dk); border-radius:var(--r-xs); color:var(--ink-soft); cursor:pointer; display:grid; place-items:center; }
 .sd-ep-edit svg{ width:17px; height:17px; }
-.sd-metrics{ display:grid; grid-template-columns:1fr 1fr; gap:10px; margin-top:14px; }
-.metric{ background:var(--paper); border-radius:var(--r-md); box-shadow:inset 0 0 0 1px var(--line2); padding:14px; }
-.metric-ic{ display:inline-grid; place-items:center; color:var(--crimson); } .metric-ic svg{ width:20px; height:20px; }
-.metric-v{ font-family:var(--mono); font-weight:700; font-size:19px; margin-top:7px; font-variant-numeric:tabular-nums; }
+/* Four numbers were four elevated cards in a 2x2 grid — the card-stack shape
+   again, and Your Lines shows these SAME figures as one compact inline row, so
+   the app spoke two visual languages about one dataset. A detail screen earns
+   bigger numerals; it does not earn four boxes. Now a hairline-topped data block. */
+.sd-metrics{ display:grid; grid-template-columns:1fr 1fr; gap:15px 18px; margin-top:16px; padding-top:15px; border-top:1px solid var(--line); }
+.metric{ background:none; border-radius:0; box-shadow:none; padding:0; }
+.metric-ic{ display:inline-grid; place-items:center; color:var(--ink-soft); } .metric-ic svg{ width:18px; height:18px; }
+.metric-v{ font-family:var(--font-num); font-weight:700; font-size:22px; letter-spacing:-.02em; margin-top:5px; font-variant-numeric:tabular-nums; }
 .metric-k{ font-size:12px; color:var(--ink-soft); margin-top:2px; }
 .sd-section{ margin-top:22px; }
 .sd-section h3{ font-weight:720; font-size:16px; letter-spacing:-.02em; margin:0 0 10px; }
@@ -1227,7 +1231,7 @@ input.inp:disabled{ background:var(--limestone-dk); color:var(--ink-soft); }
 .bz-dot.xl{ width:46px; height:46px; font-size:20px; }
 .bz-dot.ring{ background:var(--paper); color:var(--rc); box-shadow:inset 0 0 0 2px var(--rc); }
 .bz-live{ display:inline-block; font-family:var(--mono); font-size:9.5px; font-weight:700; letter-spacing:.07em; color:#0e9463; background:rgba(16,185,129,.14); border-radius:5px; padding:2px 6px; vertical-align:1px; }
-.bz-sched{ font-family:var(--mono); font-size:11px; color:var(--ink-faint); }
+.bz-sched{ font-family:var(--mono); font-size:11px; color:var(--ink-soft); }  /* carries clock times — reading work, not decoration (4th ink-faint-on-numerals instance) */
 .bz-mut{ font-size:13px; color:var(--ink-soft); }
 .bz-mut2{ font-size:12px; color:var(--ink-faint); }
 .bz-busid{ font-style:normal; font-family:var(--mono); font-size:10.5px; color:var(--ink-faint); margin-left:6px; }
@@ -2792,7 +2796,7 @@ input.inp:disabled{ background:var(--limestone-dk); color:var(--ink-soft); }
         <div class="prow" id="pUpdates"><span class="prow-ic"><span data-pi="arrows-clockwise"></span></span><b class="prow-label">What’s new<span class="upd-dot" id="updDot" style="display:none"></span></b><span class="prow-val" id="pUpdatesVal"></span><span class="prow-ch"><span data-pi="caret-right"></span></span></div>
       </div>
 
-      <div class="profile-version">BeeLine 1.0.0 · build 2026-09-02 12:50 · your data stays on this phone<br>Map data © OpenStreetMap contributors · © CARTO</div>
+      <div class="profile-version">BeeLine 1.0.0 · build 2026-09-02 12:54 · your data stays on this phone<br>Map data © OpenStreetMap contributors · © CARTO</div>
       <button class="prow" id="pAdd" style="display:none"></button>
     </div>
   </section>
@@ -3614,7 +3618,9 @@ function renderShortcutDetail(){
     <div class="sd-metrics">
       ${metricCard(SC_ICONS.clock,'Walk time',fmtClock(c.bestSeconds))}
       ${metricCard(SC_ICONS.ruler,'Distance',fmtDist(c.walkedMeters))}
-      ${metricCard(SC_ICONS.bolt,'Usually saves',savesTxt)}
+      ${/* an em dash in its own box is a box spent saying "no data" — omit it
+            until there is a comparison to report */
+        savesTxt!=='—' ? metricCard(SC_ICONS.bolt,'Usually saves',savesTxt) : ''}
       ${metricCard(SC_ICONS.trend,'Times used',c.count+'×')}
     </div>
     <div class="sd-section"><h3>Compare similar shortcuts</h3>${cmp}</div>
