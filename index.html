@@ -1836,7 +1836,26 @@ input.inp:disabled{ background:var(--limestone-dk); color:var(--ink-soft); }
 .wfi-tile.custom .pi{ color:var(--honey-deep); }
 .wfi-tile.add{ box-shadow:inset 0 0 0 1.6px var(--line2); border:none; background:none; }
 .wfi-tile.add .pi, .wfi-tile.add span{ color:var(--ink-soft); }
-.na-in{ width:100%; border:none; background:var(--paper-bg); border-radius:var(--r-sm); padding:13px 14px; font-family:var(--font-display); font-size:15px; font-weight:600; color:var(--ink); box-sizing:border-box; }
+.na-lede{ font-size:14px; color:var(--ink-soft); margin:4px 2px 12px; }
+.na-presets{ display:grid; grid-template-columns:repeat(3,1fr); gap:9px; }
+.na-preset{ display:flex; flex-direction:column; align-items:center; gap:6px; border:none; cursor:pointer; background:var(--paper-bg); border-radius:var(--r-md); padding:14px 6px 11px; }
+.na-preset em{ font-style:normal; font-size:26px; line-height:1; }
+.na-preset span{ font-family:var(--font-display); font-size:12px; font-weight:650; color:var(--ink); white-space:nowrap; overflow:hidden; text-overflow:ellipsis; max-width:100%; }
+.na-preset:active{ transform:scale(.94); background:var(--honey-tint); }
+.na-or{ display:flex; align-items:center; gap:12px; margin:18px 0 12px; }
+.na-or i{ flex:1; height:1px; background:var(--line); }
+.na-or span{ font-family:var(--mono); font-size:10px; font-weight:700; letter-spacing:.1em; text-transform:uppercase; color:var(--ink-faint); }
+.na-emojis{ display:flex; flex-wrap:wrap; gap:6px; margin-bottom:10px; }
+.na-em{ width:38px; height:38px; border:none; cursor:pointer; background:var(--paper-bg); border-radius:10px; font-size:19px; line-height:1; display:grid; place-items:center; }
+.na-em.on{ background:var(--honey-tint); box-shadow:inset 0 0 0 1.8px var(--honey); }
+.na-optlink{ display:inline-flex; align-items:center; gap:6px; border:none; background:none; cursor:pointer; margin:10px 0 2px; font-family:var(--font-display); font-size:13px; font-weight:650; color:var(--ink-soft); padding:4px 0; }
+.na-optlink .pi{ width:15px; height:15px; }
+.na-optlink i{ font-style:normal; font-weight:500; color:var(--ink-faint); }
+.na-row-em{ font-style:normal; font-size:18px; }
+.wfi-em{ font-style:normal; font-size:23px; line-height:1; }
+.wfp-em{ font-style:normal; font-size:16px; line-height:1; }
+.pd-sc-em{ font-style:normal; font-size:27px; line-height:1; height:30px; display:grid; place-items:center; }
+.na-in{ width:100%; border:none; background:var(--paper-bg); border-radius:var(--r-sm); padding:13px 14px; font-family:var(--font-display); font-size:15px; font-weight:600; color:var(--ink); box-sizing:border-box; margin-bottom:10px; }
 .na-in:focus{ outline:none; box-shadow:inset 0 0 0 2px var(--ink); }
 .na-bases{ display:flex; gap:8px; flex-wrap:wrap; }
 .na-bases .pt-c{ padding:10px 14px; flex:none; }
@@ -2670,7 +2689,7 @@ input.inp:disabled{ background:var(--limestone-dk); color:var(--ink-soft); }
         <div class="prow" id="pUpdates"><span class="prow-ic"><span data-pi="arrows-clockwise"></span></span><b class="prow-label">What’s new<span class="upd-dot" id="updDot" style="display:none"></span></b><span class="prow-val" id="pUpdatesVal"></span><span class="prow-ch"><span data-pi="caret-right"></span></span></div>
       </div>
 
-      <div class="profile-version">BeeLine 1.0.0 · build 2026-09-02 11:29 · your data stays on this phone<br>Map data © OpenStreetMap contributors · © CARTO</div>
+      <div class="profile-version">BeeLine 1.0.0 · build 2026-09-02 11:31 · your data stays on this phone<br>Map data © OpenStreetMap contributors · © CARTO</div>
       <button class="prow" id="pAdd" style="display:none"></button>
     </div>
   </section>
@@ -5522,7 +5541,12 @@ function renderSchedule(){
     $('schedSub').textContent = nE ? (bit(nC,'class','classes')+' · '+bit(nE,'other thing','other things')) : (nC+' classes this term.'); }
   const now=new Date(), todayCode=DOW_CODES[now.getDay()], nowMin=now.getHours()*60+now.getMinutes();
   const sel=schedSelDay||todayCode, isToday=sel===todayCode;
-  const WEEK=['Mo','Tu','We','Th','Fr','Sa','Su'];
+  /* Sunday-first, and not cosmetically: the strip's offsets are anchored on
+     today's index, so with Monday first every Sunday resolved the WHOLE week
+     backwards — tapping 'Mo' on Sun Sep 6 gave Aug 31, and a student checking
+     tomorrow's exam could not reach it from the strip at all. Sunday-first also
+     matches the US calendar convention this campus uses. */
+  const WEEK=['Su','Mo','Tu','We','Th','Fr','Sa'];
   const dOf=d=>d.getFullYear()+'-'+String(d.getMonth()+1).padStart(2,'0')+'-'+String(d.getDate()).padStart(2,'0');
   // date of the selected day within this Monday-started week
   const monIdx=c=>WEEK.indexOf(c);
@@ -7971,7 +7995,7 @@ const PlanUI={
       <div class="wfi-status">${pic('clock')}<b>${usable} usable minutes</b></div>
       <div class="fit-head"><h1 class="fit-title">What do you want to do?</h1></div>
       <div class="wfi-grid">${tiles.map(([k,t,ic])=>`<button class="wfi-tile${this._intent===k?' on':''}" data-wfi="${k}">${pic(ic)}<span>${t}</span></button>`).join('')}
-        ${customs.map(a=>`<button class="wfi-tile custom${this._intent==='c:'+a.id?' on':''}" data-wfi="c:${a.id}">${pic('star')}<span>${esc(a.name)}</span></button>`).join('')}
+        ${customs.map(a=>`<button class="wfi-tile custom${this._intent==='c:'+a.id?' on':''}" data-wfi="c:${a.id}"><em class="wfi-em">${esc(a.emoji||'⭐')}</em><span>${esc(a.name)}</span></button>`).join('')}
         <button class="wfi-tile add" data-wfnew="1">${pic('plus')}<span>New activity</span></button>
       </div>
       <button class="wfi-go" id="wfiGo"${this._intent?'':' disabled'}>Show me plans</button>`;
@@ -7989,55 +8013,88 @@ const PlanUI={
       this.render();
     });
   },
-  /* create a user activity: a name, the profile it behaves like (its math),
-     an optional usual place. No invented numbers — the base profile IS the
-     duration model, and the user chose it. */
+  /* PRESET ideas: one tap creates the activity AND jumps straight to plans.
+     Each borrows a real base profile's math — nothing invented, just named. */
+  NA_PRESETS:[
+    ['🏀','Basketball','gym'],   ['🏊','Swim','gym'],        ['🏃','Run','gym'],
+    ['🧗','Climbing','gym'],     ['⚽','Soccer','gym'],       ['🎾','Tennis','gym'],
+    ['🎸','Music practice','study'], ['🎨','Studio time','study'], ['📖','Reading','study'],
+    ['💻','Side project','study'],   ['🎮','Gaming','study'],      ['🧘','Chill out','coffee'],
+    ['📞','Call home','coffee'], ['🧺','Laundry','errand'],  ['🛒','Groceries','errand'],
+  ],
+  NA_EMOJIS:['⭐','🏀','🏊','🏃','🧗','⚽','🎾','🏋️','🚴','🎸','🎹','🎨','📖','💻','🎮','🧘','📞','🧺','🛒','🎤','♟️','🐝'],
+  /* the fun way in: tap an idea and you're planning; or make your own with
+     ONE typed field (the name) — everything else is a tap */
   newActivitySheet(){
     let bg=document.getElementById('naShBg'); if(bg) bg.remove();
     bg=document.createElement('div'); bg.id='naShBg'; bg.className='brxsh-bg';
-    const bases=[['study','Study'],['gym','Workout'],['eat','Meal'],['coffee','Quick stop'],['errand','Errand']];
-    let base='study', place=null;
+    const bases=[['study','Focus'],['gym','Sweat'],['eat','Food'],['coffee','Quick'],['errand','Errand']];
+    let base='study', place=null, emoji='⭐';
     const customs=ActivityStore.list();
+    const have=new Set(customs.map(a=>a.name.toLowerCase()));
+    const presets=this.NA_PRESETS.filter(p=>!have.has(p[1].toLowerCase()));
     bg.innerHTML=`<div class="brxsh">
-      <div class="brxsh-head"><b>New activity</b><button class="brxsh-x" aria-label="Close">${pic('x')}</button></div>
+      <div class="brxsh-head"><b>Add an activity</b><button class="brxsh-x" aria-label="Close">${pic('x')}</button></div>
       <div class="brxsh-scroll">
-        <div class="pt-lab">What is it?</div>
-        <input class="na-in" id="naName" type="text" placeholder="e.g. Violin practice" autocomplete="off">
-        <div class="pt-lab">Behaves like</div>
+        <div class="na-lede">Tap one — it's yours, and BeeLine finds where it fits.</div>
+        <div class="na-presets">${presets.map((p,i)=>`<button class="na-preset" data-nap="${i}"><em>${p[0]}</em><span>${esc(p[1])}</span></button>`).join('')}</div>
+        <div class="na-or"><i></i><span>or make your own</span><i></i></div>
+        <div class="na-emojis" id="naEmojis">${this.NA_EMOJIS.map(e=>`<button class="na-em${e===emoji?' on':''}" data-nae="${e}">${e}</button>`).join('')}</div>
+        <input class="na-in" id="naName" type="text" placeholder="Name it — that's all the typing" autocomplete="off">
         <div class="na-bases">${bases.map(([k,t])=>`<button class="pt-c${k===base?' on':''}" data-nb="${k}">${t}</button>`).join('')}</div>
-        <div class="pt-lab">Usual place <i class="na-opt">optional</i></div>
-        <input class="na-in" id="naPlace" type="text" placeholder="Search campus, or leave empty" autocomplete="off">
-        <div class="na-hit" id="naHit" style="display:none"></div>
-        <button class="hm-act honey" id="naSave">Save activity</button>
-        ${customs.length?`<div class="pt-lab" style="margin-top:18px">Your activities</div>${customs.map(a=>`<div class="na-row"><b>${esc(a.name)}</b><span>${esc((ActivityProfiles[a.base]||{}).t||a.base)}${a.placeName?' · '+esc(shortName(a.placeName)):''}</span><button class="na-del" data-nadel="${a.id}" aria-label="Delete">${pic('trash-simple')}</button></div>`).join('')}`:''}
+        <button class="na-optlink" id="naSpotLink">${pic('map-pin-simple')} Add a usual spot <i>optional</i></button>
+        <div id="naSpotWrap" style="display:none">
+          <input class="na-in" id="naPlace" type="text" placeholder="Search campus" autocomplete="off">
+          <div class="na-hit" id="naHit" style="display:none"></div>
+        </div>
+        <button class="hm-act honey" id="naSave">Add it</button>
+        ${customs.length?`<div class="pt-lab" style="margin-top:20px">Your activities</div>${customs.map(a=>`<div class="na-row"><em class="na-row-em">${esc(a.emoji||'⭐')}</em><b>${esc(a.name)}</b><span>${a.placeName?esc(shortName(a.placeName)):''}</span><button class="na-del" data-nadel="${a.id}" aria-label="Delete">${pic('trash-simple')}</button></div>`).join('')}`:''}
       </div></div>`;
     document.body.appendChild(bg);
     const close=()=>{ bg.classList.remove('show'); setTimeout(()=>bg.remove(),240); };
     bg.addEventListener('click',e=>{ if(e.target===bg) close(); });
     bg.querySelector('.brxsh-x').addEventListener('click',close);
+    const createAndGo=(item)=>{
+      ActivityStore.add(item);
+      close();
+      this.customSel=item; this._intent='c:'+item.id; this.filter=item.base;
+      toast(item.emoji+' '+item.name+' is yours','good');
+      this.render();
+    };
+    bg.querySelectorAll('[data-nap]').forEach(b=>b.addEventListener('click',()=>{
+      const p=presets[+b.dataset.nap];
+      createAndGo({ id:'a'+Date.now(), name:p[1], base:p[2], emoji:p[0], placeName:null, lat:null, lng:null, c:null });
+    }));
+    bg.querySelectorAll('[data-nae]').forEach(b=>b.addEventListener('click',()=>{
+      emoji=b.dataset.nae;
+      bg.querySelectorAll('[data-nae]').forEach(x=>x.classList.toggle('on',x.dataset.nae===emoji));
+    }));
     bg.querySelectorAll('[data-nb]').forEach(b=>b.addEventListener('click',()=>{
       base=b.dataset.nb;
       bg.querySelectorAll('[data-nb]').forEach(x=>x.classList.toggle('on',x.dataset.nb===base));
     }));
-    const pIn=bg.querySelector('#naPlace'), hit=bg.querySelector('#naHit');
-    pIn.addEventListener('input',()=>{
-      place=null; const q=pIn.value.trim();
-      if(q.length<3 || typeof localSearch!=='function'){ hit.style.display='none'; return; }
-      const hits=localSearch(q)||[];
-      if(hits.length){ place={n:hits[0].name,lat:hits[0].lat,lng:hits[0].lng,c:hits[0].c||'offcampus'};
-        hit.style.display='block'; hit.innerHTML=pic('check')+' '+esc(hits[0].name); }
-      else hit.style.display='none';
+    const spotLink=bg.querySelector('#naSpotLink');
+    spotLink.addEventListener('click',()=>{
+      bg.querySelector('#naSpotWrap').style.display='block'; spotLink.style.display='none';
+      const pIn=bg.querySelector('#naPlace'); pIn.focus();
+      const hit=bg.querySelector('#naHit');
+      pIn.addEventListener('input',()=>{
+        place=null; const q=pIn.value.trim();
+        if(q.length<3 || typeof localSearch!=='function'){ hit.style.display='none'; return; }
+        const hits=localSearch(q)||[];
+        if(hits.length){ place={n:hits[0].name,lat:hits[0].lat,lng:hits[0].lng,c:hits[0].c||'offcampus'};
+          hit.style.display='flex'; hit.innerHTML=pic('check')+' '+esc(hits[0].name); }
+        else hit.style.display='none';
+      });
     });
     bg.querySelectorAll('[data-nadel]').forEach(b=>b.addEventListener('click',()=>{
       ActivityStore.remove(b.dataset.nadel); close(); this.renderIntent(); toast('Activity removed','');
     }));
     bg.querySelector('#naSave').addEventListener('click',()=>{
       const name=bg.querySelector('#naName').value.trim();
-      if(!name){ toast('Give it a name first','warn'); return; }
-      ActivityStore.add({ id:'a'+Date.now(), name, base, placeName:place?place.n:null,
+      if(!name){ toast('Give it a name — one word works','warn'); return; }
+      createAndGo({ id:'a'+Date.now(), name, base, emoji, placeName:place?place.n:null,
         lat:place?place.lat:null, lng:place?place.lng:null, c:place?place.c:null });
-      close(); this.renderIntent();
-      toast(name+' added to your activities','good');
     });
     void bg.offsetHeight; bg.classList.add('show');
   },
@@ -8083,9 +8140,9 @@ const PlanUI={
   INTENTS:{eat:['Eat','fork-knife'],coffee:['Coffee','coffee'],study:['Study','books'],gym:['Work out','barbell'],errand:['Errands','signpost'],home:['Home','house-line']},
   statusRow(opts){
     const u=this.usable();
-    const im=this.customSel? [this.customSel.name,'star'] : (this.INTENTS[this.filter]||null);
+    const im=this.customSel? [this.customSel.name, null, this.customSel.emoji||'⭐'] : (this.INTENTS[this.filter]||null);
     return `<div class="wfp-status">
-      ${im?`<span class="wfp-int">${pic(im[1])}<b>${im[0]}</b></span><span class="wfp-dot">·</span>`:''}
+      ${im?`<span class="wfp-int">${im[2]?`<em class="wfp-em">${esc(im[2])}</em>`:pic(im[1])}<b>${esc(im[0])}</b></span><span class="wfp-dot">·</span>`:''}
       <span class="wfp-min">${pic('clock')}${u.slack} usable minutes</span>
       ${(opts&&opts.leaveBy)?`<span class="wfp-dot">|</span><span class="wfp-min dim">Leave by ${u.est?'~':''}${fmtClockTime(u.leaveDirect)}</span>`:''}
       ${(opts&&opts.change)?`<button class="wfp-change" id="wfpChange">Change</button>`:''}
@@ -10154,8 +10211,8 @@ const PlanDayView={
     return `<div class="pd-search">${pic('timer')}<input id="pdQ" type="text" placeholder="What do you want to do or where do you want to go?" autocomplete="off" enterkeyhint="search" value="${esc(q||'')}"></div>`;
   },
   shortcuts(items){
-    return `<div class="pd-shortcuts">${items.map(([cat,label,ic])=>
-      `<button class="pd-sc" data-pdsc="${cat}">${pic(ic)}<span>${label}</span></button>`).join('')}</div>`;
+    return `<div class="pd-shortcuts">${items.map(([cat,label,ic,em])=>
+      `<button class="pd-sc" data-pdsc="${cat}">${em?`<em class="pd-sc-em">${esc(em)}</em>`:pic(ic)}<span>${esc(label)}</span></button>`).join('')}</div>`;
   },
 
   /* ---- MY DAY ---- */
@@ -10392,14 +10449,14 @@ const PlanDayUI={
         <p>Pick something you want to do.<br>BeeLine will find where it actually fits.</p></div>`;
       html+=PlanDayView.search(this.query);
       html+=PlanDayView.shortcuts([['study','Study','books'],['eat','Eat','fork-knife'],['gym','Work out','barbell'],['errand','Errand','signpost'],
-        ...ActivityStore.list().slice(0,4).map(a=>['c:'+a.id, a.name, 'star'])]);
+        ...ActivityStore.list().slice(0,4).map(a=>['c:'+a.id, a.name, null, a.emoji||'⭐'])]);
       html+=PlanDayView.timeline(this.date);
     } else {
       html+=`<div class="pd-hero"><h1>Find somewhere that fits</h1>
         <p>Places ranked by the time you can actually spend there.</p></div>`;
       html+=PlanDayView.search(this.query);
       html+=PlanDayView.shortcuts([['eat','Food','fork-knife'],['coffee','Coffee','coffee'],['study','Study','books'],['gym','Fitness','barbell'],
-        ...ActivityStore.list().slice(0,4).map(a=>['c:'+a.id, a.name, 'star'])]);
+        ...ActivityStore.list().slice(0,4).map(a=>['c:'+a.id, a.name, null, a.emoji||'⭐'])]);
       this._ranked=PlanDayModel.rankNearby(this.date,null);
       html+=PlanDayView.nearby(this.date, this._ranked);
     }
