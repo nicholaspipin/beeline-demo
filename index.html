@@ -781,7 +781,9 @@ input.inp:disabled{ background:var(--limestone-dk); color:var(--ink-soft); }
 .ps-metric{ display:flex; align-items:center; gap:6px; background:var(--limestone); border-radius:var(--r-sm); padding:7px 11px; }
 .ps-metric svg{ width:16px; height:16px; flex:none; color:var(--crimson); }
 .ps-metric b{ font-family:var(--mono); font-weight:700; font-size:13.5px; color:var(--ink); font-variant-numeric:tabular-nums; }
-.ps-metric-note{ font-size:12px; color:var(--ink-faint); margin-top:9px; }
+/* status, not decoration: this reads "Location off" or "Tap locate for time &
+   distance" directly above the button that fixes it — 3.13 measured */
+.ps-metric-note{ font-size:12px; color:var(--ink-soft); margin-top:9px; }
 .ps-preview{ width:86px; height:86px; flex:none; border-radius:var(--r-md); overflow:hidden; background:var(--limestone-dk); box-shadow:inset 0 0 0 1px var(--line); }
 .ps-preview svg{ width:100%; height:100%; display:block; }
 .ps-prev-img{ width:100%; height:100%; object-fit:cover; display:block; }
@@ -1234,7 +1236,8 @@ input.inp:disabled{ background:var(--limestone-dk); color:var(--ink-soft); }
 .bz-sched{ font-family:var(--mono); font-size:11px; color:var(--ink-soft); }  /* carries clock times — reading work, not decoration (4th ink-faint-on-numerals instance) */
 .bz-mut{ font-size:13px; color:var(--ink-soft); }
 .bz-mut2{ font-size:12px; color:var(--ink-faint); }
-.bz-busid{ font-style:normal; font-family:var(--mono); font-size:10.5px; color:var(--ink-faint); margin-left:6px; }
+/* the id a rider matches against the number on the actual bus */
+.bz-busid{ font-style:normal; font-family:var(--mono); font-size:10.5px; color:var(--ink-soft); margin-left:6px; }
 .bz-detour-tag{ display:inline-block; font-size:10px; font-weight:700; letter-spacing:.04em; text-transform:uppercase; color:var(--honey-text); background:var(--honey-tint); border-radius:var(--r-xs); padding:2.5px 7px; margin-left:6px; }
 /* peek — compact two-liner; the whole card is the tap target */
 .bz-sheet.peek{ padding:11px 16px 12px; }
@@ -1357,7 +1360,12 @@ input.inp:disabled{ background:var(--limestone-dk); color:var(--ink-soft); }
 .brx-today{ margin-left:auto; font-style:normal; font-family:var(--font-display); font-size:11.5px; font-weight:700; color:var(--ink); background:var(--honey-tint); border-radius:999px; padding:3px 10px; }
 .brx-track{ position:relative; height:20px; border-radius:10px; background:var(--paper-bg); overflow:visible; margin:20px 0 6px; }
 .brx-segb{ position:absolute; top:0; height:100%; border-radius:10px; background:var(--rc); }
-.brx-endlab{ position:absolute; top:-17px; font-family:var(--mono); font-size:10px; font-weight:650; color:var(--ink-faint); font-variant-numeric:tabular-nums; white-space:nowrap; }
+/* --ink-faint is #96918A: 2.82 on paper. These three rules declare tabular-nums,
+   which is the CSS saying outright that they render NUMERALS — a decoration colour
+   handed reading work. Fourth, fifth and sixth instances of the same pattern after
+   .wk-day span, .sdb-gap span, .pd-tab and .bz-sched; found by grepping for the
+   --ink-faint + tabular-nums pair rather than by waiting for them to surface. */
+.brx-endlab{ position:absolute; top:-17px; font-family:var(--mono); font-size:10px; font-weight:650; color:var(--ink-soft); font-variant-numeric:tabular-nums; white-space:nowrap; }
 .brx-endlab.s{ transform:translateX(0); }
 .brx-endlab.e{ transform:translateX(-100%); }
 .brx-segb.hi{ opacity:.9; } .brx-segb.mid{ opacity:.55; } .brx-segb.lo{ opacity:.3; }
@@ -1366,7 +1374,7 @@ input.inp:disabled{ background:var(--limestone-dk); color:var(--ink-soft); }
 .brx-capline{ font-size:12.5px; color:var(--ink-soft); margin-top:8px; line-height:1.5; font-variant-numeric:tabular-nums; }
 .brx-nosvc{ font-size:13px; color:var(--ink-faint); padding:2px 0 4px; }
 .brx-ruler{ position:relative; height:16px; margin-top:14px; }
-.brx-ruler span{ position:absolute; transform:translateX(-50%); font-family:var(--mono); font-size:10px; font-weight:600; color:var(--ink-faint); font-variant-numeric:tabular-nums; }
+.brx-ruler span{ position:absolute; transform:translateX(-50%); font-family:var(--mono); font-size:10px; font-weight:600; color:var(--ink-soft); font-variant-numeric:tabular-nums; }
 .brx-all-btn{ display:flex; align-items:center; justify-content:space-between; width:100%; border:none; cursor:pointer; padding:15px 20px; margin-bottom:14px;
   background:var(--surface); border-radius:var(--r-lg); box-shadow:inset 0 0 0 1px var(--line);
   font-family:var(--font-display); font-size:15.5px; font-weight:690; color:var(--ink); }
@@ -1689,7 +1697,7 @@ input.inp:disabled{ background:var(--limestone-dk); color:var(--ink-soft); }
 .xb-media img.ld{ opacity:1; }
 @media (prefers-reduced-motion:reduce){ .xb-media img{ transition:none; } }
 .xb-card b{ display:block; font-family:var(--font-display); font-size:14px; font-weight:680; letter-spacing:-.01em; color:var(--ink); line-height:1.25; margin:9px 12px 2px; display:-webkit-box; -webkit-line-clamp:2; -webkit-box-orient:vertical; overflow:hidden; }
-.xb-card span{ display:block; font-size:11.5px; color:var(--ink-faint); margin:0 12px; font-variant-numeric:tabular-nums; }
+.xb-card span{ display:block; font-size:11.5px; color:var(--ink-soft); margin:0 12px; font-variant-numeric:tabular-nums; }
 .xb-util{ margin:2px 0 12px; background:var(--surface); border-radius:var(--r-lg); box-shadow:inset 0 0 0 1px var(--line); overflow:hidden; }
 .xb-ulink{ display:flex; align-items:center; gap:8px; width:100%; border:none; background:none; cursor:pointer; text-align:left; padding:14px 16px; }
 .xb-ulink + .xb-ulink{ border-top:1px solid var(--line); }
@@ -2796,7 +2804,7 @@ input.inp:disabled{ background:var(--limestone-dk); color:var(--ink-soft); }
         <div class="prow" id="pUpdates"><span class="prow-ic"><span data-pi="arrows-clockwise"></span></span><b class="prow-label">What’s new<span class="upd-dot" id="updDot" style="display:none"></span></b><span class="prow-val" id="pUpdatesVal"></span><span class="prow-ch"><span data-pi="caret-right"></span></span></div>
       </div>
 
-      <div class="profile-version">BeeLine 1.0.0 · build 2026-09-02 12:54 · your data stays on this phone<br>Map data © OpenStreetMap contributors · © CARTO</div>
+      <div class="profile-version">BeeLine 1.0.0 · build 2026-09-02 12:57 · your data stays on this phone<br>Map data © OpenStreetMap contributors · © CARTO</div>
       <button class="prow" id="pAdd" style="display:none"></button>
     </div>
   </section>
