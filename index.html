@@ -809,7 +809,13 @@ input.inp:disabled{ background:var(--limestone-dk); color:var(--ink-soft); }
 .ps-photo .ps-photo-glyph svg{ width:40px; height:40px; }
 .ps-photo img{ position:absolute; inset:0; width:100%; height:100%; object-fit:cover; opacity:0; transition:opacity .35s ease; }
 .ps-photo img.loaded{ opacity:1; }
-.ps-photo-cap{ font-family:var(--mono); font-size:10px; line-height:1.35; letter-spacing:.01em; color:var(--ink-faint); margin:-4px 0 12px; }
+/* Photo attribution is a LICENCE OBLIGATION, not styling — attribution nobody can
+   read does not discharge it. It was also fainter than its own inline link, which
+   was already --ink-soft. Provenance below is the same class of thing: "Hours from
+   OpenStreetMap, checked <date>" is how a user calibrates trust in the hours, which
+   is the app character, not small print. All three to --ink-soft; they stay small
+   and tertiary, they just stop being unreadable. */
+.ps-photo-cap{ font-family:var(--mono); font-size:10px; line-height:1.35; letter-spacing:.01em; color:var(--ink-soft); margin:-4px 0 12px; }
 .ps-photo-cap a{ color:var(--ink-soft); text-decoration:underline; text-underline-offset:2px; }
 .ps-drow{ display:flex; justify-content:space-between; gap:14px; padding:9px 0; font-size:13.5px; border-top:1px solid var(--line); }
 .ps-dk{ color:var(--ink-soft); flex:none; }
@@ -818,12 +824,12 @@ input.inp:disabled{ background:var(--limestone-dk); color:var(--ink-soft); }
 .ps-amen{ padding:9px 0; border-top:1px solid var(--line); }
 .ps-amen-chips{ display:flex; flex-wrap:wrap; gap:6px; margin-top:7px; }
 .ps-amen-chip{ font-size:12px; font-weight:600; color:var(--ink-soft); background:var(--limestone-dk); border-radius:var(--r-xs); padding:5px 10px; }
-.ps-source{ margin-top:10px; font-family:var(--mono); font-size:10.5px; letter-spacing:.02em; color:var(--ink-faint); }
+.ps-source{ margin-top:10px; font-family:var(--mono); font-size:10.5px; letter-spacing:.02em; color:var(--ink-soft); }
 /* open/closed indicator + hours provenance */
 .oc{ display:inline-block; font-family:var(--ui); font-weight:700; font-size:11px; letter-spacing:.01em; padding:1px 7px; border-radius:999px; vertical-align:1px; }
 .oc.open{ color:#0e9463; background:rgba(46,125,82,.14); }
 .oc.closed{ color:#b42318; background:rgba(194,65,45,.12); }
-.ps-hours-src{ font-family:var(--mono); font-size:10px; letter-spacing:.01em; color:var(--ink-faint); margin:-3px 0 2px; text-align:right; }
+.ps-hours-src{ font-family:var(--mono); font-size:10px; letter-spacing:.01em; color:var(--ink-soft); margin:-3px 0 2px; text-align:right; }
 .ps-report{ display:block; width:100%; margin-top:12px; padding:11px; border:none; background:none; color:var(--ink-faint); font-family:var(--ui); font-size:12.5px; font-weight:600; cursor:pointer; text-decoration:underline; text-underline-offset:2px; }
 .ps-report:active{ color:var(--crimson); }
 .x-maphint{ position:absolute; inset:0; z-index:7; display:none; flex-direction:column; align-items:center; justify-content:center; text-align:center; gap:2px; background:var(--limestone-dk); padding:24px; }
@@ -2804,7 +2810,7 @@ input.inp:disabled{ background:var(--limestone-dk); color:var(--ink-soft); }
         <div class="prow" id="pUpdates"><span class="prow-ic"><span data-pi="arrows-clockwise"></span></span><b class="prow-label">What’s new<span class="upd-dot" id="updDot" style="display:none"></span></b><span class="prow-val" id="pUpdatesVal"></span><span class="prow-ch"><span data-pi="caret-right"></span></span></div>
       </div>
 
-      <div class="profile-version">BeeLine 1.0.0 · build 2026-09-02 12:58 · your data stays on this phone<br>Map data © OpenStreetMap contributors · © CARTO</div>
+      <div class="profile-version">BeeLine 1.0.0 · build 2026-09-02 13:01 · your data stays on this phone<br>Map data © OpenStreetMap contributors · © CARTO</div>
       <button class="prow" id="pAdd" style="display:none"></button>
     </div>
   </section>
