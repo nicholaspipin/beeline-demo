@@ -742,13 +742,27 @@ input.inp:disabled{ background:var(--limestone-dk); color:var(--ink-soft); }
 .ps-owner #psDelete{ color:var(--crimson); }
 .x-count{ position:absolute; top:12px; left:12px; z-index:6; background:var(--paper); box-shadow:var(--shadow-pop); border-radius:999px; padding:7px 13px; font-family:var(--mono); font-size:11px; font-weight:600; color:var(--ink-soft); }
 /* place sheet (slides up over the still-visible map) */
-.x-card{ position:fixed; left:0; right:0; margin-inline:auto; width:calc(100% - 28px); max-width:432px; bottom:calc(78px + env(safe-area-inset-bottom)); z-index:31; background:var(--paper); box-shadow:var(--shadow-pop); border-radius:var(--r-lg); padding:18px 18px 16px; display:none; max-height:calc(100dvh - 150px); overflow-y:auto; -webkit-overflow-scrolling:touch; }
+.x-card{ position:fixed; left:0; right:0; margin-inline:auto; width:calc(100% - 28px); max-width:432px; bottom:calc(78px + env(safe-area-inset-bottom)); z-index:31; background:var(--paper); box-shadow:var(--shadow-pop); border-radius:var(--r-lg); padding:0 18px 16px; display:none; max-height:calc(100dvh - 150px); overflow-y:auto; -webkit-overflow-scrolling:touch; }
 .x-card.show{ display:block; animation:rise .26s cubic-bezier(.22,1,.36,1); }
-.ps-close{ position:absolute; top:13px; right:13px; width:32px; height:32px; flex:none; border:none; background:var(--limestone-dk); border-radius:50%; display:grid; place-items:center; color:var(--ink-soft); cursor:pointer; z-index:2; }
+/* The card is its own scroller, and .ps-close used to scroll away with the
+   content — so once "View details" grew the sheet there was neither a visible X
+   nor (scrollTop>0) a drag. A sticky head keeps both on screen and gives the new
+   pull-down gesture something to advertise itself with. */
+/* No negative top margin: pulling the head up shifted every following element up
+   with it, so the place name rendered underneath an opaque sticky strip and lost
+   its top third. The card's top padding moves into this head instead. */
+.ps-head{ position:sticky; top:0; z-index:3; display:flex; align-items:center; justify-content:center; min-height:30px;
+  background:var(--paper); margin:0 -18px 6px; padding:13px 18px 5px; border-radius:var(--r-lg) var(--r-lg) 0 0; }
+.ps-grab{ width:40px; height:5px; border-radius:5px; background:var(--line2); }
+/* absolute against .ps-head, which is positioned — so it rides the sticky strip */
+.ps-close{ position:absolute; top:8px; right:13px; width:32px; height:32px; flex:none; border:none; background:var(--limestone-dk); border-radius:50%; display:grid; place-items:center; color:var(--ink-soft); cursor:pointer; z-index:2; }
+/* 44px hit area without growing the 32px circle — it is the only exit for
+   VoiceOver and non-touch input, so it must not shrink now that a swipe exists */
+.ps-close::after{ content:""; position:absolute; inset:-6px; }
 .ps-close svg{ width:15px; height:15px; }
 .ps-top{ display:flex; gap:14px; align-items:flex-start; }
 .ps-info{ flex:1; min-width:0; }
-.ps-name{ font-weight:760; font-size:20px; letter-spacing:-.03em; line-height:1.12; padding-right:30px; word-break:break-word; }
+.ps-name{ font-weight:760; font-size:20px; letter-spacing:-.03em; line-height:1.12; word-break:break-word; }   /* padding-right dropped: the close button moved into .ps-head and no longer overlaps */
 .ps-sub{ font-size:13px; color:var(--ink-soft); margin-top:4px; }
 .ps-metrics{ display:flex; gap:9px; margin-top:13px; flex-wrap:wrap; }
 .ps-metric{ display:flex; align-items:center; gap:6px; background:var(--limestone); border-radius:var(--r-sm); padding:7px 11px; }
@@ -1388,6 +1402,11 @@ input.inp:disabled{ background:var(--limestone-dk); color:var(--ink-soft); }
 .sched-empty-t{ font-weight:730; font-size:18px; }
 .sched-empty-b{ color:var(--ink-soft); font-size:14px; line-height:1.5; margin:6px auto 18px; max-width:32ch; }
 /* class editor sheet */
+/* Measured at 375x812: this sheet renders 821px tall with its top at -9px, so its
+   title AND its grab pill sat above the screen edge — the one sheet tall enough to
+   need the new pull-down gesture was the one whose handle you couldn't reach.
+   Capped and scrollable; the drag handler already declines while scrollTop>0. */
+.cls-sheet{ max-height:calc(100dvh - 24px); overflow-y:auto; -webkit-overflow-scrolling:touch; }
 .cls-sheet .two{ display:flex; gap:12px; }
 .cls-sheet .two>div{ flex:1; }
 .cls-sheet .opt{ color:var(--ink-faint); font-weight:500; font-size:12px; }
@@ -2633,7 +2652,7 @@ input.inp:disabled{ background:var(--limestone-dk); color:var(--ink-soft); }
       </div>
       <div class="x-list" id="xList"></div>
       <div class="x-card place-sheet" id="xCard">
-        <button class="ps-close" id="psClose" aria-label="Close"><span data-pi="x"></span></button>
+        <div class="ps-head"><span class="ps-grab" aria-hidden="true"></span><button class="ps-close" id="psClose" aria-label="Close"><span data-pi="x"></span></button></div>
         <div class="ps-top">
           <div class="ps-info">
             <div class="ps-name" id="xCardName">Place</div>
@@ -2721,7 +2740,7 @@ input.inp:disabled{ background:var(--limestone-dk); color:var(--ink-soft); }
         <div class="prow" id="pUpdates"><span class="prow-ic"><span data-pi="arrows-clockwise"></span></span><b class="prow-label">What’s new<span class="upd-dot" id="updDot" style="display:none"></span></b><span class="prow-val" id="pUpdatesVal"></span><span class="prow-ch"><span data-pi="caret-right"></span></span></div>
       </div>
 
-      <div class="profile-version">BeeLine 1.0.0 · build 2026-09-02 11:57 · your data stays on this phone<br>Map data © OpenStreetMap contributors · © CARTO</div>
+      <div class="profile-version">BeeLine 1.0.0 · build 2026-09-02 12:13 · your data stays on this phone<br>Map data © OpenStreetMap contributors · © CARTO</div>
       <button class="prow" id="pAdd" style="display:none"></button>
     </div>
   </section>
@@ -3428,6 +3447,7 @@ function renameDialog(current, onSave){
     bg.innerHTML='<div class="sheet"><h3 id="renameTitle"></h3><div class="mb"><span class="label">Name</span><input type="text" id="renameInput" class="inp" maxlength="60" autocomplete="off"></div><div class="row"><button class="btn ghost" id="renameCancel">Cancel</button><button class="btn" id="renameSave">Save</button></div></div>';
     document.body.appendChild(bg);
     bg.addEventListener('click', e=>{ if(e.target===bg) bg.classList.remove('show'); });
+    dragToDismiss(bg);
   }
   document.getElementById('renameTitle').textContent='Rename '+ST.oneLower;
   const inp=document.getElementById('renameInput'); inp.value=current||'';
@@ -4297,8 +4317,12 @@ function onPositionTick(){
     else{
       const arriveAt=new Date(Date.now()+ (d/paceSpeed())*1000);
       let line='~'+fmtClockTime(arriveAt)+' arrival';
-      if(walkCtx){ const diff=Math.round((walkCtx.startAbs-arriveAt.getTime())/6e4);
-        line+=' · <b>'+(diff>=0 ? diff+' min early' : (-diff)+' min late')+'</b>'; }
+      /* margins run to hours when you set off for something far ahead, and raw
+         minutes stop being a quantity anyone can read at that size — "929 min
+         early" is a number you have to do arithmetic on to understand. */
+      if(walkCtx){ const diff=Math.round((walkCtx.startAbs-arriveAt.getTime())/6e4), mag=Math.abs(diff);
+        const amt = mag<60 ? mag+' min' : fmtGapMin(mag).trim();
+        line+=' · <b>'+amt+(diff>=0 ? ' early' : ' late')+'</b>'; }
       ctxEl.innerHTML=line; ctxEl.style.display='block';
     }
   }
@@ -4400,7 +4424,7 @@ function buildDialSkeleton(){
       '<circle cx="'+C+'" cy="'+(C-R)+'" r="3" fill="#fff" opacity=".85"/>'+
     '</g>'+
     '<path id="dTurn" fill="none" stroke="var(--honey)" stroke-width="3" stroke-linecap="round" stroke-linejoin="round" style="display:none"/>'+
-    '<text id="dAcquire" x="'+C+'" y="'+(C-R+40)+'" text-anchor="middle" font-family="var(--mono)" font-size="10" letter-spacing="1.5" fill="var(--walk-faint)">FINDING YOU</text>';
+    '<text id="dAcquire" x="'+C+'" y="'+(C-R+40)+'" text-anchor="middle" font-family="var(--mono)" font-size="10" letter-spacing="1.5" fill="var(--walk-faint)">FINDING NORTH</text>';
   dialBuilt=true;
 }
 // shared geometry: bearing/alignment depend on the SMOOTHED heading + position
@@ -4450,7 +4474,11 @@ function updateNeedle(){
     turn.setAttribute('stroke', st.aligned?accent:'var(--honey)'); turn.style.display='';
   } else {
     needle.style.display='none'; turn.style.display='none';
-    acq.style.display = (st.rel==null) ? '' : 'none';   // ACQUIRING only when no fix; when arrived everything hides
+    /* st.rel is null when there is no COMPASS HEADING, not when there is no fix —
+       position is already known and on screen as a distance by this point. The
+       label said FINDING YOU, so the dial claimed it couldn't locate someone it
+       was actively showing the distance for. It's the heading it's waiting on. */
+    acq.style.display = (st.rel==null) ? '' : 'none';   // when arrived everything hides
   }
 }
 
@@ -4978,7 +5006,11 @@ $('psSave').addEventListener('click', ()=>{
   else { addFav(psFavObj(psPlace)); }   // addFav saves + renderFavs + toasts
   syncSaveBtn(psPlace);
 });
-function setDetailsBtn(open){ const b=$('psDetailsBtn'); b.classList.toggle('on',open); const lbl=b.querySelector('span'); if(lbl) lbl.textContent = open?'Hide details':'View details'; }
+/* :not([data-pi]) is load-bearing. The button is <span data-pi="info"></span>
+   <span>View details</span>, so a bare querySelector('span') returns the ICON
+   holder — every call overwrote the hydrated svg with the label text, and the
+   button rendered "View detailsView details" with no icon on every open. */
+function setDetailsBtn(open){ const b=$('psDetailsBtn'); b.classList.toggle('on',open); const lbl=b.querySelector('span:not([data-pi])'); if(lbl) lbl.textContent = open?'Hide details':'View details'; }
 $('psDetailsBtn').addEventListener('click', ()=>{
   if(!psPlace) return; const db=$('psDetailBody'), open=db.classList.contains('show');
   if(open){ db.classList.remove('show'); setDetailsBtn(false); return; }
@@ -5643,7 +5675,11 @@ function renderSchedule(){
      vertically; never preventDefault until the axis is decided. */
   const board=body.querySelector('.sdb');
   if(board){
-    const WEEKD=['Mo','Tu','We','Th','Fr','Sa','Su'];
+    /* deliberately WEEK, not a second array: this used to keep its own
+       ['Mo'…'Su'] copy, and when the strip went Sunday-first the copy didn't,
+       so the swipe ran against an order the screen no longer showed — on Monday
+       you couldn't swipe to the Sunday chip visibly to its left, and on Sunday
+       you couldn't swipe right at all. One array, so they cannot diverge again. */
     let sx=null, sy=null, dir=null;
     board.addEventListener('touchstart', e=>{
       if(e.touches.length>1 || e.touches[0].clientX<24){ sx=null; return; }
@@ -5660,10 +5696,10 @@ function renderSchedule(){
       const dx=(e.changedTouches&&e.changedTouches[0].clientX-sx)||0;
       sx=null;
       if(Math.abs(dx)<32) return;
-      const cur=WEEKD.indexOf(schedSelDay||todayCode);
+      const cur=WEEK.indexOf(schedSelDay||todayCode);
       const next=cur + (dx<0?1:-1);
       if(next<0 || next>6) return;          // stop at the week's edges rather than wrapping
-      schedSelDay=WEEKD[next]; renderSchedule();
+      schedSelDay=WEEK[next]; renderSchedule();
     }, {passive:true});
   }
   body.querySelectorAll('.sdb-row').forEach(r=>{ const c=classList.find(x=>x.id===r.dataset.id);
@@ -5779,6 +5815,7 @@ function openClassEditor(existing, opts){
     </div>`;
     document.body.appendChild(bg);
     bg.addEventListener('click',e=>{ if(e.target===bg) bg.classList.remove('show'); });
+    dragToDismiss(bg);
   }
   /* Two things live in this one sheet now: classes, and everything else a day
      actually contains — a shift, practice, a club, a standing study block.
@@ -6028,7 +6065,78 @@ $('fitClose').addEventListener('click', ()=>{ show('home'); });
 $('xBackPlan').addEventListener('click', ()=>{ show('plan'); });
 
 function updateOffBanner(){ $('offBanner').classList.toggle('show', !trackingOn); $('goWalk').disabled= !dest || !trackingOn; }
-[$('saveSheetBg'),$('privacySheetBg'),$('addSheetBg'),$('campusSheetBg'),$('prefsSheetBg'),$('notifySheetBg'),$('favsSheetBg')].forEach(bg=>bg.addEventListener('click',e=>{ if(e.target===bg) bg.classList.remove('show'); }));
+/* Every .sheet paints a grab pill (.sheet::before) and, until now, not one of the
+   nine listened for the pull — the affordance was decoration. Pull the head down
+   to dismiss.
+
+   Written fresh rather than lifted from the lightbox: that handler translates the
+   scrim and ends in bg.remove(), but seven of these sheets are permanent DOM
+   closed with classList.remove('show'), so removing them destroys them and a
+   leftover inline transform would leave the next open visibly displaced. Here the
+   SHEET moves, the scrim only fades, and both are cleared on every exit path. */
+function dragToDismiss(bg){
+  const sheet = bg && bg.querySelector('.sheet');
+  if(!sheet) return;
+  wireDragDismiss(sheet, { scrim:bg, onClose:()=>bg.classList.remove('show') });
+}
+/* the shared implementation. One handler for the modal sheets AND the place
+   sheet — the place sheet has no scrim and closes through closePlaceSheet(), so
+   both differences are parameters rather than a second copy of the arithmetic.
+   (A second copy is exactly what broke the week-strip swipe earlier today.) */
+function wireDragDismiss(sheet, opts){
+  opts = opts || {};
+  if(!sheet || sheet.dataset.dragWired) return;          // idempotent: safe to call per open
+  sheet.dataset.dragWired = '1';
+  const bg = opts.scrim || null, headPx = opts.headPx || 56;
+  const close = opts.onClose || function(){};
+  let y0=null, x0=0, dy=0, axis=null;
+  const clear = ()=>{ sheet.style.transition=''; sheet.style.transform=''; if(bg) bg.style.background=''; y0=null; axis=null; dy=0; };
+  sheet.addEventListener('touchstart', e=>{
+    y0=null;
+    if(e.touches.length>1) return;
+    if(sheet.scrollTop>0) return;                        // a scrolled sheet scrolls; it doesn't drag
+    // controls keep their own gestures — only the head region is a handle
+    if(e.target.closest('input,textarea,select,button,.date-strip,.cls-ac')) return;
+    const t=e.touches[0];
+    if(t.clientY - sheet.getBoundingClientRect().top > headPx && !e.target.closest('h3,.ps-head')) return;
+    y0=t.clientY; x0=t.clientX; axis=null; dy=0; sheet.style.transition='none';
+  }, {passive:true});
+  sheet.addEventListener('touchmove', e=>{
+    if(y0==null || e.touches.length>1) return;
+    const t=e.touches[0], ddy=t.clientY-y0, ddx=t.clientX-x0;
+    if(!axis && (Math.abs(ddy)>6 || Math.abs(ddx)>6)) axis = Math.abs(ddy)>Math.abs(ddx)*1.2 ? 'y' : 'x';
+    if(axis!=='y') return;
+    if(ddy<=0){ dy=0; sheet.style.transform=''; return; } // downward only; no rubber-banding upward
+    e.preventDefault();
+    dy=ddy;
+    sheet.style.transform='translateY('+dy+'px)';
+    if(bg) bg.style.background='rgba(20,18,26,'+(0.42*Math.max(0,1-dy/420)).toFixed(3)+')';
+  }, {passive:false});
+  const release = ()=>{
+    if(y0==null) return;
+    if(dy>110){
+      y0=null;
+      sheet.style.transition='transform .18s ease-in';
+      sheet.style.transform='translateY('+(sheet.offsetHeight+40)+'px)';
+      setTimeout(()=>{ close(); clear(); }, 175);
+    } else {
+      y0=null;
+      sheet.style.transition='transform .22s cubic-bezier(.22,1,.36,1)';
+      sheet.style.transform='';
+      setTimeout(clear, 240);
+    }
+  };
+  sheet.addEventListener('touchend', release, {passive:true});
+  sheet.addEventListener('touchcancel', release, {passive:true});
+}
+[$('saveSheetBg'),$('privacySheetBg'),$('addSheetBg'),$('campusSheetBg'),$('prefsSheetBg'),$('notifySheetBg'),$('favsSheetBg')].forEach(bg=>{
+  bg.addEventListener('click',e=>{ if(e.target===bg) bg.classList.remove('show'); });
+  dragToDismiss(bg);
+});
+/* The place sheet is the one users open and close most — browsing shelves is
+   open, wrong place, close, over and over — and in List view the map is
+   display:none, so the corner X was the ONLY way out. Same gesture, no scrim. */
+wireDragDismiss($('xCard'), { onClose:closePlaceSheet, headPx:44 });
 
 /* ================================================================
    IU CAMPUS BUS — live data from the ETA SPOT instance behind IU Mobile
@@ -6979,6 +7087,7 @@ const BusUI={
   entered:false,
   async enter(){
     this.entered=true;
+    this.bindSheetDrag();
     const ok=await BusModel.load();
     if(!ok){
       $('bzRoutes').innerHTML='<div class="bz-empty">Bus data is unavailable right now — check your connection.<br><button class="btn sm" id="bzRetry" style="margin-top:12px">Try again</button></div>';
@@ -7094,7 +7203,35 @@ const BusUI={
     }
     host.innerHTML=rows.slice(0,2).map(r=>`<span class="bz-peek-row"><span class="bz-dot" style="background:${esc(r.parent.color)};--tx:${bzTextOn(r.parent.color)}">${esc(r.parent.abbr)}</span><b>${r.state!=='LIVE'&&r.minutes>=60?esc(r.clock||''):r.minutes+' min'}</b>${r.state==='LIVE'?BZ_LIVE_BADGE:'<span class="bz-sched">Scheduled</span>'}</span>`).join('');
   },
-  closeSheet(){ this.sheet=null; this.openStopId=null; this.openBusId=null; clearTimeout(this.etaTimer); BusMap.followEq=null; this.renderPeek(); const el=$('bzSheet'); if(el&&!el.classList.contains('peek')){ el.style.display='none'; this.renderPeek(); } },
+  closeSheet(){ this.sheet=null; this.openStopId=null; this.openBusId=null; clearTimeout(this.etaTimer); BusMap.followEq=null; const el=$('bzSheet'); if(el){ el.style.transform=''; el.style.transition=''; } this.renderPeek(); if(el&&!el.classList.contains('peek')){ el.style.display='none'; this.renderPeek(); } },
+  /* the drag pill finally drags: delegated to the persistent #bzSheet (render
+     sites reassign innerHTML, so child-bound listeners die), armed only from
+     the grab/head, never from a button, and the peek renders neither so it's
+     naturally excluded. Style reset lives in closeSheet — a reused node must
+     not inherit a stale translateY. */
+  bindSheetDrag(){
+    if(this._dragBound) return; this._dragBound=true;
+    const el=$('bzSheet'); if(!el) return;
+    let sy=null, dy=0;
+    el.addEventListener('touchstart', e=>{
+      const t=e.target;
+      if(e.touches.length>1 || t.closest('button') || !t.closest('.bz-sh-grab, .bz-sh-head')){ sy=null; return; }
+      sy=e.touches[0].clientY; dy=0;
+      el.style.transition='none';
+    }, {passive:true});
+    el.addEventListener('touchmove', e=>{
+      if(sy==null) return;
+      dy=Math.max(0, e.touches[0].clientY-sy);
+      el.style.transform='translateY('+dy+'px)';
+    }, {passive:true});
+    el.addEventListener('touchend', ()=>{
+      if(sy==null) return;
+      sy=null;
+      el.style.transition='transform .22s ease';
+      if(dy>80){ el.style.transform='translateY(120%)'; setTimeout(()=>this.closeSheet(),200); }
+      else el.style.transform='';
+    }, {passive:true});
+  },
   /* ---- stop sheet ---- */
   async openStop(id){
     const s=BusModel.stop(id); if(!s) return;
@@ -7699,6 +7836,7 @@ const ActivityStore={
   list(){ try{ return JSON.parse(localStorage.getItem(LS_ACTIVITIES)||'[]')||[]; }catch(e){ return []; } },
   save(a){ try{ localStorage.setItem(LS_ACTIVITIES, JSON.stringify(a)); }catch(e){} },
   add(item){ const a=this.list(); a.push(item); this.save(a); },
+  update(id, patch){ const a=this.list(); const i=a.findIndex(x=>x.id===id); if(i>=0){ Object.assign(a[i],patch); this.save(a); return a[i]; } return null; },
   remove(id){ this.save(this.list().filter(x=>x.id!==id)); },
 };
 
@@ -8039,20 +8177,22 @@ const PlanUI={
         ${customs.map(a=>`<button class="wfi-tile custom${this._intent==='c:'+a.id?' on':''}" data-wfi="c:${a.id}"><em class="wfi-em">${esc(a.emoji||'⭐')}</em><span>${esc(a.name)}</span></button>`).join('')}
         <button class="wfi-tile add" data-wfnew="1">${pic('plus')}<span>New activity</span></button>
       </div>
-      <button class="wfi-go" id="wfiGo"${this._intent?'':' disabled'}>Show me plans</button>`;
-    body.querySelectorAll('[data-wfi]').forEach(b=>b.addEventListener('click',()=>{ this._intent=b.dataset.wfi; this.renderIntent(); }));
-    const nw=body.querySelector('[data-wfnew]'); if(nw) nw.addEventListener('click',()=>this.newActivitySheet());
-    $('wfiGo').addEventListener('click',()=>{
-      if(!this._intent) return;
-      if(this._intent==='else'){ this.renderElse(); const q=$('wfeQ'); if(q) q.focus(); return; }
-      if(this._intent.startsWith('c:')){
-        const a=ActivityStore.list().find(x=>'c:'+x.id===this._intent);
+      `;
+    /* one tap commits — every other tile surface in the app does, and a
+       disabled button below the fold was the flow the user called senseless */
+    body.querySelectorAll('[data-wfi]').forEach(b=>b.addEventListener('click',()=>{
+      const k=b.dataset.wfi;
+      this._intent=k;
+      if(k==='else'){ this.renderElse(); const q=$('wfeQ'); if(q) q.focus(); return; }
+      if(k.startsWith('c:')){
+        const a=ActivityStore.list().find(x=>'c:'+x.id===k);
         if(a){ this.customSel=a; this.filter=a.base; this.render(); return; }
       }
       this.customSel=null;
-      this.filter=this._intent;
+      this.filter=k;
       this.render();
-    });
+    }));
+    const nw=body.querySelector('[data-wfnew]'); if(nw) nw.addEventListener('click',()=>this.newActivitySheet());
   },
   /* PRESET ideas: one tap creates the activity AND jumps straight to plans.
      Each borrows a real base profile's math — nothing invented, just named. */
@@ -8064,12 +8204,49 @@ const PlanUI={
     ['📞','Call home','coffee'], ['🧺','Laundry','errand'],  ['🛒','Groceries','errand'],
   ],
   NA_EMOJIS:['⭐','🏀','🏊','🏃','🧗','⚽','🎾','🏋️','🚴','🎸','🎹','🎨','📖','💻','🎮','🧘','📞','🧺','🛒','🎤','♟️','🐝'],
+  /* attach a place to an activity after the fact (the named-errand path) */
+  spotSheet(a){
+    let bg=document.getElementById('spShBg'); if(bg) bg.remove();
+    bg=document.createElement('div'); bg.id='spShBg'; bg.className='brxsh-bg';
+    let place=null;
+    bg.innerHTML=`<div class="brxsh">
+      <div class="brxsh-head"><b>Where do you go for ${esc(a.name.toLowerCase())}?</b><button class="brxsh-x" aria-label="Close">${pic('x')}</button></div>
+      <div class="brxsh-scroll">
+        <input class="na-in" id="spQ" type="text" placeholder="Search campus & nearby" autocomplete="off">
+        <div class="na-hit" id="spHit" style="display:none"></div>
+        <button class="hm-act honey" id="spSave" disabled>Save the spot</button>
+      </div></div>`;
+    document.body.appendChild(bg);
+    const close=()=>{ bg.classList.remove('show'); setTimeout(()=>bg.remove(),240); };
+    bg.addEventListener('click',e=>{ if(e.target===bg) close(); });
+    bg.querySelector('.brxsh-x').addEventListener('click',close);
+    const q=bg.querySelector('#spQ'), hit=bg.querySelector('#spHit'), save=bg.querySelector('#spSave');
+    q.addEventListener('input',()=>{
+      place=null; save.disabled=true;
+      const v=q.value.trim();
+      if(v.length<3 || typeof localSearch!=='function'){ hit.style.display='none'; return; }
+      const hits=localSearch(v)||[];
+      if(hits.length){ place={n:hits[0].name,lat:hits[0].lat,lng:hits[0].lng,c:hits[0].c||'offcampus'};
+        hit.style.display='flex'; hit.innerHTML=pic('check')+' '+esc(hits[0].name); save.disabled=false; }
+      else hit.style.display='none';
+    });
+    save.addEventListener('click',()=>{
+      if(!place) return;
+      const updated=ActivityStore.update(a.id,{placeName:place.n, lat:place.lat, lng:place.lng, c:place.c});
+      close();
+      if(updated){ this.customSel=updated; toast(a.name+' → '+shortName(place.n),'good'); this.render(); }
+    });
+    q.focus();
+    void bg.offsetHeight; bg.classList.add('show');
+  },
   /* the fun way in: tap an idea and you're planning; or make your own with
      ONE typed field (the name) — everything else is a tap */
   newActivitySheet(){
     let bg=document.getElementById('naShBg'); if(bg) bg.remove();
     bg=document.createElement('div'); bg.id='naShBg'; bg.className='brxsh-bg';
-    const bases=[['study','Focus'],['gym','Sweat'],['eat','Food'],['coffee','Quick'],['errand','Errand']];
+    /* #4: the chips decide the time math — say so, and show the numbers */
+    const bases=[['study','Focus'],['gym','Sweat'],['eat','Food'],['coffee','Quick'],['errand','Errand']]
+      .map(([k,t])=>{ const p=ActivityProfiles[k]; return [k,t,p.good+'–'+p.ideal+' min']; });
     let base='study', place=null, emoji='⭐';
     const customs=ActivityStore.list();
     const have=new Set(customs.map(a=>a.name.toLowerCase()));
@@ -8082,7 +8259,8 @@ const PlanUI={
         <div class="na-or"><i></i><span>or make your own</span><i></i></div>
         <div class="na-emojis" id="naEmojis">${this.NA_EMOJIS.map(e=>`<button class="na-em${e===emoji?' on':''}" data-nae="${e}">${e}</button>`).join('')}</div>
         <input class="na-in" id="naName" type="text" placeholder="Name it — that's all the typing" autocomplete="off">
-        <div class="na-bases">${bases.map(([k,t])=>`<button class="pt-c${k===base?' on':''}" data-nb="${k}">${t}</button>`).join('')}</div>
+        <div class="na-lede" style="margin:0 2px 7px">How much time does it usually want?</div>
+        <div class="na-bases">${bases.map(([k,t,r])=>`<button class="pt-c${k===base?' on':''}" data-nb="${k}">${t}<i style="display:block;font-style:normal;font-size:10px;font-weight:600;opacity:.62;margin-top:2px">${r}</i></button>`).join('')}</div>
         <button class="na-optlink" id="naSpotLink">${pic('map-pin-simple')} Add a usual spot <i>optional</i></button>
         <div id="naSpotWrap" style="display:none">
           <input class="na-in" id="naPlace" type="text" placeholder="Search campus" autocomplete="off">
@@ -8129,7 +8307,11 @@ const PlanUI={
       });
     });
     bg.querySelectorAll('[data-nadel]').forEach(b=>b.addEventListener('click',()=>{
-      ActivityStore.remove(b.dataset.nadel); close(); this.renderIntent(); toast('Activity removed','');
+      const a=ActivityStore.list().find(x=>x.id===b.dataset.nadel);
+      confirmDialog({ title:'Delete '+(a?a.name:'this activity')+'?',
+        msg:'Routines you made from it stay on your schedule; only the activity goes.',
+        confirmText:'Delete',
+        onConfirm:()=>{ ActivityStore.remove(b.dataset.nadel); close(); this.renderIntent(); toast('Deleted',''); } });
     }));
     bg.querySelector('#naSave').addEventListener('click',()=>{
       const name=bg.querySelector('#naName').value.trim();
@@ -8253,6 +8435,18 @@ const PlanUI={
     const body=$('fitBody'); if(!body || !this.ctx) return;
     const c=this.ctx;
     const u=this.usable();
+    /* a named errand with no place is unanswerable: the errand pool is
+       "places you go", which says nothing about where you do LAUNDRY. Ask for
+       the place instead of guessing — the printer-data precedent, applied. */
+    if(this.customSel && this.customSel.base==='errand' && this.customSel.lat==null){
+      const a=this.customSel;
+      body.innerHTML=this.statusRow({change:true})+`
+        <div class="wf-none">BeeLine doesn't know where you go for ${esc(a.name.toLowerCase())} — name the place and it'll do the math.</div>
+        <div class="wfp-deadend"><button class="wfi-go" id="wfSetSpot">Set the place</button></div>`;
+      const ch=$('wfpChange'); if(ch) ch.addEventListener('click',()=>this.renderIntent());
+      const ss=$('wfSetSpot'); if(ss) ss.addEventListener('click',()=>this.spotSheet(a));
+      return;
+    }
     const res=PlanEngine.whatFits(c, this.filter, false);
     res.plans.forEach(pl=>{ pl.busOpt=planBusBackOption(pl); });
     /* a custom activity: same math as its base profile, the user's own name
@@ -10488,7 +10682,37 @@ const PlanDayUI={
   enter(){
     PlanDayModel.load();
     if(this.stage!=='results') this.stage='browse';
+    this.bindSwipe();
     this.render();
+  },
+  /* swipe left/right changes the day, matching the Schedule board. Guard order
+     copied verbatim from its handler (app.js): passive start/end, passive:false
+     ONLY on move, claim the gesture only once clearly horizontal, ignore
+     multi-touch and the left 24px (system back). Drives shiftDate() — the SAME
+     Date the renderer uses; no parallel day array to diverge (the Sunday-first
+     lesson, b9f3155). Touches on the scrollable shortcut row and the mini-map
+     keep their own gestures. */
+  bindSwipe(){
+    if(this._swipeBound) return; this._swipeBound=true;
+    const body=$('planBody'); if(!body) return;
+    let sx=null, sy=null, dir=null;
+    body.addEventListener('touchstart', e=>{
+      if(this.stage!=='browse' || e.touches.length>1 || e.touches[0].clientX<24){ sx=null; return; }
+      if(e.target.closest('.pd-shortcuts, .pd-map-wrap')){ sx=null; return; }
+      sx=e.touches[0].clientX; sy=e.touches[0].clientY; dir=null;
+    }, {passive:true});
+    body.addEventListener('touchmove', e=>{
+      if(sx==null || e.touches.length>1) return;
+      const dx=e.touches[0].clientX-sx, dy=e.touches[0].clientY-sy;
+      if(!dir && (Math.abs(dx)>8 || Math.abs(dy)>8)) dir = Math.abs(dx)>Math.abs(dy)*1.4 ? 'x' : 'y';
+      if(dir==='x') e.preventDefault();
+    }, {passive:false});
+    body.addEventListener('touchend', e=>{
+      if(sx==null || dir!=='x'){ sx=null; return; }
+      const dx=(e.changedTouches&&e.changedTouches[0].clientX-sx)||0; sx=null;
+      if(Math.abs(dx)<32) return;
+      this.shiftDate(dx<0?1:-1);
+    }, {passive:true});
   },
   setDate(d){ this.date=d; this.render(); },
   shiftDate(days){
