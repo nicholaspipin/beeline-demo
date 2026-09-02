@@ -1237,7 +1237,15 @@ input.inp:disabled{ background:var(--limestone-dk); color:var(--ink-soft); }
 /* arrivals rows */
 .bz-arr{ display:flex; align-items:center; gap:12px; padding:11px 2px; border-top:1px solid var(--line); min-height:48px; }
 .bz-arr[data-eq]{ cursor:pointer; }
-.bz-arr-min{ font-family:var(--mono); font-size:17px; font-variant-numeric:tabular-nums; min-width:64px; }
+/* Buses is a waiting screen — read from a bench, in cold, at arm's length. The
+   hierarchy answered the wrong question: the stop's own name was the biggest text
+   at 19px, and the user just tapped it so they already know it, while the arrival
+   minutes they opened the sheet FOR sat at 17px. Raise the number rather than
+   shrink the title, using the app's existing hero-number treatment (.dp-min's
+   display face) instead of inventing a mono one — 26px display is far narrower
+   than the equivalent mono, which matters because this slot also holds a clock
+   string in scheduled mode. */
+.bz-arr-min{ font-family:var(--font-display); font-weight:760; font-size:26px; letter-spacing:-.03em; line-height:1.05; font-variant-numeric:tabular-nums; min-width:78px; }
 .bz-arr-state{ margin-left:auto; text-align:right; display:flex; align-items:center; gap:4px; }
 .bz-times{ display:flex; gap:7px; flex-wrap:wrap; margin-left:auto; }
 .bz-times i{ font-style:normal; font-family:var(--mono); font-size:12.5px; font-variant-numeric:tabular-nums; background:var(--surface-dim); border-radius:var(--r-xs); padding:4px 9px; }
@@ -2774,7 +2782,7 @@ input.inp:disabled{ background:var(--limestone-dk); color:var(--ink-soft); }
         <div class="prow" id="pUpdates"><span class="prow-ic"><span data-pi="arrows-clockwise"></span></span><b class="prow-label">What’s new<span class="upd-dot" id="updDot" style="display:none"></span></b><span class="prow-val" id="pUpdatesVal"></span><span class="prow-ch"><span data-pi="caret-right"></span></span></div>
       </div>
 
-      <div class="profile-version">BeeLine 1.0.0 · build 2026-09-02 12:35 · your data stays on this phone<br>Map data © OpenStreetMap contributors · © CARTO</div>
+      <div class="profile-version">BeeLine 1.0.0 · build 2026-09-02 12:40 · your data stays on this phone<br>Map data © OpenStreetMap contributors · © CARTO</div>
       <button class="prow" id="pAdd" style="display:none"></button>
     </div>
   </section>
@@ -4386,7 +4394,13 @@ function onPositionTick(){
   $('mapDist').textContent=fmtDist(d);
   $('mapStatus').textContent=mt;
   // header sub: silent when GPS is healthy — accuracy is only news when weak
-  $('walkSub').textContent = weakGps ? ('Weak GPS — direction may be unreliable') : '';
+  /* Weak GPS was announced twice at once, both from the weakGps boolean at 1212:
+     uppercased in the header here, and again in the bottom strip at 1219 — on a
+     screen meant to be read at a glance while moving. The strip keeps it, because
+     it carries the actual figure ("weak GPS ±62 ft") and sits with the other live
+     readouts. The assignment stays: it is the only thing that clears the
+     "finding you…" strings written when a walk starts. */
+  $('walkSub').textContent = '';
   drawDial(); updateMapCursor();
 }
 
@@ -4703,6 +4717,10 @@ function isFav(p){ const k=favKey(psFavObj(p)); return favorites.some(f=>favKey(
 function syncSaveBtn(p){ const on=isFav(p); const b=$('psSave'); b.classList.toggle('on',on); b.querySelector('.ps-save-label').textContent= on?'Saved':'Save place'; }
 function setPlaceMetrics(p){
   const tEl=$('psTime'), dEl=$('psDist'), note=$('psMetricNote');
+  /* The Go button doubles as the repair when location is off. Relabelled on EVERY
+     call, both branches, so a place opened later with tracking on can never be
+     left showing the wrong verb. */
+  { const go=$('xCardGo'); if(go) go.textContent = trackingOn ? 'Start walking' : 'Turn on location'; }
   if(!curPos || !trackingOn){
     tEl.textContent='—'; dEl.textContent='—';
     note.textContent = trackingOn ? 'Tap locate for time & distance' : 'Location off';
@@ -4731,7 +4749,26 @@ function selectPlace(p){
   $('xCardName').textContent=p.n;
   const area=campusArea(p.lat,p.lng);
   $('xCardSub').textContent = meta.label + (area? ' · '+area : '');
-  $('psPreview').innerHTML=previewMini(p);
+  /* The face's 86px slot shows the real building photo — promoted there because a
+     photo answers "is this the building I mean?" instantly — but nothing listened
+     for a tap on it, while the SAME image two taps deeper opens the gallery. The
+     obvious gesture on a thumbnail was inert exactly where it mattered most.
+
+     The reset is unconditional and load-bearing: #psPreview is ONE node reused by
+     every selectPlace(), so a photo place followed by one of the 136 without would
+     otherwise keep the role, the cursor, the stale label and a handler opening the
+     PREVIOUS building's gallery over this one's mini-map. */
+  { const pv=$('psPreview');
+    pv.innerHTML=previewMini(p);
+    pv.onclick=null; pv.removeAttribute('role'); pv.removeAttribute('tabindex');
+    pv.removeAttribute('aria-label'); pv.classList.remove('tappable');
+    const shots=placePhotos(p)||[];
+    if(shots.length){
+      pv.classList.add('tappable'); pv.setAttribute('role','button'); pv.setAttribute('tabindex','0');
+      pv.setAttribute('aria-label','View photo of '+p.n);
+      pv.onclick=()=>openLightbox(p.n, shots, 0);
+      pv.onkeydown=e=>{ if(e.key==='Enter'||e.key===' '){ e.preventDefault(); openLightbox(p.n, shots, 0); } };
+    } else { pv.onkeydown=null; } }
   /* open/closed belongs next to the walk time, not behind a details tap — it is
      half of 'should I walk there'. Unknown hours render nothing, never a guess. */
   /* placeHours(), the same resolver the details pane uses — the face read only
@@ -5112,7 +5149,29 @@ $('xSearch').addEventListener('input', ()=>{
   clearTimeout(xSearchT); xSearchT=setTimeout(fitExploreToQuery, 180);
 });
 document.querySelectorAll('#xToggle button').forEach(b=>b.addEventListener('click',()=>setXView(b.dataset.xv)));
-$('xCardGo').addEventListener('click', ()=>{ if(!exploreSel) return; const p=exploreSel; if(!trackingOn){ toast('Turn on location to get directions','warn'); return; } $('xCard').classList.remove('show'); setDest(p.lat,p.lng,p.n); startWalk(); });
+/* Was a dead end: the sheet read "Location off", the metrics showed dashes, and
+   this button refused with a toast naming a control that lives on another screen.
+   Tapping Locate didn't help either — it sets curPos but not trackingOn, so you
+   could watch your own dot appear and still be told location was off.
+
+   Same repair the Home card already uses: the button performs the fix it names.
+   Note what is NOT done here — Locate does not silently set trackingOn. Granting
+   a one-shot OS fix is not consent to a flag the user deliberately turned off
+   (turning it off even cancels a walk in progress). The flag flips only because
+   the user pressed something that said "Turn on location". */
+$('xCardGo').addEventListener('click', ()=>{
+  if(!exploreSel) return; const p=exploreSel;
+  if(!trackingOn){
+    requestLocation((ok,info)=>{
+      if(!ok){ toast((info&&info.msg)||'Location unavailable','warn'); return; }
+      updateOffBanner();                       // requestLocation set curPos + trackingOn
+      setPlaceMetrics(p);                      // dashes → real time/distance, label → Start walking
+      if(exploreMap && typeof dropUser==='function') dropUser();
+    });
+    return;
+  }
+  $('xCard').classList.remove('show'); setDest(p.lat,p.lng,p.n); startWalk();
+});
 $('psClose').addEventListener('click', closePlaceSheet);
 $('psSave').addEventListener('click', ()=>{
   if(!psPlace) return; const key=favKey(psFavObj(psPlace));
