@@ -2444,7 +2444,7 @@ input.inp:disabled{ background:var(--limestone-dk); color:var(--ink-soft); }
 .bs-tr.t1{ animation-delay:-1.6s } .bs-tr.t2{ animation-delay:-1.567s } .bs-tr.t3{ animation-delay:-1.534s } .bs-tr.t4{ animation-delay:-1.501s } .bs-tr.t5{ animation-delay:-1.468s } .bs-tr.t6{ animation-delay:-1.436s } .bs-tr.t7{ animation-delay:-1.403s }
 .t1 i{ background:#FFC300; opacity:1; animation:bsPulse 1.6s ease-in-out infinite; }
 .t2 i{ background:#EAB000; opacity:.9 } .t3 i{ background:#C29200; opacity:.74 } .t4 i{ background:#8A6A0C; opacity:.56 }
-.t5 i{ background:#14130F; opacity:.4 } .t6 i{ background:#14130F; opacity:.25 } .t7 i{ background:#14130F; opacity:.13 }
+.t5 i, .t6 i, .t7 i{ background:transparent } /* tail fades to nothing — no dark smear behind the comet */
 @keyframes bsIn{ from{ opacity:0; transform:translateY(10px) scale(.94); } to{ opacity:1; transform:none; } }
 @keyframes bsPulse{ 0%,100%{ transform:scale(1) } 50%{ transform:scale(1.16) } }
 @keyframes bsCometFade{ 0%{opacity:0} 4%{opacity:1} 94%{opacity:1} 100%{opacity:0} }
@@ -2469,7 +2469,6 @@ input.inp:disabled{ background:var(--limestone-dk); color:var(--ink-soft); }
 }
 @media (prefers-color-scheme: dark){
   #bootSplash .bs-fly svg path{ stroke:rgba(244,241,232,.25); }
-  #bootSplash .t5 i, #bootSplash .t6 i, #bootSplash .t7 i{ background:#F4F1E8; }
 }
 </style>
 <div class="bs-mark"><svg viewBox="0 0 486.82 546.21" fill="none"><path class="bs-b" fill="#14130F" d="M422.86,79.28s-4.99-6.4-11.91-7.52c-9.1-1.95-16.42,1.82-21.12,9.33-25.65,40.98-60.13,74.18-104.2,95.67,4.52-33.23,2.32-62.45-10.72-92.94-12.39-27.05-32.13-49.79-57.73-65.16-45.54-27.35-106.24-23.74-150.35,4.86C27.18,49.24.28,93.82.23,141.88L0,370.92c-.04,42.87,17.36,83.45,45.94,114.75,38.17,41.8,94.2,63.96,150.71,60.1,98.49-6.72,176.44-92.8,170.98-192.09-1.99-56.83-30.21-103.89-75.67-137.68,54.65-23.6,87.7-72.88,131.31-113.09,5.38-4.96,5.27-16.27-.41-23.63ZM327.04,343.48c5.38,41.92-7.55,83.48-35.91,114.76-32.78,36.16-80.52,54.3-129.35,46.78-33.27-5.13-63.96-21.51-86.49-46.47-22.64-25.07-35.85-57.2-35.82-91.24l.16-223.73c.02-25.12,10.22-49.46,26.52-68,18.14-20.63,43.39-32.84,70.51-35.94,60.77-6.95,110.88,43.59,111.79,103.86.26,17.11-1.94,33.52-5.33,50.09l-33.8,9.95c-19.36,5.7-37.41,13.2-55.1,22.93-27.11,15.31-55.05,37.85-61.5,69.35-2.11,10.3-1.65,20.7,3.18,30.08,10.14,19.69,32.91,26.55,54.6,24.09,51.53-5.85,95.02-57.07,115.8-103.04,7.34,4.52,13.42,10.12,19.71,16.03,22.76,21.39,37.05,49.42,41.04,80.5ZM227.69,237.92c-13.38,27.91-37.95,59.23-66.44,70.75-11.39,4.6-29.38,6.23-31.2-1.04-2.71-10.82,10.68-26.29,20.24-33.69,7.7-6.35,15.84-11.1,24.65-15.93,16.62-8.64,33.67-15.18,52.75-20.08Z"/><circle class="bs-dot" cx="453.73" cy="44.14" r="33.08" fill="#FFC300"></circle></svg></div>
