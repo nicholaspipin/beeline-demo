@@ -91,6 +91,16 @@
      new system so ~100 existing rules restyle from here. */
   --ink:#14130F; --ink-soft:#5C5850; --ink-faint:#96918A;
   --honey:#FFC300; --honey-deep:#997500; --honey-tint:rgba(255,195,0,.15); --on-honey:#14130F;   /* School-Bus scale: 500 / 700 / ~100; text on honey is ALWAYS ink */
+  /* Honey you READ, as opposed to honey you look at. --honey-deep is a glyph and
+     mark colour: icons, rules and arrows need 3:1 and it clears that fine at
+     #997500. As small TEXT on light it does not — 3.87 on paper, 4.29 on white,
+     and 3.64 on honey-tint once that tint is composited over paper (#f8ecc7)
+     rather than read as opaque. #7D5F00 is the lightest value that clears 4.5 on
+     all three (5.40 / 5.98 / 5.08); #8A6900 is the trap, passing naively at 4.62
+     and failing at 4.34 on the composited tint. Dark mode needs no split — the
+     scale-400 lift already clears everywhere. Use --honey-text for anything a
+     user reads as words or numbers; keep --honey-deep for glyphs and marks. */
+  --honey-text:#7D5F00;
   --paper-bg:#F7F3EA; --surface:#FFFFFF; --surface-dim:#EFEADD; --edge:#E4DECE;
   /* dark walking mode */
   --walk-bg:#1A1815; --walk-card:#26221C; --walk-ink:#F4F1E8; --walk-soft:#A39C8E; --walk-faint:#6E685D;
@@ -167,6 +177,7 @@
     --crimson-tint:rgba(244,241,232,.07); --crimson-tint2:rgba(244,241,232,.12);
     --honey-tint:rgba(255,195,0,.17);
     --honey-deep:#FFCF33;   /* scale 400 — honey text accents need lift on dark surfaces */
+    --honey-text:#FFCF33;   /* dark needs no glyph/text split: 8.67–12.56 everywhere */
     --shadow:none;
     --shadow-soft:0 1px 2px rgba(0,0,0,.25);
     --shadow-pop:0 10px 30px -12px rgba(0,0,0,.6);
@@ -512,7 +523,7 @@ input.inp:disabled{ background:var(--limestone-dk); color:var(--ink-soft); }
 /* official IU trident — tall/narrow, so size by height to avoid distortion */
 .iu-trident{ width:auto !important; }
 .brand-campus .iu-trident{ height:12.5px; }
-.prow-ic .iu-trident{ height:23px; }
+.prow-ic .iu-trident{ height:20px; }   /* was sized to fill the removed 34px disc */
 .bell{ position:relative; }
 .bell .dot{ position:absolute; top:11px; right:12px; width:8px; height:8px; border-radius:50%; background:var(--crimson); box-shadow:0 0 0 2px var(--paper); }
 
@@ -607,15 +618,22 @@ input.inp:disabled{ background:var(--limestone-dk); color:var(--ink-soft); }
 /* saved + profile screens */
 .page-h{ font-weight:770; font-size:32px; letter-spacing:-.04em; margin:14px 0 4px; }
 .page-sub{ color:var(--ink-soft); font-size:15px; margin:0 0 6px; }
-.profile-card{ background:var(--paper); border-radius:var(--r-lg); box-shadow:inset 0 0 0 1px var(--line); padding:6px 18px; margin-top:14px; }
-/* You rows: 74px tall with a 42px well was a settings list wearing a content
-   card's proportions — ten big tinted circles down a page, and only eight rows
-   reachable without scrolling. Tightened to real settings density (58px row,
-   34px well, 20px glyph): the well still gives each row an anchor to scan, but
-   the list reads as a list. */
+/* --r-lg (20px) on a full-width block reads as a pill fragment; --r-md holds the
+   grouping without the bubble. */
+.profile-card{ background:var(--paper); border-radius:var(--r-md); box-shadow:inset 0 0 0 1px var(--line); padding:6px 18px; margin-top:14px; }
+/* You rows, in two passes. First: 74px tall with a 42px well was a settings list
+   wearing a content card's proportions — ten big tinted circles down a page, and
+   only eight rows reachable without scrolling; tightened to 58px. Then the well
+   went entirely (see .prow-ic), which is what the first pass should have done —
+   shrinking a disc that carries no information only makes it a smaller disc.
+   46px rows now: all eleven plus the footer fit without scrolling. */
 .prow{ display:flex; align-items:center; gap:13px; padding:12px 0; cursor:pointer; }
 .prow + .prow{ border-top:1px solid var(--line); }
-.prow-ic{ width:34px; height:34px; flex:none; border-radius:50%; background:var(--crimson-tint); color:var(--crimson); display:grid; place-items:center; }
+/* No disc. Eleven rows each wrapped their icon in an identical 34px circle at 6%
+   ink — same colour, same size, every row — so the discs repeated a shape eleven
+   times without ever distinguishing one row from another, on a screen whose real
+   content is eleven words. The icon alone does that job. */
+.prow-ic{ width:22px; height:22px; flex:none; color:var(--ink-soft); display:grid; place-items:center; }
 .prow-ic svg{ width:20px; height:20px; }
 .prow-ic .pi{ width:20px; height:20px; }
 .prow-main{ flex:1; min-width:0; }
@@ -1011,13 +1029,16 @@ input.inp:disabled{ background:var(--limestone-dk); color:var(--ink-soft); }
 .sc-addnew:active,.sc-addnew:hover{ background:var(--crimson-tint); border-color:var(--crimson); }
 .sc-addnew-ic{ display:grid; place-items:center; } .sc-addnew-ic svg{ width:20px; height:20px; }
 /* empty state */
-.sc-empty{ background:var(--paper); border-radius:var(--r); box-shadow:inset 0 0 0 1px var(--line); padding:8px 24px 26px; text-align:center; margin-top:4px; }
+.sc-empty{ padding:4px 0 8px; margin-top:2px; }
 .sc-empty-art{ position:relative; }
-.sc-empty-art .gates{ opacity:.4; max-width:230px; }
-.sc-empty-ic{ display:inline-grid; place-items:center; width:48px; height:48px; border-radius:50%; background:var(--crimson-tint); color:var(--crimson); margin:-6px auto 8px; }
-.sc-empty-ic svg{ width:24px; height:24px; }
-.sc-empty-t{ font-weight:740; font-size:19px; letter-spacing:-.02em; margin:2px 0 6px; }
-.sc-empty-b{ font-size:13.5px; line-height:1.55; color:var(--ink-soft); max-width:34ch; margin:0 auto 18px; }
+/* .gates centres itself for the boxed .empty-card; here the block is left-aligned,
+   and centred art over left-aligned text read as a layout mistake */
+.sc-empty-art .gates{ opacity:.3; max-width:184px; margin-left:0; }
+.sc-empty-t{ font-weight:740; font-size:19px; letter-spacing:-.02em; margin:6px 0 5px; }
+.sc-empty-b{ font-size:14px; line-height:1.5; color:var(--ink-soft); max-width:34ch; margin:0 0 16px; }
+/* sized to its label — .btn is width:100%, and a full-bleed honey slab under two
+   lines of copy is the shape that made this read as a generated screen */
+.sc-empty-cta{ width:auto; padding-left:22px; padding-right:22px; }
 
 #exploreMap.panning .xmark-label{ display:none !important; }
 #exploreMap.panning .xmark-dot{ box-shadow:0 0 0 2px #fff !important; }
@@ -1173,7 +1194,7 @@ input.inp:disabled{ background:var(--limestone-dk); color:var(--ink-soft); }
 .bz-mut{ font-size:13px; color:var(--ink-soft); }
 .bz-mut2{ font-size:12px; color:var(--ink-faint); }
 .bz-busid{ font-style:normal; font-family:var(--mono); font-size:10.5px; color:var(--ink-faint); margin-left:6px; }
-.bz-detour-tag{ display:inline-block; font-size:10px; font-weight:700; letter-spacing:.04em; text-transform:uppercase; color:var(--honey-deep); background:var(--honey-tint); border-radius:var(--r-xs); padding:2.5px 7px; margin-left:6px; }
+.bz-detour-tag{ display:inline-block; font-size:10px; font-weight:700; letter-spacing:.04em; text-transform:uppercase; color:var(--honey-text); background:var(--honey-tint); border-radius:var(--r-xs); padding:2.5px 7px; margin-left:6px; }
 /* peek — compact two-liner; the whole card is the tap target */
 .bz-sheet.peek{ padding:11px 16px 12px; }
 .bz-peek{ cursor:pointer; }
@@ -1222,7 +1243,7 @@ input.inp:disabled{ background:var(--limestone-dk); color:var(--ink-soft); }
 .bz-status.live{ color:#0e9463; font-weight:650; }
 .bz-status.live i{ background:#10B981; opacity:1; box-shadow:0 0 0 3px rgba(16,185,129,.16); }
 .bz-status.off{ color:var(--ink-faint); }
-.bz-alert-tag{ color:var(--honey-deep); font-weight:700; }
+.bz-alert-tag{ color:var(--honey-text); font-weight:700; }
 .bz-chev{ color:var(--ink-faint); font-size:18px; }
 .bz-fav{ background:var(--paper); border-radius:var(--r-md); box-shadow:inset 0 0 0 1px var(--line); padding:12px 14px; margin-bottom:9px; cursor:pointer; }
 .bz-fav>b{ font-family:var(--font-display); font-size:15px; display:block; margin-bottom:6px; }
@@ -1320,7 +1341,7 @@ input.inp:disabled{ background:var(--limestone-dk); color:var(--ink-soft); }
 .wk-day span{ font-family:var(--mono); font-weight:700; font-size:12px; letter-spacing:.04em; color:var(--ink-soft); text-transform:uppercase; }
 .wk-day i{ width:5px; height:5px; border-radius:50%; background:var(--ink-soft); opacity:.7; }
 .wk-day i.none{ opacity:0; }
-.wk-day.today span{ color:var(--honey-deep); }
+.wk-day.today span{ color:var(--honey-text); }
 .wk-day.today b{ box-shadow:0 2px 0 var(--honey); }
 .wk-day.on{ background:var(--ink); }
 .wk-day.on span{ color:var(--paper); }
@@ -1340,10 +1361,10 @@ input.inp:disabled{ background:var(--limestone-dk); color:var(--ink-soft); }
 .sdb-main>b{ display:block; font-family:var(--font-display); font-weight:680; font-size:16px; letter-spacing:-.015em; color:var(--ink); }
 .sdb-loc{ display:block; font-size:12.5px; color:var(--ink-soft); margin-top:1px; }
 .sdb-row.past{ opacity:.35; }
-.sdb-row.next .sdb-time, .sdb-row.live .sdb-time{ color:var(--honey-deep); font-weight:700; }
-.sdb-chip{ display:inline-block; margin-left:8px; vertical-align:1px; font-family:var(--mono); font-size:10px; font-weight:700; letter-spacing:.04em; color:var(--honey-deep); background:var(--honey-tint); border-radius:999px; padding:2.5px 8px; font-variant-numeric:tabular-nums; }
+.sdb-row.next .sdb-time, .sdb-row.live .sdb-time{ color:var(--honey-text); font-weight:700; }
+.sdb-chip{ display:inline-block; margin-left:8px; vertical-align:1px; font-family:var(--mono); font-size:10px; font-weight:700; letter-spacing:.04em; color:var(--honey-text); background:var(--honey-tint); border-radius:999px; padding:2.5px 8px; font-variant-numeric:tabular-nums; }
 .sdb-chip.now{ color:var(--on-honey); background:var(--honey); }
-.sdb-walk{ flex:none; align-self:center; display:inline-flex; align-items:center; gap:2px; border:none; background:none; cursor:pointer; font-family:var(--font-display); font-weight:680; font-size:14px; color:var(--honey-deep); padding:8px 2px 8px 10px; }
+.sdb-walk{ flex:none; align-self:center; display:inline-flex; align-items:center; gap:2px; border:none; background:none; cursor:pointer; font-family:var(--font-display); font-weight:680; font-size:14px; color:var(--honey-text); padding:8px 2px 8px 10px; }
 .sdb-walk svg{ width:15px; height:15px; }
 /* 34px box keeps the row's rhythm; ::after gives it the 44px target a thumb
    actually needs, same trick as .bz-veh */
@@ -1394,7 +1415,7 @@ input.inp:disabled{ background:var(--limestone-dk); color:var(--ink-soft); }
 .insight{ display:flex; align-items:center; gap:12px; margin-top:18px; padding:14px 15px; border-radius:var(--r-md); background:var(--surface); box-shadow:inset 0 0 0 1px var(--line); }
 .insight-txt{ flex:1; min-width:0; font-size:13.5px; line-height:1.45; color:var(--ink-soft); }
 .insight-txt b{ color:var(--ink); font-weight:680; }
-.insight-txt .up{ color:var(--honey-deep); font-weight:700; }
+.insight-txt .up{ color:var(--honey-text); font-weight:700; }
 .insight-go{ flex:none; border:none; background:none; cursor:pointer; font-family:var(--font-display); font-weight:680; font-size:13.5px; color:var(--ink); white-space:nowrap; padding:4px 0; }
 
 
@@ -1501,7 +1522,7 @@ input.inp:disabled{ background:var(--limestone-dk); color:var(--ink-soft); }
 .xmark .xmark-dot{ background:var(--ink) !important; box-shadow:0 0 0 2.5px #fff, 0 1px 3px rgba(20,19,15,.4); }
 .xmark .xmark-label{ color:#1d1d24; }
 .xmark.sel .xmark-dot{ background:var(--honey) !important; box-shadow:0 0 0 3px #fff, 0 2px 10px rgba(233,162,39,.6); }
-.xmark.sel .xmark-label{ color:var(--honey-deep); }
+.xmark.sel .xmark-label{ color:var(--honey-text); }
 #exploreMap{ background:var(--surface-dim); }
 .x-maphint{ background:var(--surface-dim); }
 
@@ -1519,7 +1540,7 @@ input.inp:disabled{ background:var(--limestone-dk); color:var(--ink-soft); }
 .upd-head{ display:flex; align-items:center; gap:8px; flex-wrap:wrap; }
 .upd-head b{ font-family:var(--font-display); font-weight:700; font-size:15.5px; letter-spacing:-.01em; }
 .upd-tag{ font-family:var(--mono); font-size:9.5px; font-weight:700; letter-spacing:.06em; text-transform:uppercase; border-radius:var(--r-xs); padding:2px 7px; }
-.upd-tag.new{ color:var(--honey-deep); background:var(--honey-tint); }
+.upd-tag.new{ color:var(--honey-text); background:var(--honey-tint); }
 .upd-tag.improved{ color:var(--good); background:var(--good-tint); }
 .upd-tag.look{ color:var(--ink-soft); background:var(--surface-dim); }
 .upd-main p{ font-size:13.5px; line-height:1.5; color:var(--ink-soft); margin:5px 0 0; }
@@ -1690,7 +1711,7 @@ input.inp:disabled{ background:var(--limestone-dk); color:var(--ink-soft); }
 .pd-open-l b{ display:block; font-family:var(--font-display); font-size:18px; font-weight:750; letter-spacing:-.015em; color:var(--ink); font-variant-numeric:tabular-nums; }
 .pd-open-top{ display:flex; align-items:center; justify-content:space-between; gap:8px; }
 .pd-open-top b{ font-family:var(--font-display); font-size:17.5px; font-weight:750; letter-spacing:-.015em; color:var(--ink); }
-.pd-planhere{ display:inline-flex; align-items:center; gap:5px; font-family:var(--font-display); font-size:13px; font-weight:700; color:var(--honey-deep); white-space:nowrap; }
+.pd-planhere{ display:inline-flex; align-items:center; gap:5px; font-family:var(--font-display); font-size:13px; font-weight:700; color:var(--honey-text); white-space:nowrap; }
 .pd-planhere .pi{ width:15px; height:15px; }
 .pd-open-sub{ display:block; margin-top:3px; font-size:12.5px; color:var(--ink-soft); }
 .pd-block.planned{ border:1.5px solid var(--honey); background:var(--honey-tint); cursor:pointer; }
@@ -1703,14 +1724,15 @@ input.inp:disabled{ background:var(--limestone-dk); color:var(--ink-soft); }
 .wfi-go.ghost{ background:var(--surface); color:var(--ink); box-shadow:inset 0 0 0 1.4px var(--line2); }
 .pd-block.rough .pd-open-l b{ color:var(--ink-soft); }
 .pd-manual.ghost{ background:var(--surface); color:var(--ink); box-shadow:inset 0 0 0 1.4px var(--line2); margin-left:8px; }
-.pd-pl-min{ font-size:12px; font-weight:650; color:var(--honey-deep); white-space:nowrap; }
-.pd-nowline{ display:flex; align-items:center; gap:8px; margin:2px 0 8px 78px; font-family:var(--mono); font-size:10px; font-weight:700; letter-spacing:.1em; text-transform:uppercase; color:var(--honey-deep); }
+.pd-pl-min{ font-size:12px; font-weight:650; color:var(--honey-text); white-space:nowrap; }
+.pd-nowline{ display:flex; align-items:center; gap:8px; margin:2px 0 8px 78px; font-family:var(--mono); font-size:10px; font-weight:700; letter-spacing:.1em; text-transform:uppercase; color:var(--honey-text); }
 .pd-nowline i{ flex:1; height:1.5px; background:var(--honey); order:2; }
 .pd-foot{ display:flex; align-items:center; gap:8px; margin:14px 22px 0; padding-top:12px; border-top:1px solid var(--line); font-size:12.5px; color:var(--ink-soft); }
 .pd-foot .pi{ width:17px; height:17px; color:var(--ink-faint); }
-.pd-empty{ margin:18px 22px; padding:18px; border:1px solid var(--line); border-radius:var(--r-md); font-size:13.5px; color:var(--ink-soft); }
-.pd-empty b{ display:block; font-family:var(--font-display); font-size:16px; color:var(--ink); margin-bottom:4px; }
-.pd-empty p{ margin:4px 0 12px; line-height:1.5; }
+/* empty states: words on the page, not an elevated card announcing emptiness */
+.pd-empty{ margin:20px 22px; font-size:13.5px; color:var(--ink-soft); }
+.pd-empty b{ display:block; font-family:var(--font-display); font-size:17px; font-weight:720; letter-spacing:-.015em; color:var(--ink); margin-bottom:3px; }
+.pd-empty p{ margin:3px 0 14px; line-height:1.5; max-width:34ch; }
 .pd-manual{ display:inline-flex; align-items:center; gap:7px; border:none; cursor:pointer; background:var(--honey); color:var(--on-honey); border-radius:12px; padding:11px 17px; font-family:var(--font-display); font-size:14px; font-weight:720; }
 .pd-manual .pi{ width:15px; height:15px; }
 /* nearby: compact inline map (≤ ~30% of the screen), pins for top results */
@@ -1720,7 +1742,7 @@ input.inp:disabled{ background:var(--limestone-dk); color:var(--ink-soft); }
 .pd-map-fallback{ position:absolute; inset:0; display:grid; place-items:center; padding:0 30px; text-align:center; font-size:12.5px; color:var(--ink-soft); }
 .pd-map-toggle{ position:absolute; right:10px; bottom:8px; display:flex; align-items:center; gap:4px; font-family:var(--font-display); font-size:12.5px; font-weight:650; color:var(--ink-soft); background:var(--surface); border-radius:8px; padding:4px 9px; box-shadow:0 1px 6px rgba(20,19,15,.12); }
 .pd-map-toggle b{ color:var(--ink); font-weight:720; }
-.pd-map-toggle button{ border:none; background:none; cursor:pointer; font:inherit; font-weight:650; color:var(--honey-deep); padding:0; }
+.pd-map-toggle button{ border:none; background:none; cursor:pointer; font:inherit; font-weight:650; color:var(--honey-text); padding:0; }
 .pdm-pin{ display:flex; align-items:flex-end; gap:5px; }
 .pdm-pin svg{ width:24px; height:29px; filter:drop-shadow(0 1px 2px rgba(20,19,15,.3)); flex:none; }
 .pdm-pin span{ font-family:var(--font-display); font-size:11.5px; font-weight:700; color:#14130F; white-space:nowrap; text-shadow:0 0 3px #fff,0 0 5px #fff,0 0 7px #fff; margin-bottom:9px; }
@@ -1737,12 +1759,12 @@ input.inp:disabled{ background:var(--limestone-dk); color:var(--ink-soft); }
 .pd-place-m{ display:flex; align-items:center; gap:4px; font-size:12.5px; color:var(--ink-soft); margin-top:2px; }
 .pd-place-m .pi{ width:15px; height:15px; }
 .pd-place-a{ display:block; font-size:13.5px; font-weight:700; color:var(--ink); margin-top:4px; font-variant-numeric:tabular-nums; }
-.pd-place-f{ display:block; font-size:12.5px; font-weight:650; color:var(--honey-deep); margin-top:2px; font-variant-numeric:tabular-nums; }
+.pd-place-f{ display:block; font-size:12.5px; font-weight:650; color:var(--honey-text); margin-top:2px; font-variant-numeric:tabular-nums; }
 .pd-place-r{ display:flex; flex-direction:column; align-items:flex-end; gap:12px; flex:none; padding-top:2px; }
 .pd-save{ border:none; background:none; cursor:pointer; color:var(--ink); padding:2px; }
 .pd-save .pi{ width:20px; height:20px; }
 .pd-save.on{ color:var(--honey-deep); }
-.pd-planit{ display:inline-flex; align-items:center; gap:5px; border:none; background:none; cursor:pointer; font-family:var(--font-display); font-size:13.5px; font-weight:700; color:var(--honey-deep); padding:2px 0; }
+.pd-planit{ display:inline-flex; align-items:center; gap:5px; border:none; background:none; cursor:pointer; font-family:var(--font-display); font-size:13.5px; font-weight:700; color:var(--honey-text); padding:2px 0; }
 .pd-planit .pi{ width:15px; height:15px; }
 /* results */
 .pd-resbar{ display:flex; align-items:center; gap:6px; padding:6px 14px 0; }
@@ -1763,20 +1785,20 @@ input.inp:disabled{ background:var(--limestone-dk); color:var(--ink-soft); }
 .pd-best-foot{ display:flex; align-items:center; justify-content:space-between; gap:10px; margin-top:12px; }
 .pd-badges{ display:flex; gap:7px; flex-wrap:wrap; }
 .pd-badge{ font-size:11px; font-weight:700; letter-spacing:.04em; text-transform:uppercase; border-radius:6px; padding:5px 9px; }
-.pd-badge.fit{ background:var(--honey-tint); color:var(--honey-deep); }
+.pd-badge.fit{ background:var(--honey-tint); color:var(--honey-text); }
 .pd-badge.open{ background:var(--good-tint); color:var(--good); }
 .pd-badge.est{ background:var(--paper-bg); color:var(--ink-soft); text-transform:none; letter-spacing:0; }
-.pd-addday{ display:inline-flex; align-items:center; gap:6px; border:none; background:none; cursor:pointer; font-family:var(--font-display); font-size:14px; font-weight:720; color:var(--honey-deep); white-space:nowrap; }
+.pd-addday{ display:inline-flex; align-items:center; gap:6px; border:none; background:none; cursor:pointer; font-family:var(--font-display); font-size:14px; font-weight:720; color:var(--honey-text); white-space:nowrap; }
 .pd-addday .pi{ width:15px; height:15px; }
 .pd-sort{ font-size:13px; color:var(--ink-faint); }
 .pd-sort button{ border:none; background:none; cursor:pointer; font-family:var(--font-display); font-size:13px; font-weight:650; color:var(--ink-faint); padding:2px; }
-.pd-sort button.on{ color:var(--honey-deep); text-decoration:underline; text-underline-offset:3px; }
+.pd-sort button.on{ color:var(--honey-text); text-decoration:underline; text-underline-offset:3px; }
 .pd-more{ display:flex; align-items:center; gap:6px; margin:18px auto 8px; border:none; background:none; cursor:pointer; font-family:var(--font-display); font-size:14px; font-weight:660; color:var(--ink); }
 .pd-more .pi{ width:15px; height:15px; }
 .pd-dayrow{ display:flex; width:100%; align-items:center; justify-content:space-between; border:none; background:none; cursor:pointer; padding:13px 4px; border-bottom:1px solid var(--line); font-family:var(--font-display); color:var(--ink); }
 .pd-dayrow b{ font-size:15px; font-weight:680; }
 .pd-dayrow span{ font-size:12.5px; color:var(--ink-soft); }
-.pd-dayrow.on b{ color:var(--honey-deep); }
+.pd-dayrow.on b{ color:var(--honey-text); }
 .x-backplan{ display:inline-flex; align-items:center; gap:4px; border:none; background:none; cursor:pointer; font-family:var(--font-display); font-size:14px; font-weight:650; color:var(--ink); padding:6px 2px; }
 .x-backplan .pi{ width:16px; height:16px; }
 
@@ -1811,7 +1833,7 @@ input.inp:disabled{ background:var(--limestone-dk); color:var(--ink-soft); }
 .wfp-chips{ display:flex; gap:7px; flex-wrap:wrap; min-width:0; }
 .wfp-chip{ font-size:12px; font-weight:660; border-radius:999px; padding:5px 11px; white-space:nowrap; max-width:170px; overflow:hidden; text-overflow:ellipsis; }
 .wfp-chip.open{ background:var(--good-tint); color:var(--good); }
-.wfp-chip.why{ background:rgba(255,195,0,.2); color:var(--honey-deep); }
+.wfp-chip.why{ background:rgba(255,195,0,.2); color:var(--honey-text); }
 .wfp-chip.tight{ background:var(--paper-bg); color:var(--ink-soft); }
 .wfp-choose{ margin-left:auto; flex:none; border:none; cursor:pointer; background:var(--honey); color:var(--on-honey); border-radius:12px; padding:10px 16px; font-family:var(--font-display); font-size:13.5px; font-weight:720; }
 .wfp-choose.big{ padding:12px 19px; font-size:14.5px; }
@@ -2699,7 +2721,7 @@ input.inp:disabled{ background:var(--limestone-dk); color:var(--ink-soft); }
         <div class="prow" id="pUpdates"><span class="prow-ic"><span data-pi="arrows-clockwise"></span></span><b class="prow-label">What’s new<span class="upd-dot" id="updDot" style="display:none"></span></b><span class="prow-val" id="pUpdatesVal"></span><span class="prow-ch"><span data-pi="caret-right"></span></span></div>
       </div>
 
-      <div class="profile-version">BeeLine 1.0.0 · build 2026-09-02 11:45 · your data stays on this phone<br>Map data © OpenStreetMap contributors · © CARTO</div>
+      <div class="profile-version">BeeLine 1.0.0 · build 2026-09-02 11:57 · your data stays on this phone<br>Map data © OpenStreetMap contributors · © CARTO</div>
       <button class="prow" id="pAdd" style="display:none"></button>
     </div>
   </section>
@@ -3323,12 +3345,15 @@ function corridorCardHTML(c){
   </div>`;
 }
 function savedEmptyHTML(){
+  /* No card, no icon-in-a-circle, no full-bleed button. An empty screen is the
+     one place a bookmark glyph inside a tinted disc says nothing the heading
+     doesn't already say, and boxing the whole thing in an elevated card made a
+     state that isn't a thing look like an object. The Gates art carries it. */
   return `<div class="sc-empty">
     <div class="sc-empty-art">${GATES_SVG}</div>
-    <span class="sc-empty-ic">${SC_ICONS.bookmark}</span>
     <div class="sc-empty-t">No ${ST.manyLower} yet</div>
-    <div class="sc-empty-b">Walk a route a few times and BeeLine will remember it here as a shortcut.</div>
-    <button class="btn" id="scFindPlace">Find a place</button>
+    <div class="sc-empty-b">Walk a route a few times and BeeLine remembers it here.</div>
+    <button class="btn sc-empty-cta" id="scFindPlace">Find a place</button>
   </div>`;
 }
 function closeCardMenus(except){ document.querySelectorAll('.sc-menu.show').forEach(m=>{ if(m!==except) m.classList.remove('show'); }); }
@@ -6261,33 +6286,33 @@ document.querySelectorAll('.map-veil .mv-dot').forEach(d=>{ d.outerHTML=BEETRAIL
 const LS_UPDSEEN='beeline.updseen.v1';
 const UPDATES=[
   {d:'Sep 1',  tag:'new',      icon:'map-pin-simple',   t:'More building photos',
-   b:'45 places now have real photos — 17 more than before, including Ballantine, Woodburn, Rawles and Showalter Fountain. Every one was checked by hand against its building. Places with no free photo keep their map preview rather than a wrong guess.'},
+   b:'45 places now have real photos, each checked by hand against its building. Places without one keep the map preview rather than a wrong guess.'},
   {d:'Sep 1',  tag:'new',      icon:'calendar-blank',   t:'Schedule, anchored to today',
-   b:'The Schedule page now opens on today: a week strip up top, your day as a clean departure board below — past classes fade out, the current one is marked NOW, the next one counts down in honey with a one-tap Walk. Free gaps show between classes, and other days are a tap away.'},
+   b:'Opens on today. Week strip up top, your day as a departure board below — the next class counts down with a one-tap Walk.'},
   {d:'Sep 1',  tag:'new',      icon:'clock',            t:'Plan buses hours ahead',
-   b:'In Buses, open any route’s Schedule and pick a time — like tomorrow around 10 AM — to see every bus scheduled near it. Tap a stop for its full day of departure times. These are timetables, so they can’t know about delays — live tracking still lives on the Live tab.'},
+   b:'Pick any future time to see the buses scheduled near it. Timetables can’t know about delays — live tracking stays on the Live tab.'},
   {d:'Sep 1',  tag:'new',      icon:'arrows-clockwise', t:'This update log',
-   b:'A running list of what’s new in BeeLine — you’re reading it. A gold dot on “What’s new” means there’s something you haven’t seen yet.'},
+   b:'You’re reading it. A gold dot means there’s something here you haven’t seen.'},
   {d:'Sep 1',  tag:'improved', icon:'map-pin-simple',   t:'Building photo galleries',
-   b:'Way more real building photos — 41 campus places now have verified, freely-licensed photos, many with multi-photo galleries. Tap any photo to view it fullscreen and swipe through. Every photo is checked to be the actual building; places without a verified photo keep the clean route preview.'},
+   b:'41 places have galleries now — tap any photo to open it fullscreen and swipe through.'},
   {d:'Sep 1',  tag:'new',      icon:'bus',              t:'Campus buses, live',
-   b:'A whole Buses tab: watch every IU bus move on the map in real time, check arrivals at your stop, plan a trip, and get honest bus-vs-walk advice. Live times only ever come from real tracked buses — schedule guesses are always labeled “scheduled.”'},
+   b:'Watch every IU bus move in real time, check arrivals, and get honest bus-vs-walk advice. Live times only come from tracked buses; the rest say “scheduled.”'},
   {d:'Sep 1',  tag:'look',     icon:'palette',          t:'Dark mode',
-   b:'BeeLine now follows your phone’s light/dark setting automatically. Walking keeps its night look either way.'},
+   b:'Follows your phone’s setting. Walking keeps its night look either way.'},
   {d:'Sep 1',  tag:'look',     icon:'check',            t:'Crisper icons + BeeLine-colored maps',
-   b:'Every icon redrawn in one consistent style, and the maps now wear BeeLine’s own paper-and-ink colors instead of stock map colors.'},
+   b:'Every icon redrawn in one style, and maps now wear BeeLine’s paper-and-ink colors.'},
   {d:'Sep 1',  tag:'improved', icon:'timer',            t:'Loading you can actually see',
-   b:'Loading lines really move now — a little bee trail flies while things load, even with Reduce Motion turned on.'},
+   b:'A bee trail flies while things load — even with Reduce Motion on.'},
   {d:'Aug 31', tag:'new',      icon:'clock',            t:'Know when to leave',
-   b:'Home tells you the exact time to leave for your next class — “Leave by 10:47” — based on how you actually walk, then flips to “Leave now” at the moment. Running behind? It says so honestly, no panic, and shows your fastest option.'},
+   b:'Home gives you the exact minute to leave for your next class, based on how you actually walk. Running behind? It says so.'},
   {d:'Aug 31', tag:'new',      icon:'coffee',           t:'Free time',
-   b:'Got a gap before class? Tap “Free time,” pick Gym, Eat, Coffee or Study, and BeeLine turns it into a complete plan: where to go, how many usable minutes you get there, and when to leave to still make class.'},
+   b:'Got a gap? Pick Gym, Eat, Coffee or Study and BeeLine plans it — where to go, how long you get, when to leave.'},
   {d:'Aug 31', tag:'new',      icon:'calendar-blank',   t:'Your class schedule',
-   b:'Add your classes once — building and room included — and every time feature knows where you need to be next.'},
+   b:'Add your classes once, building and room included. Every time feature then knows where you’re headed next.'},
   {d:'Aug 31', tag:'improved', icon:'trend-up',         t:'Your Lines',
-   b:'Your saved shortcuts are now “Your Lines” (in the You tab), with real stats: how many lines you’ve learned and minutes saved this month. Repeat walks log themselves — and beating your best time gets a little celebration.'},
+   b:'Saved shortcuts are now Your Lines, with real stats. Repeat walks log themselves, and beating your best time gets a small celebration.'},
   {d:'Aug 31', tag:'look',     icon:'star',             t:'A brand-new BeeLine',
-   b:'New name, new logo, new ink-paper-honey look across the whole app. Same promise underneath: your fastest paths across campus, measured for real.'},
+   b:'New name, new logo, new ink-paper-honey look. Same promise: your fastest paths across campus, measured for real.'},
 ];
 const UPD_TAGS={ new:'New', improved:'Better', look:'Look & feel' };
 function updLatestKey(){ return UPDATES.length ? (UPDATES[0].d+'|'+UPDATES[0].t) : ''; }
