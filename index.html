@@ -367,6 +367,12 @@ body{ font-family:var(--ui); color:var(--ink); background:var(--limestone);
 .row{ display:flex; gap:11px; } .row > *{ flex:1; } .mb{ margin-bottom:14px; }
 .label{ font-family:var(--mono); font-size:10px; letter-spacing:.08em; text-transform:uppercase; color:var(--ink-faint); margin:0 0 8px; display:block; }
 input.inp{ width:100%; border:none; box-shadow:inset 0 0 0 1px var(--line2); background:var(--paper); border-radius:var(--r-sm); padding:15px 16px; font-size:16px; color:var(--ink); font-family:var(--ui); outline:none; }
+/* dead-end repairs: a message that names a fix now performs it */
+.dc-fix{ border:none; background:none; padding:0; cursor:pointer; font-family:inherit; font-size:inherit;
+  font-weight:700; color:var(--ink); text-decoration:underline; text-underline-offset:2px; }
+.dc-bus.tappable{ cursor:pointer; }
+.dc-bus-go{ margin-left:auto; flex:none; font-family:var(--font-display); font-size:12.5px; font-weight:700;
+  color:var(--ink); text-decoration:underline; text-underline-offset:2px; }
 /* ---- class-vs-event toggle + quick adds (schedule editor) ----
    One sheet builds both. The segment sets which one you're making; the quick
    picks exist because "Work" at a usual time is three taps of typing nobody
@@ -1671,7 +1677,11 @@ input.inp:disabled{ background:var(--limestone-dk); color:var(--ink-soft); }
 .pd-block.planned{ border:1.5px solid var(--honey); background:var(--honey-tint); cursor:pointer; }
 /* a window BeeLine refuses to price (missing place on either end): present,
    honest, visibly not actionable */
-.pd-block.rough{ border:1.5px dashed var(--line2); }
+.pd-block.rough{ border:1.5px dashed var(--line2); cursor:pointer; }
+/* dead-end escape hatches (Free time) */
+.wfp-deadend{ display:flex; flex-direction:column; gap:10px; margin:6px 20px 0; }
+.wfp-deadend .wfi-go{ width:100%; margin:0; }
+.wfi-go.ghost{ background:var(--surface); color:var(--ink); box-shadow:inset 0 0 0 1.4px var(--line2); }
 .pd-block.rough .pd-open-l b{ color:var(--ink-soft); }
 .pd-manual.ghost{ background:var(--surface); color:var(--ink); box-shadow:inset 0 0 0 1.4px var(--line2); margin-left:8px; }
 .pd-pl-min{ font-size:12px; font-weight:650; color:var(--honey-deep); white-space:nowrap; }
@@ -2635,7 +2645,7 @@ input.inp:disabled{ background:var(--limestone-dk); color:var(--ink-soft); }
         <div class="prow" id="pUpdates"><span class="prow-ic"><span data-pi="arrows-clockwise"></span></span><b class="prow-label">What’s new<span class="upd-dot" id="updDot" style="display:none"></span></b><span class="prow-val" id="pUpdatesVal"></span><span class="prow-ch"><span data-pi="caret-right"></span></span></div>
       </div>
 
-      <div class="profile-version">BeeLine 1.0.0 · build 2026-09-02 10:43 · your data stays on this phone<br>Map data © OpenStreetMap contributors · © CARTO</div>
+      <div class="profile-version">BeeLine 1.0.0 · build 2026-09-02 11:02 · your data stays on this phone<br>Map data © OpenStreetMap contributors · © CARTO</div>
       <button class="prow" id="pAdd" style="display:none"></button>
     </div>
   </section>
@@ -3852,7 +3862,18 @@ function renderDestCard(){
   };
   if(!curPos || !trackingOn){
     tEl.innerHTML='—'; if(aEl) aEl.textContent=''; dEl.textContent='—';
-    if(srcEl) srcEl.textContent='turn on location for times';
+    /* was a dead end: a span that named the fix and couldn't perform it, while
+       the control that does live on another screen. Now it turns location on. */
+    if(srcEl){
+      srcEl.innerHTML='<button type="button" class="dc-fix" id="dcTurnOn">Turn on location</button>';
+      const fx=$('dcTurnOn');
+      if(fx) fx.onclick=()=>{
+        requestLocation((ok,info)=>{
+          if(ok){ trackingOn=true; updateOffBanner(); renderDestCard(); renderTimeModule(); toast('Location on','good'); }
+          else toast((info&&info.msg)||'Location unavailable','warn');
+        });
+      };
+    }
     renderDestConflict(null);
   } else {
     dEl.textContent=fmtDist(distance(curPos.lat,curPos.lng,dest.lat,dest.lng));
@@ -3879,7 +3900,7 @@ function renderDestConflict(etaMin){
   const after=nx.startDelta-etaMin-classBuffer();
   if(after<12){
     el.style.display='block';
-    el.innerHTML='<b>Heads up</b> — '+esc(cls.course)+' at '+fmtTime(hm(cls.start))+'. This trip leaves you ~'+Math.max(0,Math.round(after))+' min after arriving.';
+    el.innerHTML=pic('warning')+'<span><b>'+esc(cls.course)+'</b> '+fmtTime(hm(cls.start))+' · ~'+Math.max(0,Math.round(after))+' min spare</span>';
   }
 }
 function clearDest(){ dest=null; if(destInput) destInput.value=''; refreshGoBtn(); renderDestCard(); renderTimeModule(); }
@@ -4526,8 +4547,39 @@ function openLightbox(name, photos, start){
   });
   const upd=()=>{ const i=Math.round(strip.scrollLeft/strip.clientWidth); count.textContent=(Math.min(i,photos.length-1)+1)+' / '+photos.length; };
   strip.addEventListener('scroll', upd, {passive:true});
-  bg.querySelector('#lbClose').addEventListener('click', ()=>{ bg.classList.remove('show'); setTimeout(()=>bg.remove(),260); });
-  bg.addEventListener('click', e=>{ if(e.target===bg) { bg.classList.remove('show'); setTimeout(()=>bg.remove(),260); } });
+  const lbClose=()=>{ bg.classList.remove('show'); setTimeout(()=>bg.remove(),260); };
+  bg.querySelector('#lbClose').addEventListener('click', lbClose);
+  bg.addEventListener('click', e=>{ if(e.target===bg) lbClose(); });
+  /* Swipe down to dismiss. Safe here because the lightbox owns nothing on the
+     Y axis — .lb-strip is scroll-snap-type:x and only pages horizontally — so
+     we lock the axis on first move and never preventDefault a horizontal drag,
+     which would kill the paging this screen exists for. */
+  let ty0=null, tx0=null, axis=null;
+  bg.addEventListener('touchstart', e=>{
+    if(e.touches.length>1){ ty0=null; return; }
+    ty0=e.touches[0].clientY; tx0=e.touches[0].clientX; axis=null;
+    bg.style.transition='none';
+  }, {passive:true});
+  bg.addEventListener('touchmove', e=>{
+    if(ty0==null || e.touches.length>1) return;
+    const dy=e.touches[0].clientY-ty0, dx=e.touches[0].clientX-tx0;
+    if(!axis){ if(Math.abs(dx)>6 || Math.abs(dy)>6) axis = Math.abs(dy)>Math.abs(dx)*1.4 ? 'y' : 'x'; }
+    if(axis!=='y') return;                       // horizontal belongs to the photo strip
+    if(dy<=0) return;                            // only downward dismisses
+    e.preventDefault();
+    bg.style.transform='translateY('+dy+'px)';
+    bg.style.opacity=String(Math.max(0.25, 1-dy/420));
+  }, {passive:false});
+  const lbRelease=e=>{
+    if(ty0==null) return;
+    const dy=(e.changedTouches&&e.changedTouches[0].clientY-ty0)||0;
+    bg.style.transition='transform .2s ease, opacity .2s ease';
+    if(axis==='y' && dy>110){ bg.style.transform='translateY(100vh)'; bg.style.opacity='0'; setTimeout(()=>bg.remove(),200); }
+    else { bg.style.transform=''; bg.style.opacity=''; }
+    ty0=null; axis=null;
+  };
+  bg.addEventListener('touchend', lbRelease, {passive:true});
+  bg.addEventListener('touchcancel', lbRelease, {passive:true});
   bg.offsetHeight;                    // force layout so the fade transition runs
   bg.classList.add('show');           // synchronous — rAF can be throttled when backgrounded
   if(start) strip.scrollLeft=start*strip.clientWidth;
@@ -4612,7 +4664,14 @@ function openStatus(oh){
     if(!m) return;
     const set=new Set();
     m[1].split(',').forEach(seg=>{ const r=seg.split('-'); if(r.length===1){ const i=days.indexOf(r[0]); if(i>=0) set.add(i); } else { const a=days.indexOf(r[0]), b=days.indexOf(r[1]); if(a>=0&&b>=0){ for(let i=a;;i=(i+1)%7){ set.add(i); if(i===b) break; } } } });
-    if(set.size){ known=true; const t0=toMin(m[2]), t1=toMin(m[3]); if(set.has(dow) && mins>=t0 && mins<t1) open=true; }
+    /* Overnight ranges (15:00-03:00) used to be unsatisfiable, so a cookie shop
+       open until 3am read "Closed now" at 11pm — the one place this app stated
+       something FALSE rather than saying it didn't know. When t1 <= t0 the rule
+       spans midnight: open late on its own day, or early on the following day. */
+    if(set.size){ known=true; const t0=toMin(m[2]), t1=toMin(m[3]);
+      if(t1>t0){ if(set.has(dow) && mins>=t0 && mins<t1) open=true; }
+      else { if(set.has(dow) && mins>=t0) open=true;
+             if(set.has((dow+6)%7) && mins<t1) open=true; } }
   });
   return known ? (open?'Open now':'Closed now') : null;
 }
@@ -4669,7 +4728,7 @@ function renderDetails(p){
    The flat list only renders SCOPED (search or a chip). Every tap opens the
    place sheet — details + photo + Start walking — never a surprise tab jump. */
 const X_SECTIONS=[
-  {t:'Campus landmarks', pick:p=>placeTier(p)===1},
+  {t:'Campus landmarks', pick:p=>placeTier(p)===1, photoFirst:true},
   {t:'Food & coffee',    pick:p=>p.c==='dining'},
   {t:'Study spots',      pick:p=>p.c==='library'},
   {t:'Gyms & recreation',pick:p=>p.c==='rec'},
@@ -4733,7 +4792,20 @@ function renderXList(){
   X_SECTIONS.forEach(sec=>{
     let ps=allPlaces().filter(p=>!used.has(p.n)&&sec.pick(p));
     if(curPos) ps.sort((a,b)=>distance(curPos.lat,curPos.lng,a.lat,a.lng)-distance(curPos.lat,curPos.lng,b.lat,b.lng));
-    ps.sort((a,b)=>(placePhoto(b)?1:0)-(placePhoto(a)?1:0));   // photos first, stable within
+    /* Photos used to sort ahead of distance outright, which put the FARTHEST
+       food first: Food & coffee led with the one photographed dining hall 1.2km
+       away while the IMU food court 220m away sat second, on a card that prints
+       its own walk time — the shelf visibly contradicted itself. Only 45 of 181
+       places have a photo, and Study/Dining have one each, so a single arbitrary
+       place was pinned to the front of the two shelves that most need distance.
+       Photos now only break ties within the same ~200m band. Landmarks keep
+       photo-first, where "notable" IS the intended order. */
+    if(sec.photoFirst || !curPos) ps.sort((a,b)=>(placePhoto(b)?1:0)-(placePhoto(a)?1:0));
+    else ps.sort((a,b)=>{
+      const band=p=>Math.round(distance(curPos.lat,curPos.lng,p.lat,p.lng)/200);
+      const d=band(a)-band(b); if(d) return d;
+      return (placePhoto(b)?1:0)-(placePhoto(a)?1:0);
+    });
     const shown=ps.slice(0,10);
     if(!shown.length) return;
     shown.forEach(p=>used.add(p.n));
@@ -5390,7 +5462,7 @@ function renderSchedule(){
       const past=isToday && e<=nowMin;
       const isNow=i===nowIdx, isNext=i===nextIdx;
       // free gap since previous class
-      if(i>0){ const gap=s-hm(rows[i-1].end); if(gap>=15) html+=`<div class="sdb-gap"><span>${fmtGapMin(gap)} free</span></div>`; }
+      if(i>0){ const gap=s-hm(rows[i-1].end); if(gap>=15) html+=`<div class="sdb-gap"><span>${fmtGapMin(gap)}</span></div>`; }
       const state= isNow ? `<span class="sdb-chip now">Now · ends ${fmtTime(e)}</span>`
                  : isNext ? `<span class="sdb-chip">in ${s-nowMin<60?(s-nowMin)+' min':fmtGapMin(s-nowMin)}</span>` : '';
       const walk=((isNow||isNext) && c.lat!=null)?`<button class="sdb-walk" data-walk="${esc(c.id)}">Walk ${SCHED_CHEV}</button>`:'';
@@ -5408,6 +5480,37 @@ function renderSchedule(){
   body.innerHTML=html;
   // wiring
   body.querySelectorAll('.wk-day').forEach(b=>b.addEventListener('click',()=>{ schedSelDay=b.dataset.d; renderSchedule(); }));
+  /* Swipe the board left/right to change day. The chips are ~50px wide on a
+     390pt screen — a real one-handed aim problem — and the whole state is one
+     string, so the swipe is cheap. Guards, in order: ignore multi-touch; ignore
+     the left 24px so an in-Safari back-swipe still works; require a clearly
+     horizontal drag (X > 1.4·Y and > 32px) so a long class day still scrolls
+     vertically; never preventDefault until the axis is decided. */
+  const board=body.querySelector('.sdb');
+  if(board){
+    const WEEKD=['Mo','Tu','We','Th','Fr','Sa','Su'];
+    let sx=null, sy=null, dir=null;
+    board.addEventListener('touchstart', e=>{
+      if(e.touches.length>1 || e.touches[0].clientX<24){ sx=null; return; }
+      sx=e.touches[0].clientX; sy=e.touches[0].clientY; dir=null;
+    }, {passive:true});
+    board.addEventListener('touchmove', e=>{
+      if(sx==null || e.touches.length>1) return;
+      const dx=e.touches[0].clientX-sx, dy=e.touches[0].clientY-sy;
+      if(!dir && (Math.abs(dx)>8 || Math.abs(dy)>8)) dir = Math.abs(dx)>Math.abs(dy)*1.4 ? 'x' : 'y';
+      if(dir==='x') e.preventDefault();     // claim it only once it's clearly horizontal
+    }, {passive:false});
+    board.addEventListener('touchend', e=>{
+      if(sx==null || dir!=='x') { sx=null; return; }
+      const dx=(e.changedTouches&&e.changedTouches[0].clientX-sx)||0;
+      sx=null;
+      if(Math.abs(dx)<32) return;
+      const cur=WEEKD.indexOf(schedSelDay||todayCode);
+      const next=cur + (dx<0?1:-1);
+      if(next<0 || next>6) return;          // stop at the week's edges rather than wrapping
+      schedSelDay=WEEKD[next]; renderSchedule();
+    }, {passive:true});
+  }
   body.querySelectorAll('.sdb-row').forEach(r=>{ const c=classList.find(x=>x.id===r.dataset.id);
     r.addEventListener('click',()=>{ if(c) openClassEditor(c); }); });
   body.querySelectorAll('[data-walk]').forEach(w=>w.addEventListener('click',e=>{ e.stopPropagation(); const c=classList.find(x=>x.id===w.dataset.walk); if(c) goToClass(c); }));
@@ -5421,10 +5524,10 @@ document.addEventListener('beeline:classes-changed', ()=>{
   if(screens.home.classList.contains('active')) renderTimeModule();
 });
 // set a class's building as the destination and drop the user on Home to review + Go
-function goToClass(c){ if(c.lat==null){ toast('No place set for this — add one to walk there'); return; } setDest(c.lat,c.lng, c.b+(c.room?(' · '+c.room):'')); goTab('home'); const sc=document.querySelector('#scr-home .scroll'); if(sc) sc.scrollTo({top:0}); }
+function goToClass(c){ if(c.lat==null){ toast('Add where this is and BeeLine can walk you there'); openClassEditor(c); return; } setDest(c.lat,c.lng, c.b+(c.room?(' · '+c.room):'')); goTab('home'); const sc=document.querySelector('#scr-home .scroll'); if(sc) sc.scrollTo({top:0}); }
 // walk to the up-next class right now (needs location on)
 function walkToClass(c){
-  if(c.lat==null){ toast('No place set for this — add one to walk there'); return; }
+  if(c.lat==null){ toast('Add where this is and BeeLine can walk you there'); openClassEditor(c); return; }
   setDest(c.lat,c.lng, c.b+(c.room?(' · '+c.room):''));
   if(!trackingOn){ goTab('home'); const sc=document.querySelector('#scr-home .scroll'); if(sc) sc.scrollTo({top:0}); toast('Turn on location to walk','warn'); return; }
   startWalk();
@@ -5609,7 +5712,11 @@ function openClassEditor(existing, opts){
     acEl.querySelectorAll('.cls-ac-item').forEach(el=>el.onclick=()=>{ const it=items[+el.dataset.i]; sel={name:it.name,lat:it.lat,lng:it.lng}; bIn.value=it.name; acEl.style.display='none'; });
   };
   const del=$('clsDelete'); del.style.display=editing?'block':'none';
-  del.onclick = editing ? ()=>confirmDialog({title:(existing.kind==='event'?'Delete event?':'Delete class?'), msg:'Remove '+ (existing.course) +' from your schedule.', confirmText:'Delete', onConfirm:()=>{ classList=classList.filter(x=>x.id!==existing.id); saveClasses(); bg.classList.remove('show'); renderSchedule(); toast('Class removed'); }}) : null;
+  del.onclick = editing ? ()=>confirmDialog({title:(existing.kind==='event'?'Delete event?':'Delete class?'), msg:'Remove '+ (existing.course) +' from your schedule.', confirmText:'Delete', onConfirm:()=>{ const wasEvent=existing.kind==='event'; classList=classList.filter(x=>x.id!==existing.id); saveClasses(); bg.classList.remove('show'); renderSchedule();
+    /* the Plan tab and Home listen for this — without it an open Plan tab kept showing a deleted commitment until you switched tabs */
+    try{ document.dispatchEvent(new CustomEvent('beeline:classes-changed',{detail:{removed:1}})); }catch(e){}
+    if(typeof renderTimeModule==='function') renderTimeModule();
+    toast(wasEvent?'Event removed':'Class removed'); }}) : null;
   $('clsStart').onclick=()=>classTimeSheet($('clsStart').dataset.v||'09:00', v=>{
     setClsTime($('clsStart'), v);
     // a fresh start with no end yet: offer the common 50-minute block, still editable
@@ -5892,7 +5999,12 @@ function renderBusOption(){
     const b=$('dcBus');
     if(!opt){ b.style.display='none'; return; }
     if(opt.status==='no-route'){ b.style.display='none'; return; }
-    if(opt.status==='none-live'){ b.style.display='block'; b.className='dc-bus muted'; b.innerHTML=BUS_ICON+'<span>No campus buses live on this route right now.</span>'; return; }
+    /* honest (we never invent a live bus) but no longer terminal: the Buses tab
+       has the SCHEDULED trip for this route, so offer it. */
+    if(opt.status==='none-live'){ b.style.display='block'; b.className='dc-bus muted tappable';
+      b.innerHTML=BUS_ICON+'<span>No buses live right now</span><b class="dc-bus-go">See schedule</b>';
+      b.onclick=()=>{ if(typeof BusUI!=='undefined' && BusUI.planTo && dest) BusUI.planTo(dest.name,dest.lat,dest.lng); else goTab('buses'); };
+      return; }
     const directMin=estWalkMin(distance(curPos.lat,curPos.lng,dest.lat,dest.lng));
     const saves=directMin-opt.total;
     const verdict = saves>=2 ? 'Saves ~'+Math.round(saves)+' min vs walking' : (saves<=-2 ? 'Walking is faster' : 'About the same as walking');
@@ -6713,7 +6825,11 @@ const BusUI={
   async enter(){
     this.entered=true;
     const ok=await BusModel.load();
-    if(!ok){ $('bzRoutes').innerHTML='<div class="bz-empty">Bus data is unavailable right now — check your connection and try again.</div>'; return; }
+    if(!ok){
+      $('bzRoutes').innerHTML='<div class="bz-empty">Bus data is unavailable right now — check your connection.<br><button class="btn sm" id="bzRetry" style="margin-top:12px">Try again</button></div>';
+      const rt=$('bzRetry'); if(rt) rt.addEventListener('click',()=>this.enter());
+      return;
+    }
     this.renderChips();
     if(this.view==='live'){ BusMap.init(); setTimeout(()=>{ if(BusMap.map) BusMap.map.resize(); },150); }
     BusLive.start();
@@ -6800,7 +6916,12 @@ const BusUI={
     el.querySelector('.bz-peek').addEventListener('click',()=>this.openStop(s.id));
     const rows=await BusLive.stopEtas(s.id);
     const host=$('bzPeekRows'); if(!host) return;
-    if(!rows.length){ host.innerHTML='<span class="bz-mut">No upcoming buses at this stop right now.</span>'; return; }
+    if(!rows.length){
+      const tw=bzTomorrowFirsts(s);
+      host.innerHTML= tw ? '<span class="bz-mut2" style="display:block;margin-bottom:5px">Done for today — first buses tomorrow:</span>'+tw
+                         : '<span class="bz-mut">No upcoming buses at this stop right now.</span>';
+      return;
+    }
     host.innerHTML=rows.slice(0,2).map(r=>`<span class="bz-peek-row"><span class="bz-dot" style="background:${esc(r.parent.color)}">${esc(r.parent.abbr)}</span><b>${r.state!=='LIVE'&&r.minutes>=60?esc(r.clock||''):r.minutes+' min'}</b>${r.state==='LIVE'?BZ_LIVE_BADGE:'<span class="bz-sched">Scheduled</span>'}</span>`).join('');
   },
   closeSheet(){ this.sheet=null; this.openStopId=null; this.openBusId=null; clearTimeout(this.etaTimer); BusMap.followEq=null; this.renderPeek(); const el=$('bzSheet'); if(el&&!el.classList.contains('peek')){ el.style.display='none'; this.renderPeek(); } },
@@ -6909,11 +7030,15 @@ const BusUI={
     const body=el.querySelector('div:last-child');
     const walkMin=Math.round(r.walkDirectMin||0);
     if(r.status){
-      const msgs={TOO_CLOSE:`It's a short walk — about <b>${walkMin} min</b>. No bus needed.`,
-        NO_ROUTE:`No Campus Bus route runs between here and there.<br><b>Walk · about ${walkMin} min</b>`,
-        NO_SERVICE:`No buses serving this trip right now — none scheduled soon either.<br><b>Walk · about ${walkMin} min</b>`,
+      const msgs={TOO_CLOSE:`It's a short walk. No bus needed.`,
+        NO_ROUTE:`No Campus Bus route runs between here and there.`,
+        NO_SERVICE:`No buses serving this trip right now — none scheduled soon either.`,
         UNKNOWN:'Bus data is unavailable right now.'};
-      body.innerHTML=`<div class="bz-mut" style="line-height:1.5">${msgs[r.status]||msgs.UNKNOWN}</div>`;
+      /* "walk it" is advice — hand over the walk, don't just describe it */
+      const walkable=r.status!=='UNKNOWN' && walkMin>0;
+      body.innerHTML=`<div class="bz-mut" style="line-height:1.5">${msgs[r.status]||msgs.UNKNOWN}</div>`
+        +(walkable?`<button class="btn" id="bzWalkGo" style="margin-top:12px">${pic('person-simple-walk')} Walk it — about ${walkMin} min</button>`:'');
+      const wg=$('bzWalkGo'); if(wg) wg.addEventListener('click',()=>{ this.closeSheet(); setDest(lat,lng,name); show('home'); });
       return;
     }
     const b=r.best;
@@ -6985,7 +7110,7 @@ const BusUI={
     favs.forEach(async s=>{
       const rows=await BusLive.stopEtas(s.id); const el=document.getElementById('bzFav-'+s.id); if(!el) return;
       el.innerHTML= rows.length? rows.slice(0,2).map(r=>`<span class="bz-peek-row"><span class="bz-dot" style="background:${esc(r.parent.color)}">${esc(r.parent.abbr)}</span><b>${r.state!=='LIVE'&&r.minutes>=60?esc(r.clock||''):r.minutes+' min'}</b>${r.state==='LIVE'?BZ_LIVE_BADGE:'<span class="bz-sched">Sched</span>'}</span>`).join('')
-        : '<span class="bz-mut">No upcoming buses</span>';
+        : (bzTomorrowFirsts(s)||'<span class="bz-mut">No upcoming buses</span>');
     });
   },
   /* ---- destination-first search ---- */
@@ -7024,6 +7149,23 @@ const BusUI={
    Route detail (pushed screen): Live metro line w/ real vehicle positions
    between stops + per-stop taps; Schedule from GTFS (today/tomorrow).
    ================================================================ */
+/* "no buses now" is not the end of the answer: tomorrow's first departures
+   from this stop, straight from the GTFS timetable — labeled, never guessed */
+function bzTomorrowFirsts(s){
+  try{
+    if(typeof BusSchedule==='undefined' || !BusSchedule.ok() || !s || !s.ext) return '';
+    const tm=new Date(); tm.setDate(tm.getDate()+1);
+    const firsts=[];
+    BusModel.parents.forEach(p=>{
+      if(p.schedOnly) return;
+      if(s.routes && s.routes.size && !s.routes.has(p.id)) return;
+      const d=BusSchedule.departures(p, s.ext, tm, 0, 1);
+      if(d.length) firsts.push({p, sec:d[0].sec});
+    });
+    firsts.sort((a,b)=>a.sec-b.sec);
+    return firsts.slice(0,2).map(f=>`<span class="bz-peek-row"><span class="bz-dot" style="background:${esc(f.p.color)}">${esc(f.p.abbr)}</span><b>${bzFmtSec(f.sec)}</b><span class="bz-sched">Tomorrow</span></span>`).join('');
+  }catch(e){ return ''; }
+}
 /* the stop AFTER this one on the route = the direction a bus here is headed */
 function bzTowardName(parent, stopId){
   if(!parent || !parent.stops || stopId==null) return null;
@@ -7838,7 +7980,18 @@ const PlanUI={
     if(this.showAll && more.length){ more.forEach(pl=>{ pl.busOpt=planBusBackOption(pl); }); rows=res.plans.concat(more.slice(0,9)); }
     this._rows=rows;
     if(!rows.length){
-      html+=`<div class="wf-none">You're good — nothing you have to do. ${this.filter?('Nothing fits for '+esc(ActivityProfiles[this.filter].t.toLowerCase())+'.'):''}</div>`;
+      /* never a dead end: the unfiltered answer is one call away, so say what
+         DOES fit and hand over the door — the user should not have to notice
+         the little Change link to escape an empty filter */
+      let others=0;
+      if(this.filter){ try{ others=PlanEngine.whatFits(c, null, false).plans.length; }catch(e){} }
+      html+=`<div class="wf-none">${this.filter
+          ? `Nothing fits for ${esc(ActivityProfiles[this.filter].t.toLowerCase())} in this window.`
+          : `You're good — nothing you have to do.`}</div>
+        <div class="wfp-deadend">
+          ${others?`<button class="wfi-go" id="wfShowAll">Show what does fit · ${others}</button>`:''}
+          <button class="wfi-go ghost" id="wfElse">Search somewhere else</button>
+        </div>`;
     } else {
       html+=rows.map((pl,i)=>this.planBand(pl,i)).join('');
       if(!this.showAll && more.length) html+=`<button class="wfp-more" id="wfpMore">See more options</button>`;
@@ -7852,6 +8005,8 @@ const PlanUI={
     const body=$('fitBody');
     const rows=this._rows||res.plans||[];
     const ch=$('wfpChange'); if(ch) ch.addEventListener('click',()=>this.renderIntent());
+    const sa=$('wfShowAll'); if(sa) sa.addEventListener('click',()=>{ this.filter=null; this._intent=null; this.render(); });
+    const se=$('wfElse'); if(se) se.addEventListener('click',()=>this.renderElse());
     const mo=$('wfpMore'); if(mo) mo.addEventListener('click',()=>{ this.showAll=true; this.render(); });
     body.querySelectorAll('.wfp-plan[data-wf]').forEach(el=>el.addEventListener('click',()=>{
       const pl=rows[+el.dataset.wf]; if(!pl) return; this.openPlanSheet(pl);
@@ -7920,7 +8075,8 @@ const PlanUI={
     plans.forEach(pl=>{ pl.busOpt=planBusBackOption(pl); });
     html+=`<div class="wfe-search">${pic('map-pin-simple')}<input id="wfeQ" type="text" placeholder="Search a place or activity" autocomplete="off" enterkeyhint="search" value="${esc(this.lastQuery)}"></div>`;
     if(req.errand){
-      html+=`<div class="wf-none">BeeLine doesn't have reliable ${req.errand==='print'?'printer':'package-pickup'} locations yet — pick the place yourself and it'll do the math.</div>`;
+      html+=`<div class="wf-none">BeeLine doesn't have reliable ${req.errand==='print'?'printer':'package-pickup'} locations yet.</div>
+        <div class="wfp-deadend"><button class="wfi-go" id="wfPickPlace">Pick the place — it'll do the math</button></div>`;
     }
     if(!plans.length && !req.errand){
       html+=`<div class="wf-none">Nothing matches that${req.wantMin?(' for '+req.wantMin+' min'):''} before ${esc(c.nextName)}.</div>`;
@@ -7936,6 +8092,7 @@ const PlanUI={
     body.innerHTML=html;
     this._rows=plans;
     this.wireCommon({plans});
+    const pp=$('wfPickPlace'); if(pp) pp.addEventListener('click',()=>this.renderElse());
     const qi=$('wfeQ');
     if(qi) qi.addEventListener('keydown',e=>{ if(e.key==='Enter' && qi.value.trim()) this.canI(qi.value); });
   },
@@ -9620,7 +9777,7 @@ const PlanDayModel={
       if(i===0 && today && now < cs[0].startMs - 8*6e4){
         const g={ startMs:now, endMs:cs[0].startMs,
           from:{lat:(curPos||IU).lat,lng:(curPos||IU).lng}, fromName:'where you are',
-          next:{course:cs[0].label, b:cs[0].c.b, lat:cs[0].c.lat, lng:cs[0].c.lng, room:cs[0].c.room||''}, leading:true };
+          next:{course:cs[0].label, b:cs[0].c.b, lat:cs[0].c.lat, lng:cs[0].c.lng, room:cs[0].c.room||'', ref:cs[0].c}, leading:true };
         /* an event with no location can't price the walk to it — the gap shows
            but is never planned into (noDest); nothing is invented */
         if(!cs[0].hasLoc){ g.noDest=true; g.next.lat=g.from.lat; g.next.lng=g.from.lng; }
@@ -9636,8 +9793,8 @@ const PlanDayModel={
           : (a.hasLoc?{lat:a.c.lat,lng:a.c.lng}:{lat:(curPos||IU).lat,lng:(curPos||IU).lng});
         const g={ startMs, endMs:b.startMs,
           from:fromLoc, fromName:a.hasLoc?favLabel(a.c.b||''):'wherever '+a.label+' ends',
-          next:{course:b.label, b:b.c.b, lat:b.c.lat, lng:b.c.lng, room:b.c.room||''},
-          afterIdx:i };
+          next:{course:b.label, b:b.c.b, lat:b.c.lat, lng:b.c.lng, room:b.c.room||'', ref:b.c},
+          afterIdx:i, prevRef:a.c };
         if(!b.hasLoc){ g.noDest=true; g.next.lat=g.from.lat; g.next.lng=g.from.lng; }
         if(!a.hasLoc) g.fuzzyFrom=true;                     // travel FROM is a guess too
         out.push(g);
@@ -9800,12 +9957,16 @@ const PlanDayView={
     const planned=PlanDayModel.plannedFor(date);
     const today=PlanDayModel.isToday(date), now=Date.now();
     if(!cs.length && !gaps.length){
+      /* a student WITH a schedule looking at a free Saturday is not a new
+         user — don't pitch onboarding at them (crew audit #9/#10) */
+      const hasSchedule=(typeof classList!=='undefined' && classList.length>0);
       return `<div class="pd-empty">
-        <b>No commitments ${today?'today':'on this day'}.</b>
-        <p>Add your schedule and BeeLine finds the time between things — or set this day up by hand.</p>
+        <b>${hasSchedule?`Nothing on ${today?'today':this.dateLabel(date).replace('Today','today')} — you're free.`:`No commitments ${today?'today':'on this day'}.`}</b>
+        <p>${hasSchedule?'Add a shift, practice, or anything else, and BeeLine plans around it.':'Add your schedule and BeeLine finds the time between things — or set this day up by hand.'}</p>
         <button class="pd-manual" id="pdAddCustom">Add something to this day</button>
-        <button class="pd-manual ghost" id="pdManual">Set up hours by hand</button>
-        <button class="hm-link" id="pdScan">Scan your schedule</button>
+        ${today?'':'<button class="pd-manual ghost" id="pdBackToday">Back to today</button>'}
+        ${hasSchedule?'':`<button class="pd-manual ghost" id="pdManual">Set up hours by hand</button>
+        <button class="hm-link" id="pdScan">Scan your schedule</button>`}
       </div>`;
     }
     /* interleave: classes + (gap | planned-in-gap) in time order */
@@ -9844,10 +10005,12 @@ const PlanDayView={
         const sub= !priced
           ? (g.noDest? `Add where ${g.next.course} is to plan this window` : `Rough — ${esc(g.fromName)} has no set place`)
           : (best?'Best opening today':this.gapHint(g,it.usable));
+        /* the rough window's tap IS the remedy: it opens the location-less
+           event so the user can add the place (crew audit #12) */
         html+=`<div class="pd-item">
           <div class="pd-times"><b>${this.clock(g.startMs)}</b><b>${this.clock(g.startMs+it.usable*6e4)}</b></div>
           <div class="pd-dotcol on"><i class="d f"></i><i class="l f"></i><i class="d f o"></i></div>
-          <div class="pd-block${priced?' open':' rough'}${best?' best':''}" ${priced?`data-pdgap="${g.startMs}" role="button" tabindex="0"`:''}>
+          <div class="pd-block${priced?' open':' rough'}${best?' best':''}" ${priced?`data-pdgap="${g.startMs}" role="button" tabindex="0"`:`data-pdfix="${g.startMs}" role="button" tabindex="0"`}>
             <div class="pd-open-l"><b>${priced?'':'~'}${this.usableLabel(it.usable)}</b><span class="pd-open-sub">${sub}</span></div>
             ${priced?`<span class="pd-planhere">Plan here ${pic('arrow-right')}</span>`:''}
           </div>
@@ -9929,12 +10092,15 @@ const PlanDayView={
     const ctxLine= b0? `${today?'Today':this.dateLabel(date)} · before ${favLabel(b0.ctx.nextB||b0.gap.next.course)} at ${this.clock(b0.gap.endMs)}` : (today?'Today':this.dateLabel(date));
     html+=`<div class="pd-resctx">${esc(ctxLine)}</div>`;
     if(r.req && r.req.errand){
-      html+=`<div class="pd-empty"><b>No reliable ${r.req.errand==='print'?'printer':'package-pickup'} data yet.</b><p>Pick the place yourself and BeeLine will do the time math.</p></div>`;
+      html+=`<div class="pd-empty"><b>No reliable ${r.req.errand==='print'?'printer':'package-pickup'} data yet.</b>
+        <p>Name the place and BeeLine does the time math.</p>
+        <button class="pd-manual" id="pdPickPlace">Search the place</button></div>`;
     }
     if(!r.plans.length){
       html+=`<div class="pd-empty"><b>Nothing fits ${today?'today':'this day'}.</b>
         <p>Once travel, getting settled and getting to what's next are counted, no window works. A closer place or a shorter visit might.</p>
-        <button class="pd-manual" id="pdTomorrow">See tomorrow ${pic('arrow-right')}</button></div>`;
+        ${today?`<button class="pd-manual" id="pdTomorrow">See tomorrow ${pic('arrow-right')}</button>`
+               :`<button class="pd-manual" id="pdBackToday">Back to today</button>`}</div>`;
       return html;
     }
     const best=r.plans[0];
@@ -10051,10 +10217,17 @@ const PlanDayUI={
       const g=PlanDayModel.gaps(this.date).find(x=>String(x.startMs)===el.dataset.pdgap);
       if(g) this.gapSheet(g);
     }));
+    body.querySelectorAll('[data-pdfix]').forEach(el=>el.addEventListener('click',()=>{
+      const g=PlanDayModel.gaps(this.date).find(x=>String(x.startMs)===el.dataset.pdfix);
+      const item=g && (g.noDest ? (g.next&&g.next.ref) : g.prevRef);
+      if(item && typeof openClassEditor==='function'){ try{ show('schedule'); openClassEditor(item); return; }catch(e){} }
+      show('schedule');
+    }));
     body.querySelectorAll('[data-pdpl]').forEach(el=>el.addEventListener('click',()=>this.plannedSheet(el.dataset.pdpl)));
     body.querySelectorAll('[data-pdlive]').forEach(el=>el.addEventListener('click',()=>goTab('home')));
     const man=$('pdManual'); if(man) man.addEventListener('click',()=>this.manualSetup());
     const ac=$('pdAddCustom'); if(ac) ac.addEventListener('click',()=>this.addCustom(null));
+    const bt=$('pdBackToday'); if(bt) bt.addEventListener('click',()=>this.setDate(new Date()));
     const sc=$('pdScan'); if(sc) sc.addEventListener('click',()=>{ if(typeof openScheduleScan==='function') openScheduleScan(); });
     const mo=$('pdMapOpen'); if(mo) mo.addEventListener('click',()=>show('map'));
     const tm=$('pdTomorrow'); if(tm) tm.addEventListener('click',()=>this.shiftDate(1));
@@ -10118,6 +10291,8 @@ const PlanDayUI={
   },
   wireResults(r){
     const ao=$('pdAddOwn'); if(ao) ao.addEventListener('click',()=>this.addCustom(this._gapCtx));
+    const bt=$('pdBackToday'); if(bt) bt.addEventListener('click',()=>{ this.stage='browse'; this.lastResults=null; this.setDate(new Date()); });
+    const pp=$('pdPickPlace'); if(pp) pp.addEventListener('click',()=>{ const q=$('pdQ'); if(q){ q.value=''; this.query=''; q.focus(); } });
     const back=$('pdResBack'); if(back) back.addEventListener('click',()=>{ this.stage='browse'; this._gapCtx=null; this.lastResults=null; this.render(); });
     const qx=$('pdQx'); if(qx) qx.addEventListener('click',()=>{ this.query=''; this.stage='browse'; this.lastResults=null; this.render(); });
     const q=$('pdQ'); if(q) q.addEventListener('keydown',e=>{ if(e.key==='Enter'&&q.value.trim()) this.runSearch(q.value.trim()); });
