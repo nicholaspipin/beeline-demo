@@ -2645,7 +2645,7 @@ input.inp:disabled{ background:var(--limestone-dk); color:var(--ink-soft); }
         <div class="prow" id="pUpdates"><span class="prow-ic"><span data-pi="arrows-clockwise"></span></span><b class="prow-label">What’s new<span class="upd-dot" id="updDot" style="display:none"></span></b><span class="prow-val" id="pUpdatesVal"></span><span class="prow-ch"><span data-pi="caret-right"></span></span></div>
       </div>
 
-      <div class="profile-version">BeeLine 1.0.0 · build 2026-09-02 11:02 · your data stays on this phone<br>Map data © OpenStreetMap contributors · © CARTO</div>
+      <div class="profile-version">BeeLine 1.0.0 · build 2026-09-02 11:04 · your data stays on this phone<br>Map data © OpenStreetMap contributors · © CARTO</div>
       <button class="prow" id="pAdd" style="display:none"></button>
     </div>
   </section>
@@ -7535,7 +7535,8 @@ const PlanPersonalization={
     this.d.sel.push({cat:planObj.cat, place:planObj.placeName, usable:planObj.usableMin, at:Date.now()});
     if(this.d.sel.length>60) this.d.sel=this.d.sel.slice(-60);
     // update observed accepted-duration distribution for the category
-    const durs=this.d.sel.filter(s=>s.cat===planObj.cat).map(s=>s.usable).sort((a,b)=>a-b);
+    // (numeric only: a caller that omits usableMin must not poison the p25)
+    const durs=this.d.sel.filter(s=>s.cat===planObj.cat && typeof s.usable==='number' && isFinite(s.usable)).map(s=>s.usable).sort((a,b)=>a-b);
     if(durs.length>=3) (this.d.minObserved=this.d.minObserved||{})[planObj.cat]={n:durs.length, p25:durs[Math.floor(durs.length*0.25)]};
     this.save();
   },
@@ -10313,7 +10314,7 @@ const PlanDayUI={
     if(!ev.gap){ toast('No window attached to that plan','warn'); return; }
     if(PlanDayModel.plannedInGap(ev.gap,this.date)){ toast('That window already has a plan — remove it first','warn'); return; }
     PlanDayModel.addPlanned(ev,this.date);
-    PlanPersonalization.load(); PlanPersonalization.recordSelection({cat:ev.cat, placeName:ev.place.n});
+    PlanPersonalization.load(); PlanPersonalization.recordSelection({cat:ev.cat, placeName:ev.place.n, usableMin:ev.usableMin});
     PlanDayModel.promoteDue();             // a basically-now window goes live immediately
     toast(favLabel(ev.place.n)+' added · '+PlanDayView.clock(ev.arriveMs),'good');
     this.stage='browse'; this.mode='day'; this.lastResults=null; this.render();
@@ -10360,6 +10361,7 @@ const PlanDayUI={
           <div class="wfsh-step"><b>Arrive ${PlanDayView.clock(p.arriveMs)}</b><span>${p.thereSrc==='est'?'~':''}${p.thereMin} min walk</span></div>
           <div class="wfsh-step"><b>Leave by ${PlanDayView.clock(p.leaveThereBy)}</b><span>${p.backSrc==='est'?'~':''}${p.backMin} min to ${esc(favLabel(p.nextB||p.nextName))} — there ${p.buffer} min early</span></div>
         </div>
+        ${(p.lat!=null&&p.lng!=null)?`<button class="hm-act honey" id="pdPlRoutine">Make this a weekly routine</button>`:''}
         <button class="hm-act" id="pdPlRemove">Remove from my day</button>
       </div></div>`;
     document.body.appendChild(bg);
@@ -10367,6 +10369,24 @@ const PlanDayUI={
     bg.addEventListener('click',e=>{ if(e.target===bg) close(); });
     bg.querySelector('.brxsh-x').addEventListener('click',close);
     bg.querySelector('#pdPlRemove').addEventListener('click',()=>{ PlanDayModel.removePlanned(p.id); close(); toast('Removed','' ); this.render(); });
+    /* the user's "make it a routine": this plan becomes a weekly reserved
+       block on the schedule (same day, time and place, class-shaped event) —
+       the one-off planned item retires because the routine now covers it */
+    const rt=bg.querySelector('#pdPlRoutine');
+    if(rt) rt.addEventListener('click',()=>{
+      const day=DOW_CODES[new Date(p.arriveMs).getDay()];
+      const toHM=ms=>{ const d=new Date(ms); return String(d.getHours()).padStart(2,'0')+':'+String(d.getMinutes()).padStart(2,'0'); };
+      const prof=ActivityProfiles[p.cat]||{};
+      classList.push({ id:'rt'+Date.now(), kind:'event', course:(prof.t||p.cat), title:'',
+        days:[day], date:'', start:toHM(p.arriveMs), end:toHM(p.leaveThereBy),
+        b:p.placeName, lat:p.lat, lng:p.lng, room:'', note:'' });
+      saveClasses();
+      PlanDayModel.removePlanned(p.id);
+      try{ document.dispatchEvent(new CustomEvent('beeline:classes-changed',{detail:{added:1}})); }catch(e){}
+      close();
+      toast((prof.t||'Routine')+' every '+DOW_SHORT[day]+' · '+favLabel(p.placeName),'good');
+      this.render();
+    });
     void bg.offsetHeight; bg.classList.add('show');   // forced reflow: rAF is throttled in hidden webviews (lightbox precedent)
   },
   /* schedule-less day: from / until / where-you-need-to-be */
