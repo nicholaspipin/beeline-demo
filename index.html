@@ -739,6 +739,11 @@ input.inp:disabled{ background:var(--limestone-dk); color:var(--ink-soft); }
 .ps-metric-note{ font-size:12px; color:var(--ink-faint); margin-top:9px; }
 .ps-preview{ width:86px; height:86px; flex:none; border-radius:var(--r-md); overflow:hidden; background:var(--limestone-dk); box-shadow:inset 0 0 0 1px var(--line); }
 .ps-preview svg{ width:100%; height:100%; display:block; }
+.ps-prev-img{ width:100%; height:100%; object-fit:cover; display:block; }
+/* open/closed sits with the walk time — the two facts that decide whether to go */
+.ps-open{ flex:none; font-family:var(--font-display); font-size:12px; font-weight:700; letter-spacing:.01em;
+  padding:3px 9px; border-radius:999px; background:var(--surface-dim); color:var(--ink-soft); }
+.ps-open.yes{ background:var(--good-tint); color:var(--good); }
 .ps-preview-empty{ width:100%; height:100%; display:grid; place-items:center; color:var(--ink-faint); }
 .ps-preview-empty svg{ width:30px; height:30px; }
 .ps-go{ margin-top:16px; height:54px; }
@@ -1157,7 +1162,9 @@ input.inp:disabled{ background:var(--limestone-dk); color:var(--ink-soft); }
 .bz-x{ flex:none; width:32px; height:32px; border:none; border-radius:50%; background:var(--surface-dim); color:var(--ink-soft); font-size:13px; cursor:pointer; }
 .bz-star{ flex:none; width:36px; height:36px; border:none; border-radius:50%; background:var(--surface-dim); color:var(--ink-faint); font-size:17px; cursor:pointer; }
 .bz-star.on{ color:var(--honey); background:var(--honey-tint); }
-.bz-dot{ display:inline-grid; place-items:center; width:24px; height:24px; border-radius:50%; color:#fff; font-family:var(--font-display); font-weight:700; font-size:12px; flex:none; }
+/* --tx comes from bzTextOn(routeColor) at every call site — white text on a
+   #FFC300 route was ~1.7:1, on the exact abbr doing colour-blind rescue work */
+.bz-dot{ display:inline-grid; place-items:center; width:24px; height:24px; border-radius:50%; color:var(--tx,#fff); font-family:var(--font-display); font-weight:700; font-size:12px; flex:none; }
 .bz-dot.lg{ width:34px; height:34px; font-size:15px; }
 .bz-dot.xl{ width:46px; height:46px; font-size:20px; }
 .bz-dot.ring{ background:var(--paper); color:var(--rc); box-shadow:inset 0 0 0 2px var(--rc); }
@@ -2564,7 +2571,7 @@ input.inp:disabled{ background:var(--limestone-dk); color:var(--ink-soft); }
             <div class="ps-sub" id="xCardSub">—</div>
             <div class="ps-metrics">
               <span class="ps-metric"><span data-pi="person-simple-walk"></span><b id="psTime">—</b></span>
-              <span class="ps-metric"><span data-pi="ruler"></span><b id="psDist">—</b></span>
+              <span class="ps-metric"><span data-pi="ruler"></span><b id="psDist">—</b></span><span class="ps-open" id="psOpen" style="display:none"></span>
             </div>
             <div class="ps-metric-note" id="psMetricNote" style="display:none"></div>
           </div>
@@ -2645,7 +2652,7 @@ input.inp:disabled{ background:var(--limestone-dk); color:var(--ink-soft); }
         <div class="prow" id="pUpdates"><span class="prow-ic"><span data-pi="arrows-clockwise"></span></span><b class="prow-label">What’s new<span class="upd-dot" id="updDot" style="display:none"></span></b><span class="prow-val" id="pUpdatesVal"></span><span class="prow-ch"><span data-pi="caret-right"></span></span></div>
       </div>
 
-      <div class="profile-version">BeeLine 1.0.0 · build 2026-09-02 11:10 · your data stays on this phone<br>Map data © OpenStreetMap contributors · © CARTO</div>
+      <div class="profile-version">BeeLine 1.0.0 · build 2026-09-02 11:16 · your data stays on this phone<br>Map data © OpenStreetMap contributors · © CARTO</div>
       <button class="prow" id="pAdd" style="display:none"></button>
     </div>
   </section>
@@ -4500,7 +4507,14 @@ function campusArea(lat,lng){
 }
 // route-preview mini-map: reuse the corridor miniMap component (straight line
 // from the user to the place). Falls back to the category glyph with no fix.
+/* The 86px slot led with an abstract straight-line mini-map — no streets, no
+   scale — while the place's verified PHOTO sat behind a "View details" tap.
+   A photo answers "is this the building I mean?" instantly; the line drawing
+   answers nothing at that size. Photo when we have one, the line as the honest
+   fallback when we don't (136 of 181 places), category glyph with no fix. */
 function previewMini(p){
+  const ph=(typeof placePhoto==='function')?placePhoto(p):null;
+  if(ph) return '<img class="ps-prev-img" src="'+esc(ph.t)+'" alt="'+esc(p.n)+'" loading="lazy" decoding="async">';
   if(!curPos) return '<div class="ps-preview-empty">'+(PIN_ICON[p.c]||PIN_ICON.offcampus)+'</div>';
   return miniMap({startLat:curPos.lat,startLng:curPos.lng,destLat:p.lat,destLng:p.lng,track:[]});
 }
@@ -4517,11 +4531,21 @@ function setPlaceMetrics(p){
   }
   note.style.display='none';
   dEl.textContent=fmtDist(distance(curPos.lat,curPos.lng,p.lat,p.lng));
-  tEl.innerHTML='<span class="ldots"><i></i><i></i><i></i></span>';
+  /* Show the local estimate immediately, then upgrade it. This used to be
+     loading dots for up to 14s (OSRM 7s, then Valhalla 7s) before falling back
+     to exactly this arithmetic — and offline, which is the case this app is
+     built for, the spinner ran the full 14s to land on a number available at
+     0ms. The card the user just tapped already showed it. '~' marks the
+     estimate and disappears when the routed value lands, matching how the app
+     distinguishes measured from estimated everywhere else. */
+  const rough=Math.max(1,Math.round(estWalkMin(distance(curPos.lat,curPos.lng,p.lat,p.lng))));
+  tEl.textContent='~'+rough+' min';
   const seq=++psSeq;
   fetchOfficialWalkMinutes(curPos.lat,curPos.lng,p.lat,p.lng)
-    .then(r=>{ if(seq!==psSeq) return; tEl.textContent=Math.max(1,Math.round(r.minutes))+' min'; })
-    .catch(()=>{ if(seq===psSeq) tEl.textContent='—'; });
+    .then(r=>{ if(seq!==psSeq) return;
+      const m=Math.max(1,Math.round(r.minutes));
+      tEl.textContent=(r.source==='osm'?'':'~')+m+' min'; })
+    .catch(()=>{ /* keep the honest estimate rather than falling back to a dash */ });
 }
 function selectPlace(p){
   exploreSel=p; psPlace=p; const meta=catMeta(p.c);
@@ -4529,6 +4553,12 @@ function selectPlace(p){
   const area=campusArea(p.lat,p.lng);
   $('xCardSub').textContent = meta.label + (area? ' · '+area : '');
   $('psPreview').innerHTML=previewMini(p);
+  /* open/closed belongs next to the walk time, not behind a details tap — it is
+     half of 'should I walk there'. Unknown hours render nothing, never a guess. */
+  { const nEl=$('psOpen'); if(nEl){ const e=(typeof enrichNow==='function')?enrichNow(p):null;
+      const st=(e&&e.fields&&e.fields.hours)?openStatus(e.fields.hours):null;
+      nEl.textContent=st||''; nEl.className='ps-open'+(st==='Open now'?' yes':(st==='Closed now'?' no':''));
+      nEl.style.display=st?'':'none'; } }
   setPlaceMetrics(p);
   syncSaveBtn(p);
   // collapse details each time a place is selected
@@ -6852,8 +6882,21 @@ const BusUI={
     if(!ok){
       $('bzRoutes').innerHTML='<div class="bz-empty">Bus data is unavailable right now — check your connection.<br><button class="btn sm" id="bzRetry" style="margin-top:12px">Try again</button></div>';
       const rt=$('bzRetry'); if(rt) rt.addEventListener('click',()=>this.enter());
+      /* Live is the DEFAULT view and bzRoutes is hidden there — without this,
+         a dead feed leaves "Loading live map…" pulsing forever over a hidden
+         error (crew F4). Surface the same message + retry in the veil. */
+      const veil=$('bzMapVeil');
+      if(veil){
+        veil.style.display='flex';
+        const dot=veil.querySelector('.mv-dot, .beetrail'); if(dot) dot.style.display='none';   // spinner class varies (night pass swapped mv-dot for beetrail)
+        const tx=veil.querySelector('.mv-txt');
+        if(tx) tx.innerHTML='Bus data is unavailable right now.<br><button class="btn sm" id="bzRetryV" style="margin-top:10px">Try again</button>';
+        const rv=document.getElementById('bzRetryV'); if(rv) rv.addEventListener('click',()=>this.enter());
+      }
       return;
     }
+    /* a successful (re)load clears any failure veil left from a dead feed */
+    if(BusMap.loaded && $('bzMapVeil')) $('bzMapVeil').style.display='none';
     this.renderChips();
     if(this.view==='live'){ BusMap.init(); setTimeout(()=>{ if(BusMap.map) BusMap.map.resize(); },150); }
     BusLive.start();
@@ -6942,11 +6985,13 @@ const BusUI={
     const host=$('bzPeekRows'); if(!host) return;
     if(!rows.length){
       const tw=bzTomorrowFirsts(s);
-      host.innerHTML= tw ? '<span class="bz-mut2" style="display:block;margin-bottom:5px">Done for today — first buses tomorrow:</span>'+tw
+      const lead= tw.includes('>Today<') ? 'Nothing tracking live — next on the schedule:'
+                                         : 'Done for today — first buses tomorrow:';
+      host.innerHTML= tw ? '<span class="bz-mut2" style="display:block;margin-bottom:5px">'+lead+'</span>'+tw
                          : '<span class="bz-mut">No upcoming buses at this stop right now.</span>';
       return;
     }
-    host.innerHTML=rows.slice(0,2).map(r=>`<span class="bz-peek-row"><span class="bz-dot" style="background:${esc(r.parent.color)}">${esc(r.parent.abbr)}</span><b>${r.state!=='LIVE'&&r.minutes>=60?esc(r.clock||''):r.minutes+' min'}</b>${r.state==='LIVE'?BZ_LIVE_BADGE:'<span class="bz-sched">Scheduled</span>'}</span>`).join('');
+    host.innerHTML=rows.slice(0,2).map(r=>`<span class="bz-peek-row"><span class="bz-dot" style="background:${esc(r.parent.color)};--tx:${bzTextOn(r.parent.color)}">${esc(r.parent.abbr)}</span><b>${r.state!=='LIVE'&&r.minutes>=60?esc(r.clock||''):r.minutes+' min'}</b>${r.state==='LIVE'?BZ_LIVE_BADGE:'<span class="bz-sched">Scheduled</span>'}</span>`).join('');
   },
   closeSheet(){ this.sheet=null; this.openStopId=null; this.openBusId=null; clearTimeout(this.etaTimer); BusMap.followEq=null; this.renderPeek(); const el=$('bzSheet'); if(el&&!el.classList.contains('peek')){ el.style.display='none'; this.renderPeek(); } },
   /* ---- stop sheet ---- */
@@ -6982,7 +7027,7 @@ const BusUI={
          one names the direction; the fleet number lives in the bus sheet */
       const tw=bzTowardName(r.parent, this.openStopId);
       return `<div class="bz-arr" ${r.equipmentId?`data-eq="${esc(r.equipmentId)}"`:''}>
-      <span class="bz-dot lg" style="background:${esc(r.parent.color)}">${esc(r.parent.abbr)}</span>
+      <span class="bz-dot lg" style="background:${esc(r.parent.color)};--tx:${bzTextOn(r.parent.color)}">${esc(r.parent.abbr)}</span>
       <span class="bz-arr-main"><b class="bz-arr-min">${esc(String(primary))}</b>${tw?`<span class="bz-toward">toward ${esc(tw)}</span>`:''}</span>
       <span class="bz-arr-state">${r.state==='LIVE' ? BZ_LIVE_BADGE+((f=>f?`<span class="bz-fullness ${f.cls}">${f.t} · ${f.n}</span>`:'')(bzFullness(r))) : `<span class="bz-sched">Scheduled${(r.minutes<60&&r.clock)?' · '+esc(r.clock):''}</span>`}</span></div>`;
     }).join('');
@@ -6999,7 +7044,7 @@ const BusUI={
     BusModel.parents.filter(p=>s.routes.has(p.id)).forEach(p=>{
       const deps=BusSchedule.departures(p, s.ext, d, 0, 5);
       if(!deps.length) return; any=true;
-      html+=`<div class="bz-arr sched"><span class="bz-dot lg" style="background:${esc(p.color)}">${esc(p.abbr)}</span><span class="bz-times">${deps.map(x=>`<i>${bzFmtSec(x.sec)}</i>`).join('')}</span></div>`;
+      html+=`<div class="bz-arr sched"><span class="bz-dot lg" style="background:${esc(p.color)};--tx:${bzTextOn(p.color)}">${esc(p.abbr)}</span><span class="bz-times">${deps.map(x=>`<i>${bzFmtSec(x.sec)}</i>`).join('')}</span></div>`;
     });
     if(!any) html+='<div class="bz-mut" style="padding:8px 2px">No scheduled service at this stop tomorrow.</div>';
     host.innerHTML=html; clearTimeout(this.etaTimer);
@@ -7027,7 +7072,7 @@ const BusUI={
     }
     el.className='bz-sheet'; el.style.display='block';
     el.innerHTML=`<div class="bz-sh-grab"></div>
-      <div class="bz-sh-head"><div style="display:flex;align-items:center;gap:10px"><span class="bz-dot lg" style="background:${esc(p.color)}">${esc(p.abbr)}</span><b class="bz-sh-title">Bus ${esc(v.equipmentId)}</b>${st==='LIVE'?BZ_LIVE_BADGE:'<span class="bz-sched">Signal lost…</span>'}${v.onDetour?'<span class="bz-detour-tag">Detour</span>':''}</div>
+      <div class="bz-sh-head"><div style="display:flex;align-items:center;gap:10px"><span class="bz-dot lg" style="background:${esc(p.color)};--tx:${bzTextOn(p.color)}">${esc(p.abbr)}</span><b class="bz-sh-title">Bus ${esc(v.equipmentId)}</b>${st==='LIVE'?BZ_LIVE_BADGE:'<span class="bz-sched">Signal lost…</span>'}${v.onDetour?'<span class="bz-detour-tag">Detour</span>':''}</div>
       <button class="bz-x" id="bzShClose">${pic('x')}</button></div>
       ${ns?`<div class="bz-brow big"><span class="bz-bk">Next stop</span><span class="bz-bv"><b>${esc(ns.name)}</b>${v.nextStopEta!=null?` <b class="bz-eta">${v.nextStopEta<1?'Now':Math.round(v.nextStopEta)+' min'}</b>`:''}</span></div>`:''}
       ${after?`<div class="bz-brow"><span class="bz-bk">After that</span><span class="bz-bv">${esc(after.name)}</span></div>`:''}
@@ -7083,7 +7128,7 @@ const BusUI={
       <div class="bz-plan-total">${headline} ${verdict}</div>
       <div class="bz-steps">
         <div class="bz-step"><span class="bz-step-ic">${pic('person-simple-walk')}</span><div>Walk <b>${Math.max(1,Math.round(b.walkTo))} min</b> to <b>${esc(b.board.name)}</b></div></div>
-        <div class="bz-step"><span class="bz-dot" style="background:${esc(b.p.color)}">${esc(b.p.abbr)}</span><div>Take the <b>${esc(b.p.abbr)}</b>${live?` — Bus ${esc(b.bus)} arrives in <b>${b.wait} min</b>`:` — departs <b>${bzFmtSec(b.depSec)}</b>`}${(f=>f?`<br><span class="bz-fullness ${f.cls}">${f.t} — ${f.n} aboard · it may be standing-room, or pass you by</span>`:'')(bzFullness({state:b.state,load:b.load,capacity:b.capacity}))}<br><span class="bz-mut2">${leave}</span></div></div>
+        <div class="bz-step"><span class="bz-dot" style="background:${esc(b.p.color)};--tx:${bzTextOn(b.p.color)}">${esc(b.p.abbr)}</span><div>Take the <b>${esc(b.p.abbr)}</b>${live?` — Bus ${esc(b.bus)} arrives in <b>${b.wait} min</b>`:` — departs <b>${bzFmtSec(b.depSec)}</b>`}${(f=>f?`<br><span class="bz-fullness ${f.cls}">${f.t} — ${f.n} aboard · it may be standing-room, or pass you by</span>`:'')(bzFullness({state:b.state,load:b.load,capacity:b.capacity}))}<br><span class="bz-mut2">${leave}</span></div></div>
         <div class="bz-step"><span class="bz-step-ic">${pic('signpost')}</span><div>Get off at <b>${esc(b.alight.name)}</b>${b.rideStops?` · <b>${b.rideStops} stop${b.rideStops>1?'s':''}</b>`:''} (~${Math.round(b.ride)} min ride)</div></div>
         <div class="bz-step"><span class="bz-step-ic">${pic('person-simple-walk')}</span><div>Walk <b>${Math.max(1,Math.round(b.walkFrom))} min</b> to <b>${esc(name)}</b></div></div>
       </div>`;
@@ -7133,7 +7178,7 @@ const BusUI={
     // fill favorites live rows
     favs.forEach(async s=>{
       const rows=await BusLive.stopEtas(s.id); const el=document.getElementById('bzFav-'+s.id); if(!el) return;
-      el.innerHTML= rows.length? rows.slice(0,2).map(r=>`<span class="bz-peek-row"><span class="bz-dot" style="background:${esc(r.parent.color)}">${esc(r.parent.abbr)}</span><b>${r.state!=='LIVE'&&r.minutes>=60?esc(r.clock||''):r.minutes+' min'}</b>${r.state==='LIVE'?BZ_LIVE_BADGE:'<span class="bz-sched">Sched</span>'}</span>`).join('')
+      el.innerHTML= rows.length? rows.slice(0,2).map(r=>`<span class="bz-peek-row"><span class="bz-dot" style="background:${esc(r.parent.color)};--tx:${bzTextOn(r.parent.color)}">${esc(r.parent.abbr)}</span><b>${r.state!=='LIVE'&&r.minutes>=60?esc(r.clock||''):r.minutes+' min'}</b>${r.state==='LIVE'?BZ_LIVE_BADGE:'<span class="bz-sched">Sched</span>'}</span>`).join('')
         : (bzTomorrowFirsts(s)||'<span class="bz-mut">No upcoming buses</span>');
     });
   },
@@ -7153,7 +7198,7 @@ const BusUI={
         let html='';
         places.forEach((p,i)=>{ html+=`<div class="bz-ac-item" data-k="p${i}"><span class="bz-ac-ic">${pic('map-pin-simple')}</span><div><b>${esc(p.name)}</b><span>Plan a bus trip</span></div></div>`; });
         stops.forEach((s,i)=>{ html+=`<div class="bz-ac-item" data-k="s${i}"><span class="bz-ac-ic">${pic('signpost')}</span><div><b>${esc(s.name)}</b><span>Bus stop · arrivals</span></div></div>`; });
-        routes.forEach((r,i)=>{ html+=`<div class="bz-ac-item" data-k="r${i}"><span class="bz-dot" style="background:${esc(r.color)}">${esc(r.abbr)}</span><div><b>${esc(r.name)}</b><span>Route detail</span></div></div>`; });
+        routes.forEach((r,i)=>{ html+=`<div class="bz-ac-item" data-k="r${i}"><span class="bz-dot" style="background:${esc(r.color)};--tx:${bzTextOn(r.color)}">${esc(r.abbr)}</span><div><b>${esc(r.name)}</b><span>Route detail</span></div></div>`; });
         if(!html) html='<div class="bz-ac-item none"><div><b>No matches</b><span>Try a building, stop, or route letter</span></div></div>';
         ac.innerHTML=html; ac.style.display='block';
         ac.querySelectorAll('.bz-ac-item[data-k]').forEach(el=>el.addEventListener('click',()=>{
@@ -7178,16 +7223,20 @@ const BusUI={
 function bzTomorrowFirsts(s){
   try{
     if(typeof BusSchedule==='undefined' || !BusSchedule.ok() || !s || !s.ext) return '';
+    /* TODAY's remaining schedule first (a 2 AM check must show this morning's
+       7 AM bus, not skip to the next calendar day), then tomorrow's */
+    const now=new Date(), nowSec=now.getHours()*3600+now.getMinutes()*60;
     const tm=new Date(); tm.setDate(tm.getDate()+1);
     const firsts=[];
     BusModel.parents.forEach(p=>{
       if(p.schedOnly) return;
       if(s.routes && s.routes.size && !s.routes.has(p.id)) return;
-      const d=BusSchedule.departures(p, s.ext, tm, 0, 1);
-      if(d.length) firsts.push({p, sec:d[0].sec});
+      let d=BusSchedule.departures(p, s.ext, now, nowSec+60, 1), when='Today';
+      if(!d.length){ d=BusSchedule.departures(p, s.ext, tm, 0, 1); when='Tomorrow'; }
+      if(d.length) firsts.push({p, sec:d[0].sec, when});
     });
-    firsts.sort((a,b)=>a.sec-b.sec);
-    return firsts.slice(0,2).map(f=>`<span class="bz-peek-row"><span class="bz-dot" style="background:${esc(f.p.color)}">${esc(f.p.abbr)}</span><b>${bzFmtSec(f.sec)}</b><span class="bz-sched">Tomorrow</span></span>`).join('');
+    firsts.sort((a,b)=> a.when!==b.when ? (a.when==='Today'?-1:1) : a.sec-b.sec);
+    return firsts.slice(0,2).map(f=>`<span class="bz-peek-row"><span class="bz-dot" style="background:${esc(f.p.color)};--tx:${bzTextOn(f.p.color)}">${esc(f.p.abbr)}</span><b>${bzFmtSec(f.sec)}</b><span class="bz-sched">${f.when}</span></span>`).join('');
   }catch(e){ return ''; }
 }
 /* the stop AFTER this one on the route = the direction a bus here is headed */
