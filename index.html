@@ -2645,7 +2645,7 @@ input.inp:disabled{ background:var(--limestone-dk); color:var(--ink-soft); }
         <div class="prow" id="pUpdates"><span class="prow-ic"><span data-pi="arrows-clockwise"></span></span><b class="prow-label">What’s new<span class="upd-dot" id="updDot" style="display:none"></span></b><span class="prow-val" id="pUpdatesVal"></span><span class="prow-ch"><span data-pi="caret-right"></span></span></div>
       </div>
 
-      <div class="profile-version">BeeLine 1.0.0 · build 2026-09-02 11:04 · your data stays on this phone<br>Map data © OpenStreetMap contributors · © CARTO</div>
+      <div class="profile-version">BeeLine 1.0.0 · build 2026-09-02 11:07 · your data stays on this phone<br>Map data © OpenStreetMap contributors · © CARTO</div>
       <button class="prow" id="pAdd" style="display:none"></button>
     </div>
   </section>
@@ -3771,12 +3771,36 @@ function localSearch(q){
       if(cq.includes(sq)) out.push({name:c.b, sub:c.course+(c.room?(' · '+c.room):'')+' · your class', lat:c.lat, lng:c.lng, src:'campus', sc:120});
     });
   }
+  /* People type how they speak: "the union", "the rec", "study", "somewhere to
+     eat". Before this, a leading article scored ZERO campus matches and the
+     geocoder's guess became result #1 — one Enter away from routing someone off
+     campus. De-article both sides, and map intent words onto categories. */
+  const deArt=t=>t.replace(/^(the|a|an)\s+/,'');
+  const sBare=deArt(s);
+  const INTENT=[
+    [/^(eat|food|hungry|lunch|dinner|breakfast|dining)$/, ['dining','offcampus'], 'to eat'],
+    [/^(study|quiet|read|library)$/,                      ['library'],            'to study'],
+    [/^(gym|workout|work out|lift|exercise|rec)$/,        ['rec'],                'to work out'],
+    [/^(coffee|cafe|café)$/,                              ['dining','offcampus'], 'for coffee'],
+  ];
+  const intent=INTENT.find(([re])=>re.test(sBare));
   for(const p of pool){
-    const name=p.n.toLowerCase(); let sc=-1;
-    for(const h of [name].concat(p.a||[])){
-      if(h===s) sc=Math.max(sc,100); else if(h.startsWith(s)) sc=Math.max(sc,80); else if(h.includes(s)) sc=Math.max(sc,55);
+    const name=p.n.toLowerCase(), nameBare=deArt(name); let sc=-1;
+    for(const h of [name, nameBare].concat(p.a||[])){
+      if(h===s||h===sBare) sc=Math.max(sc,100);
+      else if(h.startsWith(s)||h.startsWith(sBare)) sc=Math.max(sc,80);
+      else if(h.includes(s)||h.includes(sBare)) sc=Math.max(sc,55);
     }
-    if(sc<0 && s.split(/\s+/).every(t=>name.includes(t))) sc=40;
+    if(sc<0 && sBare.split(/\s+/).every(t=>name.includes(t))) sc=40;
+    /* "eat" used to return three theatres on a substring accident; now it
+       returns places you can actually eat at, ranked below any real name match */
+    if(sc<0 && intent && intent[1].includes(p.c)) sc=70;   // above a 55 substring accident, below a real prefix (80) or exact (100) name match
+    /* nearest wins among equals — "hall" used to return seven halls in the order
+       someone typed the file, with the closest one unreachable. Capped at 12 so
+       it can never lift a substring match over an exact one. */
+    if(sc>=0 && curPos && p.lat!=null){
+      sc += Math.max(0, 12 - distance(curPos.lat,curPos.lng,p.lat,p.lng)/150);
+    }
     if(sc>=0){ if(p.mine) sc+=15; const cl=(p.c&&CAT[p.c])?CAT[p.c].label:'IU Bloomington'; out.push({name:p.n, sub:p.mine?'your saved place':(p.c==='offcampus'?cl:cl+' · IU'), lat:p.lat, lng:p.lng, src:p.mine?'mine':'campus', sc}); }
   }
   return out.sort((a,b)=>b.sc-a.sc).slice(0,7);
@@ -7598,6 +7622,14 @@ function planPool(cat){
     cat==='home' ? null : 'Your '+(roleFor==='food'?'spot':roleFor)));
   if(cat==='home') return out;                      // Home is only the designated place
   const freq={}; walks.forEach(w=>{ const k=w.destLat.toFixed(4)+','+w.destLng.toFixed(4); freq[k]=(freq[k]||0)+1; });
+  /* errands are PERSONAL, not a campus category — the honest pool is places
+     the user has saved plus places they demonstrably go. (Previously [] here,
+     so the Errands filter could only ever come up empty.) */
+  if(cat==='errand'){
+    favorites.forEach(f=>{ if(f.role==='home') return; push({n:favLabel(f.name),lat:f.lat,lng:f.lng,c:f.c||'offcampus'}, 'Saved place'); });
+    IU_PLACES.forEach(p=>{ const n=freq[p.lat.toFixed(4)+','+p.lng.toFixed(4)]||0; if(n>=2) push(p,'You go often'); });
+    return out;
+  }
   const cats = cat==='eat'?['dining','offcampus'] : cat==='coffee'?['dining','offcampus'] : cat==='gym'?['rec'] : cat==='study'?['library']:[];
   const match=p=>{
     if(!cats.includes(p.c)) return false;
