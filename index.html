@@ -436,7 +436,10 @@ input.inp:disabled{ background:var(--limestone-dk); color:var(--ink-soft); }
 #scr-onb{ background:var(--limestone); }
 .onb-wrap{ flex:1; min-height:0; display:flex; flex-direction:column; padding:16px 26px 26px; }
 .onb-top{ display:flex; align-items:center; gap:14px; height:44px; }
-.onb-back{ width:42px; height:42px; border-radius:50%; background:var(--paper); box-shadow:inset 0 0 0 1px var(--line); display:grid; place-items:center; cursor:pointer; font-size:18px; color:var(--ink-soft); border:none; }
+/* a <button> now, not a <div> — it takes a click and belongs in the tab order.
+   font-size went with the typed "←" it used to size. */
+.onb-back{ width:42px; height:42px; padding:0; border-radius:50%; background:var(--paper); box-shadow:inset 0 0 0 1px var(--line); display:grid; place-items:center; cursor:pointer; color:var(--ink-soft); border:none; }
+.onb-back .pi{ width:19px; height:19px; }   /* matches the other back controls */
 .onb-back.hidden{ visibility:hidden; }
 .dots{ display:flex; gap:6px; }
 .dot{ width:7px; height:7px; border-radius:4px; background:var(--limestone-edge); transition:all .35s cubic-bezier(.22,1,.36,1); }
@@ -708,7 +711,9 @@ input.inp:disabled{ background:var(--limestone-dk); color:var(--ink-soft); }
 .x-cats{ display:flex; gap:8px; overflow-x:auto; padding:11px 18px 4px; scrollbar-width:none; }
 .x-cats::-webkit-scrollbar{ display:none; }
 .xcat{ flex:none; display:inline-flex; align-items:center; gap:7px; border:none; background:var(--paper); box-shadow:inset 0 0 0 1px var(--line2); color:var(--ink-soft); font-family:var(--ui); font-size:13px; font-weight:600; padding:8px 13px; border-radius:999px; cursor:pointer; transition:all .14s; white-space:nowrap; }
-.xcat .swatch{ width:9px; height:9px; border-radius:50%; }
+/* the colour swatch is gone with the inline styles that fed it; the pill now
+   carries the same glyph the map draws for that category */
+.xcat svg{ width:15px; height:15px; flex:none; }
 .xcat.on{ color:#fff; box-shadow:none; }
 .x-toggle{ display:flex; gap:4px; padding:4px; background:var(--limestone-dk); border-radius:var(--r-sm); margin:10px 18px 0; }
 .x-toggle button{ flex:1; height:36px; border:none; background:transparent; border-radius:var(--r-sm); font-family:var(--ui); font-size:13.5px; font-weight:650; color:var(--ink-soft); cursor:pointer; display:flex; align-items:center; justify-content:center; gap:7px; transition:all .18s; }
@@ -1409,8 +1414,8 @@ input.inp:disabled{ background:var(--limestone-dk); color:var(--ink-soft); }
 .sched-add{ display:flex; align-items:center; justify-content:center; gap:8px; width:100%; height:48px; border:1.5px dashed var(--line2); background:none; border-radius:var(--r-md); color:var(--ink-soft); font-family:var(--ui); font-weight:650; font-size:14px; cursor:pointer; margin:2px 0 12px; }
 .sched-add svg{ width:18px; height:18px; }
 .sched-empty{ text-align:center; padding:44px 20px; }
-.sched-empty-t{ font-weight:730; font-size:18px; }
-.sched-empty-b{ color:var(--ink-soft); font-size:14px; line-height:1.5; margin:6px auto 18px; max-width:32ch; }
+/* the 18px gap before the buttons used to live on .sched-empty-b margin */
+.sched-empty-t{ font-weight:730; font-size:18px; margin:0 0 18px; }
 /* class editor sheet */
 /* Measured at 375x812: this sheet renders 821px tall with its top at -9px, so its
    title AND its grab pill sat above the screen edge — the one sheet tall enough to
@@ -1558,7 +1563,7 @@ input.inp:disabled{ background:var(--limestone-dk); color:var(--ink-soft); }
 /* ---- EXPLORE restyle ---- */
 .xcat{ background:var(--surface); color:var(--ink-soft); }
 .xcat.on{ background:var(--ink) !important; color:var(--paper-bg); }
-.xcat .swatch{ display:none; }
+/* .xcat .swatch removed with the element */
 .xrow-ic{ background:var(--surface-dim) !important; color:var(--ink); }
 .fav-ic{ background:var(--surface-dim) !important; color:var(--ink); }
 /* markers on the LIGHT Explore basemap (user's explicit call): ink dots with a
@@ -2442,7 +2447,7 @@ input.inp:disabled{ background:var(--limestone-dk); color:var(--ink-soft); }
   <section class="screen" id="scr-onb">
     <div class="onb-wrap">
       <div class="onb-top">
-        <div class="onb-back hidden" id="onbBack">←</div>
+        <button class="onb-back hidden" id="onbBack" aria-label="Back"><span data-pi="caret-left"></span></button>
         <div class="dots" id="onbDots"></div>
       </div>
 
@@ -2769,7 +2774,7 @@ input.inp:disabled{ background:var(--limestone-dk); color:var(--ink-soft); }
         <div class="prow" id="pUpdates"><span class="prow-ic"><span data-pi="arrows-clockwise"></span></span><b class="prow-label">What’s new<span class="upd-dot" id="updDot" style="display:none"></span></b><span class="prow-val" id="pUpdatesVal"></span><span class="prow-ch"><span data-pi="caret-right"></span></span></div>
       </div>
 
-      <div class="profile-version">BeeLine 1.0.0 · build 2026-09-02 12:30 · your data stays on this phone<br>Map data © OpenStreetMap contributors · © CARTO</div>
+      <div class="profile-version">BeeLine 1.0.0 · build 2026-09-02 12:35 · your data stays on this phone<br>Map data © OpenStreetMap contributors · © CARTO</div>
       <button class="prow" id="pAdd" style="display:none"></button>
     </div>
   </section>
@@ -2879,7 +2884,7 @@ input.inp:disabled{ background:var(--limestone-dk); color:var(--ink-soft); }
     <span id="roLeft" style="display:none"></span><span id="roGps" style="display:none"></span><span id="roLine" style="display:none"></span><span id="roDriftBox" style="display:none"></span>
 
     <div class="walkfoot">
-      <button class="btn arrive-cta" id="arriveBtn" style="display:none">I’m here ✓</button>
+      <button class="btn arrive-cta" id="arriveBtn" style="display:none"><span data-pi="check"></span>I’m here</button>
       <button class="walk-cancel" id="cancelWalk">End walk</button>
     </div>
   </section>
@@ -4553,8 +4558,15 @@ function filteredPlaces(){
 const X_CATS=[['all','All'],['academic','Academic'],['library','Libraries'],['dining','Dining'],['residence','Housing'],['greek','Greek Life'],['rec','Recreation'],['arts','Arts']];
 function buildCats(){
   const wrap=$('xCats'); if(!wrap) return;
-  wrap.innerHTML=X_CATS.map(([k,label])=>{ const color = k==='all' ? '#FFC300' : (CAT[k]?CAT[k].color:'#FFC300');
-    return `<button class="xcat ${k===xCat?'on':''}" data-c="${k}" style="${k===xCat?('background:'+color+';'):''}"><span class="swatch" style="background:${color}"></span>${label}</button>`; }).join('');
+  /* Eight identical grey word-pills you had to read left-to-right to find
+     "Dining", with "Arts" scrolled off the edge — while the map already draws a
+     distinct glyph per category in PIN_ICON. Both colour affordances here were
+     dead anyway: .xcat .swatch is display:none and .xcat.on carries
+     background:var(--ink) !important, so the inline colour never rendered.
+     Verified all seven categories have a PIN_ICON entry before relying on it;
+     'All' uses pic('list'), which exists in the vocabulary. */
+  wrap.innerHTML=X_CATS.map(([k,label])=>
+    `<button class="xcat ${k===xCat?'on':''}" data-c="${k}">${k==='all'?pic('list'):(PIN_ICON[k]||'')}${label}</button>`).join('');
   wrap.querySelectorAll('.xcat').forEach(b=>b.addEventListener('click',()=>{ xCat=b.dataset.c; buildCats(); refreshExplore(); }));
 }
 function setXView(v){ xView=v; $('scr-map').dataset.xview=v; document.querySelectorAll('#xToggle button').forEach(b=>b.classList.toggle('on', b.dataset.xv===v)); if(v==='map'){ initExplore(); setTimeout(()=>{ if(exploreMap){ exploreMap.resize(); } },150); refreshMarkers(); } else { renderXList(); } }
@@ -4605,8 +4617,18 @@ function visiblePlaces(){
   return all.filter(p=>placeTier(p)<=band);
 }
 function buildMarkers(){
-  { const n=filteredPlaces().length;                         // searching to one match said "1 places"
-    if($('xCount')) $('xCount').textContent = n+(n===1?' place':' places'); }
+  /* The pill counted filteredPlaces() while the map drew visiblePlaces(): at the
+     opening zoom of 14.8 that is "181 places" asserted over 48 dots, in an app
+     whose whole character is that a number on screen is true. But the two agree
+     EXACTLY once a query or category is active, because visiblePlaces() stops
+     tier-filtering on explicit intent — measured 10/10 for Dining, 5/5 for
+     "library". So the count isn't wrong, it's wrong in one state. Show it where
+     it's true and genuinely useful; hide it where it describes undrawn dots.
+     (The audit said delete it outright; that also throws away the true case.) */
+  { const el=$('xCount');
+    if(el){ const n=filteredPlaces().length;
+      el.textContent = n+(n===1?' place':' places');         // searching to one match said "1 places"
+      el.style.display = (xQuery.trim() || xCat!=='all') ? '' : 'none'; } }
   if(!exploreMap || !(exMapLoaded || exploreMap.loaded())) return;
   clearMarkers();
   visiblePlaces().forEach(p=>{
@@ -5690,10 +5712,10 @@ function renderSchedule(){
   if(screens.schedule.classList.contains('active') && !document.hidden)
     schedTick=setTimeout(()=>{ if(screens.schedule.classList.contains('active') && !document.hidden) renderSchedule(); }, 60000);
   if(!classList.length){
-    body.innerHTML=`<div class="sched-empty"><div class="sched-empty-t">No classes yet</div><div class="sched-empty-b">Add your classes and BeeLine will walk you to each one.</div><button class="btn" id="schedAdd0">Add a class</button><button class="btn ghost" id="schedScan0">Scan your schedule</button></div>`;
+    body.innerHTML=`<div class="sched-empty"><div class="sched-empty-t">No classes yet</div><button class="btn" id="schedAdd0">Add a class</button><button class="btn ghost" id="schedScan0">Scan your schedule</button></div>`;
     const a=$('schedAdd0'); if(a) a.addEventListener('click',()=>openClassEditor());
     const s0=$('schedScan0'); if(s0) s0.addEventListener('click',()=>{ if(typeof ScanUI!=='undefined') ScanUI.open(); });
-    $('schedSub').textContent='Add your classes to get walking directions.';
+    $('schedSub').textContent='';   // the empty state below already says it; the page subtitle said it a second time
     return;
   }
   { const nC=classList.filter(x=>(x.kind||'class')==='class').length, nE=classList.length-nC;
@@ -6092,7 +6114,7 @@ function renderHomeInsight(){
       ? ' — '+Math.round((lr.baselineMinutes*60-lr.bestSeconds)/60)+' min faster than the official estimate' : '') : '';
   box.innerHTML=`<div class="insight">
     <div class="insight-txt">Best of your <b>${lr.count} walk${lr.count===1?'':'s'}</b> to ${esc(favLabel(nx.c.b))}: <span class="up">${fmtClock(lr.bestSeconds)}</span>${vs}.</div>
-    <button class="insight-go" id="insightGo">View →</button></div>`;
+    <button class="insight-go" id="insightGo">View ${pic('arrow-right')}</button></div>`;
   const g=$('insightGo'); if(g) g.addEventListener('click',()=>show('saved'));
 }
 
@@ -7467,7 +7489,7 @@ const BusUI={
       ${crowd}
       <div class="bz-sh-actions">
         <button class="btn ghost sm" id="bzViewRoute">View route</button>
-        <button class="btn ghost sm" id="bzFollow">${BusMap.followEq===v.equipmentId?'Following ✓':'Follow bus'}</button>
+        <button class="btn ghost sm" id="bzFollow">${BusMap.followEq===v.equipmentId?'Following '+pic('check'):'Follow bus'}</button>
       </div>`;
     $('bzShClose').addEventListener('click',()=>this.closeSheet());
     $('bzViewRoute').addEventListener('click',()=>BusRouteDetail.open(p.id));
