@@ -1649,8 +1649,10 @@ input.inp:disabled{ background:var(--limestone-dk); color:var(--ink-soft); }
 .pd-search input{ flex:1; border:none; background:none; font-family:var(--font-display); font-size:14.5px; font-weight:570; color:var(--ink); min-width:0; }
 .pd-search input:focus{ outline:none; }
 .pd-search input::placeholder{ color:var(--ink-soft); font-weight:500; }
-.pd-shortcuts{ display:flex; justify-content:space-between; padding:18px 30px 4px; }
-.pd-sc{ display:flex; flex-direction:column; align-items:center; gap:8px; border:none; background:none; cursor:pointer; font-family:var(--font-display); font-size:13px; font-weight:640; color:var(--ink); }
+.pd-shortcuts{ display:flex; justify-content:space-between; gap:18px; padding:18px 30px 4px; overflow-x:auto; scrollbar-width:none; }
+.pd-shortcuts::-webkit-scrollbar{ display:none; }
+.pd-sc{ flex:none; display:flex; flex-direction:column; align-items:center; gap:8px; border:none; background:none; cursor:pointer; font-family:var(--font-display); font-size:13px; font-weight:640; color:var(--ink); max-width:86px; }
+.pd-sc span{ white-space:nowrap; overflow:hidden; text-overflow:ellipsis; max-width:86px; }
 .pd-sc .pi{ width:30px; height:30px; }
 .pd-sc:active{ opacity:.6; }
 .pd-dayh{ display:flex; align-items:center; padding:22px 22px 10px; }
@@ -1830,6 +1832,22 @@ input.inp:disabled{ background:var(--limestone-dk); color:var(--ink-soft); }
 .wfi-tile.on{ background:var(--honey-tint); box-shadow:inset 0 0 0 1.8px var(--honey); }
 .wfi-go{ display:block; width:calc(100% - 40px); margin:18px 20px 8px; border:none; cursor:pointer; background:var(--honey); color:var(--on-honey); border-radius:var(--r-md); padding:16px; font-family:var(--font-display); font-size:16px; font-weight:740; }
 .wfi-go[disabled]{ opacity:.45; pointer-events:none; }
+/* activity library: user tiles + the add tile + the creation sheet */
+.wfi-tile.custom .pi{ color:var(--honey-deep); }
+.wfi-tile.add{ box-shadow:inset 0 0 0 1.6px var(--line2); border:none; background:none; }
+.wfi-tile.add .pi, .wfi-tile.add span{ color:var(--ink-soft); }
+.na-in{ width:100%; border:none; background:var(--paper-bg); border-radius:var(--r-sm); padding:13px 14px; font-family:var(--font-display); font-size:15px; font-weight:600; color:var(--ink); box-sizing:border-box; }
+.na-in:focus{ outline:none; box-shadow:inset 0 0 0 2px var(--ink); }
+.na-bases{ display:flex; gap:8px; flex-wrap:wrap; }
+.na-bases .pt-c{ padding:10px 14px; flex:none; }
+.na-opt{ font-style:normal; font-weight:500; text-transform:none; letter-spacing:0; }
+.na-hit{ display:flex; align-items:center; gap:6px; margin-top:6px; font-size:13px; font-weight:650; color:var(--good); }
+.na-hit .pi{ width:14px; height:14px; }
+.na-row{ display:flex; align-items:center; gap:10px; padding:10px 2px; border-bottom:1px solid var(--line); }
+.na-row b{ font-family:var(--font-display); font-size:14.5px; }
+.na-row span{ flex:1; font-size:12.5px; color:var(--ink-soft); }
+.na-del{ border:none; background:none; cursor:pointer; color:var(--ink-faint); padding:6px; }
+.na-del .pi{ width:16px; height:16px; }
 .wfsh-inc{ font-size:12.5px; color:var(--ink-faint); margin-top:2px; }
 .wfsh-steps{ margin:16px 0 2px; }
 .wfsh-step{ position:relative; padding:0 0 14px 24px; }
@@ -2545,7 +2563,7 @@ input.inp:disabled{ background:var(--limestone-dk); color:var(--ink-soft); }
     <div class="x-top">
       <div class="x-search">
         <span class="s-ic"><span data-pi="magnifying-glass"></span></span>
-        <input type="text" id="xSearch" placeholder="Search 100+ places" autocomplete="off">
+        <input type="text" id="xSearch" placeholder="Search any campus place" autocomplete="off">
       </div>
     </div>
     <div class="x-cats" id="xCats"></div>
@@ -2652,7 +2670,7 @@ input.inp:disabled{ background:var(--limestone-dk); color:var(--ink-soft); }
         <div class="prow" id="pUpdates"><span class="prow-ic"><span data-pi="arrows-clockwise"></span></span><b class="prow-label">What’s new<span class="upd-dot" id="updDot" style="display:none"></span></b><span class="prow-val" id="pUpdatesVal"></span><span class="prow-ch"><span data-pi="caret-right"></span></span></div>
       </div>
 
-      <div class="profile-version">BeeLine 1.0.0 · build 2026-09-02 11:16 · your data stays on this phone<br>Map data © OpenStreetMap contributors · © CARTO</div>
+      <div class="profile-version">BeeLine 1.0.0 · build 2026-09-02 11:29 · your data stays on this phone<br>Map data © OpenStreetMap contributors · © CARTO</div>
       <button class="prow" id="pAdd" style="display:none"></button>
     </div>
   </section>
@@ -3082,7 +3100,7 @@ let consent=lsGet(LS_CONSENT);
 let campus=lsGet(LS_CAMPUS) || {name:'IU Bloomington', tag:'IUB'};
 let trackingOn=true;
 let dest=null, pendingGoogle=null, pendingBaselineSource=null, saveBaselineSource=null;
-let active=null, heading=0, curPos=null, tickTimer=null;
+let active=null, heading=null, curPos=null, tickTimer=null;   /* null until a real sample — 0 meant "facing north" and drew a confident needle */
 let walkMap=null, mapReady=false, mapInited=false, destMarker=null, curMarker=null, curEl=null;
 // compass smoothing/throttle state
 let headEMA=null;             // EMA of the heading unit vector {x,y}, or null
@@ -4137,7 +4155,7 @@ async function startWalk(){
     recordPoint(curPos); onPositionTick();
   }, err=>{ $('walkSub').textContent=geoErrMsg(err).slice(0,42); }, {enableHighAccuracy:true,timeout:15000,maximumAge:1000});
 }
-function readPos(pos){ return {lat:pos.coords.latitude, lng:pos.coords.longitude, acc:pos.coords.accuracy||null}; }
+function readPos(pos){ return {lat:pos.coords.latitude, lng:pos.coords.longitude, acc:pos.coords.accuracy||null, at:Date.now()}; }
 function recordPoint(p){
   if(!active) return; const last=active.lastPt;
   if(last && distance(last.lat,last.lng,p.lat,p.lng)<2) return;
@@ -4168,14 +4186,30 @@ function tryAutoLog(){
   }catch(e){}
 }
 function beginTick(){ clearInterval(tickTimer); tickTimer=setInterval(updateTime,1000); updateTime(); }
-function updateTime(){ if(active) $('roTime').textContent=fmtClock((Date.now()-active.t0)/1000); }
+function updateTime(){
+  if(!active) return;
+  $('roTime').textContent=fmtClock((Date.now()-active.t0)/1000);
+  /* Staleness has to be driven by the CLOCK, not by the next fix — the whole
+     point is that no next fix is coming. Without this the screen would only
+     admit the signal was lost at the moment it came back. */
+  if(curPos && curPos.at && Date.now()-curPos.at>20000) onPositionTick();
+}
 function onPositionTick(){
   if(!active||!curPos||!dest) return;
   const d=distance(curPos.lat,curPos.lng,dest.lat,dest.lng);
   const arrived=d<closeRadius();
   const dft=d*3.28084, dmi=d/1609.34;
-  $('bigDist').textContent = dft>=528 ? dmi.toFixed(2) : Math.round(dft);
-  $('bigUnit').textContent = arrived ? "you're here" : (dft>=528 ? 'miles to go' : 'feet to go');
+  /* A lost or rejected fix used to leave this screen looking live: curPos was
+     never invalidated, so the 68px number and the turn instruction froze at
+     their last values and kept presenting at full confidence while the walker
+     kept moving. The app never fabricates a position — but it was fabricating
+     FRESHNESS. Past the watch's own 15s timeout, say the reading is old. */
+  const fixAge = curPos.at ? (Date.now()-curPos.at) : 0;
+  const stale = fixAge > 20000;
+  $('bigDist').textContent = (stale?'~':'') + (dft>=528 ? dmi.toFixed(2) : Math.round(dft));
+  $('bigUnit').textContent = arrived ? "you're here"
+    : stale ? 'last known · signal lost'
+    : (dft>=528 ? 'miles to go' : 'feet to go');
   let drift=0;
   if(active.start) drift=Math.abs(crossTrack(active.start.lat,active.start.lng,dest.lat,dest.lng,curPos.lat,curPos.lng));
   $('roDrift').textContent=Math.round(drift*3.28084);
@@ -4324,7 +4358,9 @@ function dialState(){
   if(hasFix){ const bRaw=bearing(curPos.lat,curPos.lng,dest.lat,dest.lng); bToDest=(active&&active.lastBearing!=null&&d!=null&&d<holdRadius())?active.lastBearing:bRaw; }
   const arrived=d!=null && d<closeRadius();
   let rel=null, relSigned=null, aligned=false;
-  if(bToDest!=null){ rel=((bToDest-heading)+360)%360; relSigned=rel>180?rel-360:rel; aligned=Math.abs(relSigned)<14; }
+  /* no heading = no direction claim. rel stays null so the needle hides and the
+     dial shows its acquiring state rather than pointing wherever north is. */
+  if(bToDest!=null && heading!=null){ rel=((bToDest-heading)+360)%360; relSigned=rel>180?rel-360:rel; aligned=Math.abs(relSigned)<14; }
   let prog=0; if(active&&active.initialDist&&d!=null) prog=Math.max(0,Math.min(1,1-d/active.initialDist));
   return {hasFix,bToDest,d,arrived,rel,relSigned,aligned,prog};
 }
@@ -4394,7 +4430,7 @@ function filteredPlaces(){
   });
 }
 // curated chip set per the redesign spec (other categories still show under "All")
-const X_CATS=[['all','All'],['academic','Academic'],['library','Libraries'],['dining','Dining'],['residence','Housing'],['greek','Greek Life'],['rec','Recreation']];
+const X_CATS=[['all','All'],['academic','Academic'],['library','Libraries'],['dining','Dining'],['residence','Housing'],['greek','Greek Life'],['rec','Recreation'],['arts','Arts']];
 function buildCats(){
   const wrap=$('xCats'); if(!wrap) return;
   wrap.innerHTML=X_CATS.map(([k,label])=>{ const color = k==='all' ? '#FFC300' : (CAT[k]?CAT[k].color:'#FFC300');
@@ -4785,8 +4821,8 @@ const X_SECTIONS=[
   {t:'Campus landmarks', pick:p=>placeTier(p)===1, photoFirst:true},
   {t:'Food & coffee',    pick:p=>p.c==='dining'},
   {t:'Study spots',      pick:p=>p.c==='library'},
-  {t:'Gyms & recreation',pick:p=>p.c==='rec'},
-  {t:'Arts & museums',   pick:p=>p.c==='arts'},
+  {t:'Gyms & recreation',pick:p=>p.c==='rec', all:'rec'},
+  {t:'Arts & museums',   pick:p=>p.c==='arts', all:'arts'},
   {t:'Academic buildings',pick:p=>p.c==='academic', all:'academic'},
 ];
 const X_UTIL=[
@@ -7575,17 +7611,30 @@ function planTimeSheet(initial, cb, title){
 
 /* ---- ActivityProfiles — setup/exit overhead + duration shape.
    Starter defaults, NOT truths: personalization nudges min via observed
-   accepted durations (see PlanPersonalization). type: elastic (any
-   meaningful duration works, diminishing returns) | threshold (below min
-   don't surface) | compound (setup+exit dominate) | fixed (user-set). ---- */
+   accepted durations (see PlanPersonalization). The duration SHAPE lives
+   entirely in min/good/ideal via planDurationUtility — a former `type` tag
+   duplicated that in prose, was read nowhere, and died rather than being
+   inherited half-implemented by user-defined activities. ---- */
 const ActivityProfiles={
-  coffee:{ t:'Coffee', setup:4, exit:1, min:5,  good:12, ideal:18, type:'elastic',  verb:'for coffee' },
-  eat:   { t:'Eat',    setup:6, exit:2, min:12, good:22, ideal:32, type:'threshold',verb:'to eat' },
-  gym:   { t:'Gym',    setup:6, exit:5, min:25, good:45, ideal:65, type:'compound', verb:'to work out' },
-  study: { t:'Study',  setup:2, exit:1, min:10, good:30, ideal:60, type:'elastic',  verb:'to study' },
-  home:  { t:'Home',   setup:2, exit:3, min:15, good:30, ideal:60, type:'threshold',verb:'at home' },
-  errand:{ t:'Errand', setup:1, exit:1, min:5,  good:10, ideal:15, type:'fixed',    verb:'' },
-  break: { t:'Break',  setup:0, exit:0, min:1,  good:10, ideal:20, type:'elastic',  verb:'to breathe' },
+  coffee:{ t:'Coffee', setup:4, exit:1, min:5,  good:12, ideal:18, verb:'for coffee' },
+  eat:   { t:'Eat',    setup:6, exit:2, min:12, good:22, ideal:32, verb:'to eat' },
+  gym:   { t:'Gym',    setup:6, exit:5, min:25, good:45, ideal:65, verb:'to work out' },
+  study: { t:'Study',  setup:2, exit:1, min:10, good:30, ideal:60, verb:'to study' },
+  home:  { t:'Home',   setup:2, exit:3, min:15, good:30, ideal:60, verb:'at home' },
+  errand:{ t:'Errand', setup:1, exit:1, min:5,  good:10, ideal:15, verb:'' },
+  break: { t:'Break',  setup:0, exit:0, min:1,  good:10, ideal:20, verb:'to breathe' },
+};
+
+/* ---- ActivityStore — the user's own activities. An activity is a NAME plus
+   a base profile it behaves like (its setup/exit/min math comes from that
+   profile — never invented) and an optional usual place. Independent of any
+   specific time; routines are made from these via the schedule editor. ---- */
+const LS_ACTIVITIES='beeline.activities.v1';
+const ActivityStore={
+  list(){ try{ return JSON.parse(localStorage.getItem(LS_ACTIVITIES)||'[]')||[]; }catch(e){ return []; } },
+  save(a){ try{ localStorage.setItem(LS_ACTIVITIES, JSON.stringify(a)); }catch(e){} },
+  add(item){ const a=this.list(); a.push(item); this.save(a); },
+  remove(id){ this.save(this.list().filter(x=>x.id!==id)); },
 };
 
 /* ---- PlanPersonalization — explicit roles > repeated behavior > context.
@@ -7897,7 +7946,7 @@ setInterval(()=>{ if(plan && plan.v===2){ const before=plan.phase+Math.round((pl
 const PlanUI={
   ctx:null, filter:null, deadline:null, lastQuery:'', stage:'intent', _intent:null,
   open(){
-    this.filter=null; this.lastQuery='';
+    this.filter=null; this.lastQuery=''; this.customSel=null;
     this.ctx=PlanEngine.context();
     show('fit');
     if(!this.ctx && !this.deadline){ this.renderDeadlineAsk(); return; }
@@ -7917,18 +7966,80 @@ const PlanUI={
     const usable=Math.max(0, Math.round(c.gapMin-direct.min-c.buffer));
     const tiles=[['eat','Eat','fork-knife'],['coffee','Coffee','coffee'],['study','Study','books'],
                  ['gym','Work out','barbell'],['errand','Run an errand','signpost'],['else','Somewhere else','compass']];
+    const customs=ActivityStore.list();
     body.innerHTML=`
       <div class="wfi-status">${pic('clock')}<b>${usable} usable minutes</b></div>
       <div class="fit-head"><h1 class="fit-title">What do you want to do?</h1></div>
-      <div class="wfi-grid">${tiles.map(([k,t,ic])=>`<button class="wfi-tile${this._intent===k?' on':''}" data-wfi="${k}">${pic(ic)}<span>${t}</span></button>`).join('')}</div>
+      <div class="wfi-grid">${tiles.map(([k,t,ic])=>`<button class="wfi-tile${this._intent===k?' on':''}" data-wfi="${k}">${pic(ic)}<span>${t}</span></button>`).join('')}
+        ${customs.map(a=>`<button class="wfi-tile custom${this._intent==='c:'+a.id?' on':''}" data-wfi="c:${a.id}">${pic('star')}<span>${esc(a.name)}</span></button>`).join('')}
+        <button class="wfi-tile add" data-wfnew="1">${pic('plus')}<span>New activity</span></button>
+      </div>
       <button class="wfi-go" id="wfiGo"${this._intent?'':' disabled'}>Show me plans</button>`;
     body.querySelectorAll('[data-wfi]').forEach(b=>b.addEventListener('click',()=>{ this._intent=b.dataset.wfi; this.renderIntent(); }));
+    const nw=body.querySelector('[data-wfnew]'); if(nw) nw.addEventListener('click',()=>this.newActivitySheet());
     $('wfiGo').addEventListener('click',()=>{
       if(!this._intent) return;
       if(this._intent==='else'){ this.renderElse(); const q=$('wfeQ'); if(q) q.focus(); return; }
+      if(this._intent.startsWith('c:')){
+        const a=ActivityStore.list().find(x=>'c:'+x.id===this._intent);
+        if(a){ this.customSel=a; this.filter=a.base; this.render(); return; }
+      }
+      this.customSel=null;
       this.filter=this._intent;
       this.render();
     });
+  },
+  /* create a user activity: a name, the profile it behaves like (its math),
+     an optional usual place. No invented numbers — the base profile IS the
+     duration model, and the user chose it. */
+  newActivitySheet(){
+    let bg=document.getElementById('naShBg'); if(bg) bg.remove();
+    bg=document.createElement('div'); bg.id='naShBg'; bg.className='brxsh-bg';
+    const bases=[['study','Study'],['gym','Workout'],['eat','Meal'],['coffee','Quick stop'],['errand','Errand']];
+    let base='study', place=null;
+    const customs=ActivityStore.list();
+    bg.innerHTML=`<div class="brxsh">
+      <div class="brxsh-head"><b>New activity</b><button class="brxsh-x" aria-label="Close">${pic('x')}</button></div>
+      <div class="brxsh-scroll">
+        <div class="pt-lab">What is it?</div>
+        <input class="na-in" id="naName" type="text" placeholder="e.g. Violin practice" autocomplete="off">
+        <div class="pt-lab">Behaves like</div>
+        <div class="na-bases">${bases.map(([k,t])=>`<button class="pt-c${k===base?' on':''}" data-nb="${k}">${t}</button>`).join('')}</div>
+        <div class="pt-lab">Usual place <i class="na-opt">optional</i></div>
+        <input class="na-in" id="naPlace" type="text" placeholder="Search campus, or leave empty" autocomplete="off">
+        <div class="na-hit" id="naHit" style="display:none"></div>
+        <button class="hm-act honey" id="naSave">Save activity</button>
+        ${customs.length?`<div class="pt-lab" style="margin-top:18px">Your activities</div>${customs.map(a=>`<div class="na-row"><b>${esc(a.name)}</b><span>${esc((ActivityProfiles[a.base]||{}).t||a.base)}${a.placeName?' · '+esc(shortName(a.placeName)):''}</span><button class="na-del" data-nadel="${a.id}" aria-label="Delete">${pic('trash-simple')}</button></div>`).join('')}`:''}
+      </div></div>`;
+    document.body.appendChild(bg);
+    const close=()=>{ bg.classList.remove('show'); setTimeout(()=>bg.remove(),240); };
+    bg.addEventListener('click',e=>{ if(e.target===bg) close(); });
+    bg.querySelector('.brxsh-x').addEventListener('click',close);
+    bg.querySelectorAll('[data-nb]').forEach(b=>b.addEventListener('click',()=>{
+      base=b.dataset.nb;
+      bg.querySelectorAll('[data-nb]').forEach(x=>x.classList.toggle('on',x.dataset.nb===base));
+    }));
+    const pIn=bg.querySelector('#naPlace'), hit=bg.querySelector('#naHit');
+    pIn.addEventListener('input',()=>{
+      place=null; const q=pIn.value.trim();
+      if(q.length<3 || typeof localSearch!=='function'){ hit.style.display='none'; return; }
+      const hits=localSearch(q)||[];
+      if(hits.length){ place={n:hits[0].name,lat:hits[0].lat,lng:hits[0].lng,c:hits[0].c||'offcampus'};
+        hit.style.display='block'; hit.innerHTML=pic('check')+' '+esc(hits[0].name); }
+      else hit.style.display='none';
+    });
+    bg.querySelectorAll('[data-nadel]').forEach(b=>b.addEventListener('click',()=>{
+      ActivityStore.remove(b.dataset.nadel); close(); this.renderIntent(); toast('Activity removed','');
+    }));
+    bg.querySelector('#naSave').addEventListener('click',()=>{
+      const name=bg.querySelector('#naName').value.trim();
+      if(!name){ toast('Give it a name first','warn'); return; }
+      ActivityStore.add({ id:'a'+Date.now(), name, base, placeName:place?place.n:null,
+        lat:place?place.lat:null, lng:place?place.lng:null, c:place?place.c:null });
+      close(); this.renderIntent();
+      toast(name+' added to your activities','good');
+    });
+    void bg.offsetHeight; bg.classList.add('show');
   },
   renderDeadlineAsk(){
     this.stage='ask';
@@ -7972,7 +8083,7 @@ const PlanUI={
   INTENTS:{eat:['Eat','fork-knife'],coffee:['Coffee','coffee'],study:['Study','books'],gym:['Work out','barbell'],errand:['Errands','signpost'],home:['Home','house-line']},
   statusRow(opts){
     const u=this.usable();
-    const im=this.INTENTS[this.filter]||null;
+    const im=this.customSel? [this.customSel.name,'star'] : (this.INTENTS[this.filter]||null);
     return `<div class="wfp-status">
       ${im?`<span class="wfp-int">${pic(im[1])}<b>${im[0]}</b></span><span class="wfp-dot">·</span>`:''}
       <span class="wfp-min">${pic('clock')}${u.slack} usable minutes</span>
@@ -8046,6 +8157,21 @@ const PlanUI={
     const u=this.usable();
     const res=PlanEngine.whatFits(c, this.filter, false);
     res.plans.forEach(pl=>{ pl.busOpt=planBusBackOption(pl); });
+    /* a custom activity: same math as its base profile, the user's own name
+       on the results; its usual place (if set) leads as an explicit plan */
+    if(this.customSel){
+      const a=this.customSel;
+      if(a.lat!=null && a.lng!=null){
+        const ev=PlanEngine.evaluate(c,{p:{n:a.placeName,lat:a.lat,lng:a.lng,c:a.c||'offcampus'},why:'Your usual spot'},a.base,{explicit:true});
+        if(ev){ ev.busOpt=planBusBackOption(ev);
+          const dup=res.plans.findIndex(p=>p.place.n===ev.place.n);
+          if(dup>=0) res.plans.splice(dup,1);
+          res.plans.unshift(ev);
+        }
+      }
+      const patch=pl=>{ pl.prof=Object.assign({},pl.prof,{t:a.name, verb:'for '+a.name}); };
+      res.plans.forEach(patch); (res.all||[]).forEach(patch);
+    }
     let html=this.statusRow({change:true});
     if(u.slack<=3 || (!res.plans.length && u.slack<=12)){
       html+=`<div class="wf-none"><b>Nothing fits comfortably before ${esc(c.nextName)}.</b>
@@ -8087,7 +8213,7 @@ const PlanUI={
     const body=$('fitBody');
     const rows=this._rows||res.plans||[];
     const ch=$('wfpChange'); if(ch) ch.addEventListener('click',()=>this.renderIntent());
-    const sa=$('wfShowAll'); if(sa) sa.addEventListener('click',()=>{ this.filter=null; this._intent=null; this.render(); });
+    const sa=$('wfShowAll'); if(sa) sa.addEventListener('click',()=>{ this.filter=null; this._intent=null; this.customSel=null; this.render(); });
     const se=$('wfElse'); if(se) se.addEventListener('click',()=>this.renderElse());
     const mo=$('wfpMore'); if(mo) mo.addEventListener('click',()=>{ this.showAll=true; this.render(); });
     body.querySelectorAll('.wfp-plan[data-wf]').forEach(el=>el.addEventListener('click',()=>{
@@ -8109,7 +8235,7 @@ const PlanUI={
   /* "Somewhere else" — search-first screen (user mockup): saved places,
      a search box over the whole gazetteer, and honest nearby starters */
   renderElse(){
-    this.stage='else'; this.filter=null;
+    this.stage='else'; this.filter=null; this.customSel=null;
     this.setTitle('Somewhere else');
     const body=$('fitBody'); if(!body||!this.ctx) return;
     const roleIc=f=> f.role==='home'?'house-line' : f.role==='food'?'fork-knife' : f.role==='gym'?'barbell' : 'bookmark-simple';
@@ -10265,13 +10391,15 @@ const PlanDayUI={
       html+=`<div class="pd-hero"><h1>Make time ${PlanDayModel.isToday(this.date)?'today':'that day'}</h1>
         <p>Pick something you want to do.<br>BeeLine will find where it actually fits.</p></div>`;
       html+=PlanDayView.search(this.query);
-      html+=PlanDayView.shortcuts([['study','Study','books'],['eat','Eat','fork-knife'],['gym','Work out','barbell'],['errand','Errand','signpost']]);
+      html+=PlanDayView.shortcuts([['study','Study','books'],['eat','Eat','fork-knife'],['gym','Work out','barbell'],['errand','Errand','signpost'],
+        ...ActivityStore.list().slice(0,4).map(a=>['c:'+a.id, a.name, 'star'])]);
       html+=PlanDayView.timeline(this.date);
     } else {
       html+=`<div class="pd-hero"><h1>Find somewhere that fits</h1>
         <p>Places ranked by the time you can actually spend there.</p></div>`;
       html+=PlanDayView.search(this.query);
-      html+=PlanDayView.shortcuts([['eat','Food','fork-knife'],['coffee','Coffee','coffee'],['study','Study','books'],['gym','Fitness','barbell']]);
+      html+=PlanDayView.shortcuts([['eat','Food','fork-knife'],['coffee','Coffee','coffee'],['study','Study','books'],['gym','Fitness','barbell'],
+        ...ActivityStore.list().slice(0,4).map(a=>['c:'+a.id, a.name, 'star'])]);
       this._ranked=PlanDayModel.rankNearby(this.date,null);
       html+=PlanDayView.nearby(this.date, this._ranked);
     }
@@ -10290,9 +10418,25 @@ const PlanDayUI={
       q.addEventListener('keydown',e=>{ if(e.key==='Enter'&&q.value.trim()) this.runSearch(q.value.trim()); });
     }
     body.querySelectorAll('[data-pdsc]').forEach(b=>b.addEventListener('click',()=>{
-      const cat=b.dataset.pdsc;
-      this.query=(ActivityProfiles[cat]||{}).t||cat;
-      this.lastResults={req:{cat}, plans:PlanDayModel.rankNearby(this.date,cat)};
+      const key=b.dataset.pdsc;
+      /* a custom activity ranks with its base profile's math; its usual place
+         (if set) is fit explicitly into every open window and leads if best */
+      if(key.startsWith('c:')){
+        const a=ActivityStore.list().find(x=>'c:'+x.id===key); if(!a) return;
+        this.query=a.name;
+        let plans=PlanDayModel.rankNearby(this.date, a.base);
+        if(a.lat!=null && a.lng!=null){
+          const open=PlanDayModel.gaps(this.date).filter(g=>PlanDayModel.plannable(g,this.date));
+          const evs=open.map(g=>PlanDayModel.fit(g,{p:{n:a.placeName,lat:a.lat,lng:a.lng,c:a.c||'offcampus'},why:'Your usual spot'},a.base,{explicit:true})).filter(Boolean);
+          evs.sort((x,y)=>y.score-x.score);
+          if(evs[0]){ plans=plans.filter(p=>p.place.n!==a.placeName); plans.unshift(evs[0]); }
+        }
+        plans.forEach(pl=>{ pl.prof=Object.assign({},pl.prof,{t:a.name, verb:'for '+a.name}); });
+        this.lastResults={req:{cat:a.base}, plans};
+        this.stage='results'; this.render(); return;
+      }
+      this.query=(ActivityProfiles[key]||{}).t||key;
+      this.lastResults={req:{cat:key}, plans:PlanDayModel.rankNearby(this.date,key)};
       this.stage='results'; this.render();
     }));
     body.querySelectorAll('[data-pdgap]').forEach(el=>el.addEventListener('click',()=>{
